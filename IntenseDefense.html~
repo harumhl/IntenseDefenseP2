@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
 	<meta charset="UTF-8"></meta>
-	<meta content="width=device-width, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport"></meta>
+	<meta content="width=device-width, user-scalable=0, minimum-scal=1.0, maximum-scale=1.0" name="viewport"></meta>
 	<title>Intense Defense</title>
 	<script src="Quintus-master/lib/quintus.js"></script>
 	<script src="Quintus-master/lib/quintus_sprites.js"</script>

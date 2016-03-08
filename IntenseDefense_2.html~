@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <!-- Pull the engine from the Quintus CDN or load it locally -->
+    <!-- (use quintus-all.min.js for production) -->
+    <script src='http://cdn.html5quintus.com/v0.2.0/quintus-all.js'></script>
+    <script src="IntenseDefense.js"></script>
+    <style> body { padding:0px; margin:0px;}</style>  
+</head>
+<body style="padding:0px; margin:0px;">
+	<div id="quintus_container" style="width:1920px; margin:0px auto; position: relative;"></div>
+</body>
+</html>
