@@ -1,0 +1,86 @@
+/*
+#ContentPanel1 {
+    text-align:center
+}
+
+#leftPane {
+    background:Yellow;
+    float: left;
+    width: 100px;
+}
+
+#rightPane {
+    background:Blue;
+    float: right;
+    width: 100px;
+}
+#middlePane {
+    text-align:left;
+    background:Orange;
+    margin:0 auto;
+    display:inline-block
+    width: calc(100% - 160px);
+}
+*/
+
+
+
+#container
+{
+    width:100%;
+    text-align:center;
+}
+
+#leftPane
+{
+    float: left;
+    width: 100px;
+    background-color: Yellow;
+    margin 5px;
+}
+
+#rightPane
+{
+    float: right;
+    width: 100px;
+    background-color: Orange;
+    margin: 5px;
+    
+}
+#midPane
+{
+    /*text-align: left;
+    background: Green;
+    display: inline-block;
+    margin:0 auto;*/
+    width: (100% - 200px);
+    display: inline-block;
+    padding: 15px;
+    background-color: aqua;
+}
+
+
+
+/*
+#mid-box
+{
+    display: inline-block;
+    width: calc (100% - 200px);
+    background: Yellow;
+}
+
+#left-box 
+{
+    display: inline-block;
+    float: left;
+    width 200px;
+    height: 100px;
+}
+#right-box 
+{
+    display: inline-block;
+    float: right;
+    width 200px;
+    height: 100px;
+}
+*/
