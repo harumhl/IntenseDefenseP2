@@ -83,6 +83,11 @@ function addTower() {
     document.getElementById("towers").innerHTML = "accept input: ";
     var tower_x = document.getElementById("tower_x").value;
     var tower_y = document.getElementById("tower_y").value;
+    
+    // default initialization if not provided
+    if (tower_x == "") tower_x = 0;
+    if (tower_y == "") tower_y = 0;
+    
     document.getElementById("towers").innerHTML = "accept input x: [" + tower_x +", " +tower_y +"]";
     towers.push({
                 type: "regular",
