@@ -82,7 +82,7 @@ function addStrongZombie() {
     if(lane == "center")
     {
 	    zombies.push({
-		         type: "strong",
+		 type: "strong",
                  health: 300,
                  speed: 2,
                  position_x: 5,
@@ -94,13 +94,13 @@ function addStrongZombie() {
     else if(lane == "right")
     {
 	zombies.push({
-		         type: "strong",
+		 type: "strong",
                  health: 300,
                  speed: 2,
                  position_x: 5,
                  position_y: 0,
                  position_index: 0,
-			 zombieLane: "right"
+		 zombieLane: "right"
 		         });
     }
     else
@@ -145,26 +145,22 @@ function updatePositions() {
 	{	
 		if(zombies[i].position_y <20)
 		{
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;;
+			zombies[i].position_y++
 		}	
 	}
 	else if(zombies[i].zombieLane == "right")
 	{
 		if(zombies[i].position_x < 10 && zombies[i].position_y == 0)
 		{		
-			zombies[i].position_x = x_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_x++
 		}
 		else if(zombies[i].position_x == 10 && zombies[i].position_y < 20)
 		{		
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_y++
 		}
 		else if(zombies[i].position_x > 5 && zombies[i].position_y == 20)
 		{		
-			zombies[i].position_x = x_positions[pos_index-1];
-			zombies[i].position_index++;
+			zombies[i].position_x--
 			
 		}
 	}
@@ -172,18 +168,15 @@ function updatePositions() {
 	{
 		if(zombies[i].position_x > 0 && zombies[i].position_y == 0)
 		{		
-			zombies[i].position_x = x_positions[pos_index-1];
-			zombies[i].position_index++;
+			zombies[i].position_x--
 		}
 		else if(zombies[i].position_x == 0 && zombies[i].position_y < 20)
 		{		
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_y++
 		}
 		else if(zombies[i].position_x < 5 && zombies[i].position_y == 20)
 		{		
-			zombies[i].position_x = x_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_x++
 		}
 	}
 	position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +", "+zombies[i].zombieLane+"]";
