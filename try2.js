@@ -1,11 +1,15 @@
 
 //class Zombie {}
 
-var money = 1000;
-var zombies = [];
-var towers = [];
+var money = 1000; // money for the offensive player
+var zombies = []; // keeps all (alive) zombie objects
+var towers = [];  // keeps all (alive) tower objects
+
+// (x,y) coordinate path for the zombies
 var x_positions = [60,90,120,150,180,210,240,270,300,330,360,390,420, 420,420,420,420,420,420,420];
 var y_positions = [40,40,40,40,40,40,40,40,40,40,40,40,40, 70,100,130,160,190,220,250];
+
+// game canvas
 var myGameArea;
 
 // Object constructor function
@@ -15,7 +19,7 @@ function Zombie(type, health, speed, position_x, position_y, position_index) {
     this.speed = speed;
     this.position_x = position_x;
     this.position_y = position_y;
-    this.position_index = position_index;
+    this.position_index = position_index || 0;
     
     this.damage = function (damages) {
         this.health -= damages;
@@ -29,6 +33,7 @@ function Tower(type, health, attack_speed, position_x, position_y) {
     this.position_y = position_y;
     
 }
+// Game Canvas declaration, as well as methods for redraw
 myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
@@ -36,11 +41,6 @@ myGameArea = {
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        //this.frameNo = 0;
-        //this.interval = setInterval(updateGameArea, 20);
-        
-        //this.context.fillStyle = "yellow";
-        //this.context.fillRect(30,30,30,30);
     },
     clear : function() {
         this.context.clearRect(0,0,480,270);
@@ -58,10 +58,11 @@ myGameArea = {
         else if (type == "strong")      this.context.fillStyle = "green";
         else                            this.context.fillStyle = "red";
         
-        this.context.fillRect(30,30,30,30);
+        this.context.fillRect(60,40,30,30);
     }
 }
 
+// Adding zombies
 function addStandardZombie() {
     if (money < 100) {
         window.alert("Not Enough Money");
@@ -98,27 +99,7 @@ function addStrongZombie() {
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
 }
-
-
-// Updating the zombies' positions every second
-function start() {
-    setInterval(updatePositions, 1000); // 1000 miliseconds = 1 sec
-}
-function updatePositions() {
-    var position_str = "";
-    myGameArea.clear();
-    //    this.context.fillRect(150,30,30,30);
-    
-    for (var i=0; i < zombies.length; i++) {
-        var pos_index = zombies[i].position_index;
-        zombies[i].position_x = x_positions[pos_index+1];
-        zombies[i].position_y = y_positions[pos_index+1];
-        zombies[i].position_index++;
-        myGameArea.moveWhere(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
-        position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +"]";
-    }
-    document.getElementById("positions").innerHTML = "positions: " +position_str;
-}
+// Adding towers
 function addTower() {
     document.getElementById("towers").innerHTML = "accept input: ";
     // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
@@ -133,12 +114,51 @@ function addTower() {
                 attack_speed: 3,
                 position_x: tower_x,
                 position_y: tower_y
-    });
+                });
     var position_str = "";
     for (var i=0; i < towers.length; i++) {
         position_str += " [" +towers[i].position_x + ", " + towers[i].position_y +"]";
     }
     document.getElementById("towers").innerHTML = "num: "+towers.length +" towers: " +position_str;
+}
+
+
+// Updating the zombies' positions every second
+function start() {
+    setInterval(updatePositions, 1000); // 1000 miliseconds = 1 sec
+}
+function updatePositions() {
+    var position_str = "";
+    var dead_zombies = []; // index for dead zombies
+    
+    myGameArea.clear();
+    
+    for (var i=0; i < zombies.length; i++) {
+        var pos_index = zombies[i].position_index;
+        zombies[i].position_x = x_positions[pos_index+1];
+        zombies[i].position_y = y_positions[pos_index+1];
+        zombies[i].position_index++;
+        
+        if (zombies[i].position_x == undefined || zombies[i].position_y == undefined ||
+            zombies[i].health <= 0) {
+            dead_zombies.push(i);
+            continue;
+        }
+        
+        myGameArea.moveWhere(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
+        
+        position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +"]";
+    }
+    for (var i=0; i < dead_zombies.length; i++) { // delete all dead zombies
+        zombies.splice(dead_zombies[i], 1);
+    }
+    if (dead_zombies.length > 0)
+        document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
+    "\n" + "Money left: " + money;
+
+    dead_zombies = []; // empties the array
+
+    document.getElementById("positions").innerHTML = "positions: " +position_str;
 }
 
 var myGamePiece;
