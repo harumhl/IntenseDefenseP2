@@ -1,30 +1,66 @@
-/*
-#ContentPanel1 {
-    text-align:center
+
+#container 
+{
+    /*text-align:center*/
+    width: 900px;
 }
 
-#leftPane {
-    background:Yellow;
+#header
+{
+    width: 900px; /*must be same as container width*/
+    height: 100px;
+    position: relative; /* will be centered relative to the container*/
+    background-color: cadetblue;
+    border-bottom: 2px solid #000000; /*black border*/
+}
+
+#leftPanel 
+{
+    
     float: left;
-    width: 100px;
+    width: 140px;
+    height: 400px;
+    background-color: yellow;
+    border-right: 1px dashed #694717;
+
 }
 
-#rightPane {
-    background:Blue;
+#rightPanel 
+{
     float: right;
-    width: 100px;
+    width: 140px;
+    height: 400px;
+    background-color: aqua;
+    border-left: 1px dashed #694717;
 }
-#middlePane {
-    text-align:left;
+
+#body
+{
+    margin: auto;
+    width: 600px;
+    padding: 10px 0px 0px 10px; 
+}
+#midPanel 
+{
+    /*text-align:left;
     background:Orange;
     margin:0 auto;
     display:inline-block
     width: calc(100% - 160px);
+    */
+    margin: auto;
+    background:Orange;
+    width: 600px;
+    padding: 10px 0px 0px 10px; 
 }
-*/
 
+#footer
+{
+    clear: both; /*clears both right and left nav so it scales across the width of webpage*/
+    background-color: crimson;
+}
 
-
+/*
 #container
 {
     width:100%;
@@ -52,14 +88,14 @@
     /*text-align: left;
     background: Green;
     display: inline-block;
-    margin:0 auto;*/
+    margin:0 auto;
     width: (100% - 200px);
     display: inline-block;
     padding: 15px;
     background-color: aqua;
 }
 
-
+*/
 
 /*
 #mid-box
