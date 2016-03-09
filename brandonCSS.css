@@ -68,7 +68,7 @@
 /* want to try to give the buttons an effect when user clicks on them*/
 #button 
 {
-  background: url(standardZombie.png) no-repeat top;
+  background: url(button.png) no-repeat top;
 }
 
 
