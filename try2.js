@@ -132,7 +132,7 @@ function addZombie(zombieType) {
         zombies.push({
                      type: "strong",
                      health: 300,
-                     speed: 2,
+                     speed: 3,
                      position_x: 240,
                      position_y: 0,
                      lane: lane_position
@@ -142,7 +142,7 @@ function addZombie(zombieType) {
 	else if (zombieType == "healing") {
         zombies.push({
                      type: "healing",
-                     health: 300,
+                     health: 180,
                      speed: 2,
                      position_x: 240,
                      position_y: 0,
@@ -150,16 +150,16 @@ function addZombie(zombieType) {
                      });
         money -= 200;
     }
-	else if (zombieType == "generations") {
+	else if (zombieType == "generations") { // GOTTA MAKE IT SPLIT!
         zombies.push({
                      type: "generations",
-                     health: 300,
+                     health: 600,
                      speed: 2,
                      position_x: 240,
                      position_y: 0,
                      lane: lane_position
                      });
-        money -= 200;
+        money -= 400;
     }
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
@@ -184,7 +184,7 @@ function addTower(towerType) {
 					type: "regular",
 					health: 150,
 					damage: 30,
-					attack_speed: 3,
+					attack_speed: 4,
 					position_x: tower_x,
 					position_y: tower_y,
 					attack_range: tower_attack_range
@@ -200,7 +200,7 @@ function addTower(towerType) {
 					type: "strong",
 					health: 200,
 					damage: 50,
-					attack_speed: 1,
+					attack_speed: 3,
 					position_x: tower_x,
 					position_y: tower_y,
 					attack_range: tower_attack_range
@@ -213,7 +213,7 @@ function addTower(towerType) {
 		myGameArea.drawTower(tower_x, tower_y, "splash");
 
 		towers.push({
-					type: "splash",
+					type: "splash", // SHOULD ATTACK SEVERAL
 					health: 200,
 					damage: 15,
 					attack_speed: 1,
@@ -231,8 +231,8 @@ function addTower(towerType) {
 		towers.push({
 					type: "freeze",
 					health: 200,
-					damage: 0,
-					attack_speed: 1,
+					damage: 0, // SHOULD IT HAVE A DAMAGE? // SHOULD IT FREEZE/UNFREEZE OR ALL?
+					attack_speed: 3,
 					position_x: tower_x,
 					position_y: tower_y,
 					attack_range: tower_attack_range
