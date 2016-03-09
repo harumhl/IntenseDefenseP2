@@ -43,10 +43,12 @@ function Tower(type, health, damage, attack_speed, position_x, position_y, attac
 var ctx = document.getElementById('canvas');
 var standardZombie = new Image;
 var strongZombie = new Image;
-
+var standardTower = new Image;
+var strongTower = new Image;
 standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
-
+standardTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/standardTower.png";
+strongTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/strongTower.png";
 var zombieImage = new Image;
 
 
@@ -82,10 +84,10 @@ myGameArea = {
         this.context.drawImage(zombieImage,x,y,30,30);
     },
     drawTower : function(x, y, type) { // TEMP IMPLEMENTATION
-        if      (type == "regular")     this.context.fillStyle = "yellow";
-        else                            this.context.fillStyle = "yellow";
+        if      (type == "regular")     towerImage = standardTower;
+        else if (type == "strong") towerImage = strongTower;
         
-        this.context.fillRect(x,y,30,30);
+        this.context.drawImage(towerImage,x,y,30,30);
     },
     zombieAttacked : function(x, y) {
 
@@ -142,7 +144,7 @@ function addZombie(zombieType) {
 }
 
 // Adding towers
-function addTower() {
+function addTower(towerType) {
     
     // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
     var tower_x = document.getElementById("tower_x").value || 270; // TEMP SET OF DEFAULT AS 90
@@ -150,19 +152,38 @@ function addTower() {
 
     // I AM NOT SO SURE ABOUT THE RANGE!
     // SINCE THE TOWER POSITION IS NOT THE CENTER OF THE DRAWING BUT THE LEFT TOP
-    var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
-    
-    myGameArea.drawTower(tower_x, tower_y, "regular");
+    if(towerType == "standard")
+	{
+		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
+		
+		myGameArea.drawTower(tower_x, tower_y, "regular");
 
-    towers.push({
-                type: "regular",
-                health: 150,
-                damage: 30,
-                attack_speed: 3,
-                position_x: tower_x,
-                position_y: tower_y,
-                attack_range: tower_attack_range
-                });
+		towers.push({
+					type: "regular",
+					health: 150,
+					damage: 30,
+					attack_speed: 3,
+					position_x: tower_x,
+					position_y: tower_y,
+					attack_range: tower_attack_range
+					});
+	}
+	else if(towerType == "strong")
+	{
+		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
+		
+		myGameArea.drawTower(tower_x, tower_y, "strong");
+
+		towers.push({
+					type: "strong",
+					health: 200,
+					damage: 50,
+					attack_speed: 1,
+					position_x: tower_x,
+					position_y: tower_y,
+					attack_range: tower_attack_range
+					});
+	}
     // for print out
     var position_str = "";
     for (var i=0; i < towers.length; i++) {
