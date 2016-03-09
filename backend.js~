@@ -90,8 +90,8 @@ myGameArea = {
 		
     },
     clear : function() { // clears out the canvas
-        this.context.clearRect(0,0,676,733);
-	this.context.drawImage(background,0,0, 676, 733);
+        this.context.clearRect(0,0,480,270);
+		this.context.drawImage(background,0,0, 676, 733);
     },
     moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
@@ -486,7 +486,7 @@ function doMouseDown(event) { // Gets mouse position coordinate when click
     // Add the tower
     if (is_tower_selected == true) {
         
-        addTower(tower_selection, canvasX-15, canvasY-15);
+        addTower(tower_selection, canvasX, canvasY);
     }
     is_tower_selected = false;
 }
