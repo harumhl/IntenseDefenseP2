@@ -70,11 +70,11 @@ myGameArea = {
         else                            this.context.fillStyle = "red";
         
         if (x == undefined || y == undefined) return;
-        this.context.drawImage(zombieImage,(x||150),(y||30)),30,30);
+        this.context.drawImage(zombieImage,(x||150),(y||30),30,30);
     },
     addZombie : function(type) {
         if      (type == "standard")     zombieImage = standardZombie;//this.context.fillStyle = "blue";
-        else if (type == "strong")      zombieImage = strongZombie;
+        else if (type == "strong")       zombieImage = strongZombie;
         else                            this.context.fillStyle = "red";
         
         this.context.drawImage(zombieImage,60,40,30,30);
@@ -251,7 +251,7 @@ function addTower() {
 
 // Updating the zombies' positions every second
 function start() {
-    setInterval(updatePositions, 1000); // 1000 miliseconds = 1 sec
+    setInterval(updatePositions, 100); // 1000 miliseconds = 1 sec
 }
 /*Haru's update Positions ---------------------------------------------------------------------------------
 function updatePositions() {
