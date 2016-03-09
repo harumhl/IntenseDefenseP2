@@ -139,6 +139,28 @@ function addZombie(zombieType) {
                      });
         money -= 200;
     }
+	else if (zombieType == "healing") {
+        zombies.push({
+                     type: "healing",
+                     health: 300,
+                     speed: 2,
+                     position_x: 240,
+                     position_y: 0,
+                     lane: lane_position
+                     });
+        money -= 200;
+    }
+	else if (zombieType == "generations") {
+        zombies.push({
+                     type: "generations",
+                     health: 300,
+                     speed: 2,
+                     position_x: 240,
+                     position_y: 0,
+                     lane: lane_position
+                     });
+        money -= 200;
+    }
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
 }
@@ -184,14 +206,46 @@ function addTower(towerType) {
 					attack_range: tower_attack_range
 					});
 	}
+	else if(towerType == "splash")
+	{
+		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
+		
+		myGameArea.drawTower(tower_x, tower_y, "splash");
+
+		towers.push({
+					type: "splash",
+					health: 200,
+					damage: 15,
+					attack_speed: 1,
+					position_x: tower_x,
+					position_y: tower_y,
+					attack_range: tower_attack_range
+					});
+	}
+	else if(towerType == "freeze")
+	{
+		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
+		
+		myGameArea.drawTower(tower_x, tower_y, "freeze");
+
+		towers.push({
+					type: "freeze",
+					health: 200,
+					damage: 0,
+					attack_speed: 1,
+					position_x: tower_x,
+					position_y: tower_y,
+					attack_range: tower_attack_range
+					});
+	}
     // for print out
     var position_str = "";
     for (var i=0; i < towers.length; i++) {
         position_str += " [" +towers[i].position_x + ", " + towers[i].position_y +"]";
     }
     document.getElementById("towers").innerHTML = "num: "+towers.length +" towers: " +position_str;
-    
-    setInterval(function() { towerAttack(towers[towers.length-1]); }, 500);
+    for(var i = 0; i<towers.length; i++)
+		setInterval(function() { towerAttack(towers[i]); }, 500);
 }
 
 
