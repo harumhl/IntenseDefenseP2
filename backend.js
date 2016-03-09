@@ -11,6 +11,10 @@ var money = 1000; // money for the offensive player
 var zombies = []; // keeps all (alive) zombie objects
 var towers = [];  // keeps all (alive) tower objects
 
+// for tower purchase
+var is_tower_selected = false;
+var tower_selection; // same as string towerType, but glocal
+
 var image = new Image(); // TEMP: tried to display zombie/tower image on canvas
 
 // game canvas
@@ -50,7 +54,7 @@ var standardZombie = new Image;
 var strongZombie = new Image;
 var healingZombie = new Image;
 var generationsZombie = new Image;
-var standardTower = new Image;
+var regularTower = new Image;
 var strongTower = new Image;
 var splashTower = new Image;
 var slowTower = new Image;
@@ -59,7 +63,7 @@ standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEa
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
 healingZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png";
 generationsZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/generationsZombie.png";
-standardTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/standardTower.png";
+regularTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/standardTower.png";
 strongTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/strongTower.png";
 splashTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/bombTower.png";
 slowTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/iceTower.png";
@@ -79,6 +83,7 @@ myGameArea = {
         canvas.width = 676; // temporary dimension
         canvas.height = 733;
         this.context = canvas.getContext("2d");
+        canvas.addEventListener("mousedown", doMouseDown, false);
 		
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         document.getElementById("lane").innerHTML = "Current Lane: "+'\u2191'+"\n";
@@ -106,7 +111,7 @@ myGameArea = {
         this.context.drawImage(zombieImage,x,y,30,30);
     },
     drawTower : function(x, y, type) { // TEMP IMPLEMENTATION
-        if      (type == "standard")    towerImage = standardTower;
+        if      (type == "regular")    towerImage = regularTower;
         else if (type == "strong") 		towerImage = strongTower;
 		else if (type == "splash")		towerImage = splashTower;
 		else 							towerImage = slowTower;
@@ -189,23 +194,31 @@ function addZombie(zombieType) {
     "\n" + "Money left: " + money;
 }
 
-// Adding towers
-function addTower(towerType) {
+// Adding towers: selectTower -> doMouseDown (mouse click on map) -> addTower
+function selectTower(towerType) {
+    is_tower_selected = true;
+    
+    tower_selection = towerType;
+}
+
+function addTower(towerType, tower_x, tower_y) {
     
     // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
-    var tower_x = document.getElementById("tower_x").value || 270; // TEMP SET OF DEFAULT AS 90
-    var tower_y = document.getElementById("tower_y").value || 90;
+//    var tower_x = document.getElementById("tower_x").value || 270; // TEMP SET OF DEFAULT AS 90
+//    var tower_y = document.getElementById("tower_y").value || 90;
 
     // I AM NOT SO SURE ABOUT THE RANGE!
     // SINCE THE TOWER POSITION IS NOT THE CENTER OF THE DRAWING BUT THE LEFT TOP
-    if(towerType == "standard")
+    
+
+    if(towerType == "regular")
 	{
 		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
 		
-		myGameArea.drawTower(tower_x, tower_y, "standard");
+		myGameArea.drawTower(tower_x, tower_y, "regular");
 
 		towers.push({
-					type: "standard",
+					type: "regular",
 					health: 150,
 					damage: 30,
 					attack_speed: 3,
@@ -450,4 +463,30 @@ function pickLane()
     else                                { lane_position = "center"; lane_arrow = '\u2191';}
     
     document.getElementById("lane").innerHTML = "Current Lane: "+lane_arrow+"\n";
+}
+
+function doMouseDown(event) { // Gets mouse position coordinate when click
+    
+    // Calculate (x,y) on canvas
+    var totalOffsetX = 0;
+    var totalOffsetY = 0;
+    var canvasX = 0;
+    var canvasY = 0;
+    var currentElement = this;
+    
+    do{
+        totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+        totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+    }
+    while(currentElement = currentElement.offsetParent)
+        
+    canvasX = event.pageX - totalOffsetX - document.body.scrollLeft;
+    canvasY = event.pageY - totalOffsetY - document.body.scrollTop;
+    
+    // Add the tower
+    if (is_tower_selected == true) {
+        
+        addTower(tower_selection, canvasX, canvasY);
+    }
+    is_tower_selected = false;
 }
