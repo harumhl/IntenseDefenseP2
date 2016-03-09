@@ -54,6 +54,7 @@ var standardTower = new Image;
 var strongTower = new Image;
 var splashTower = new Image;
 var slowTower = new Image;
+var background = new Image;
 standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
 healingZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png";
@@ -62,9 +63,12 @@ standardTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEal
 strongTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/strongTower.png";
 splashTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/bombTower.png";
 slowTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/iceTower.png";
+background.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/mockupWebpage.png";
 var zombieImage = new Image;
 
-
+background.onload = function(){
+    ctx.drawImage(background,0,0, 480, 270);   
+}
 
 // Game Canvas declaration, as well as methods for redraw
 myGameArea = {
@@ -75,11 +79,14 @@ myGameArea = {
         canvas.width = 686; // temporary dimension
         canvas.height = 290;
         this.context = canvas.getContext("2d");
+		
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         document.getElementById("lane").innerHTML = "Current Lane: "+'\u2191'+"\n";
+		
     },
     clear : function() { // clears out the canvas
         this.context.clearRect(0,0,480,270);
+		this.context.drawImage(background,0,0, 480, 270);
     },
     moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
