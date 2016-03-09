@@ -72,7 +72,7 @@ myGameArea = {
 // Adding zombies
 
 // Haru's add methods-----------------------------------------------------------------
-function addStandardZombie() {
+/*function addStandardZombie() {
     if (money < 100) {
         window.alert("Not Enough Money");
         return;
@@ -107,9 +107,9 @@ function addStrongZombie() {
     money -= 200;
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
-}
+}*/
 //-------------------------------------------------------------------------------------
-/* Adam's add methods -----------------------------------------------------------------
+// Adam's add methods -----------------------------------------------------------------
 function addStandardZombie() {
     if (money < 100) {
         window.alert("Not Enough Money");
@@ -121,7 +121,7 @@ function addStandardZombie() {
 		         type: "standard",
 		         health: 100,
 		         speed: 5,
-		         position_x: 5,
+		         position_x: 240,
 		         position_y: 0,
 		         position_index: 0,
 			 zombieLane: "center"
@@ -133,7 +133,7 @@ function addStandardZombie() {
 		         type: "standard",
 		         health: 100,
 		         speed: 5,
-		         position_x: 5,
+		         position_x: 240,
 		         position_y: 0,
 		         position_index: 0,
 			 zombieLane: "right"
@@ -145,7 +145,7 @@ function addStandardZombie() {
 		         type: "standard",
 		         health: 100,
 		         speed: 5,
-		         position_x: 5,
+		         position_x: 240,
 		         position_y: 0,
 		         position_index: 0,
 			 zombieLane: "left"
@@ -166,7 +166,7 @@ function addStrongZombie() {
 		         type: "strong",
                  health: 300,
                  speed: 2,
-                 position_x: 5,
+                 position_x: 240,
                  position_y: 0,
                  position_index: 0,
 		 zombieLane: "center"
@@ -178,7 +178,7 @@ function addStrongZombie() {
 		         type: "strong",
                  health: 300,
                  speed: 2,
-                 position_x: 5,
+                 position_x: 240,
                  position_y: 0,
                  position_index: 0,
 			 zombieLane: "right"
@@ -190,7 +190,7 @@ function addStrongZombie() {
 	         type: "strong",
         	 health: 300,
        		  speed: 2,
-      		   position_x: 5,
+      		   position_x: 240,
         	 position_y: 0,
        		  position_index: 0,
 		 zombieLane: "left"
@@ -200,7 +200,7 @@ function addStrongZombie() {
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
 }
-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------*/
 function pickLane()
 {
 	if(lane == "center")
@@ -241,7 +241,7 @@ function addTower() {
 function start() {
     setInterval(updatePositions, 1000); // 1000 miliseconds = 1 sec
 }
-//Haru's update Positions ---------------------------------------------------------------------------------
+/*Haru's update Positions ---------------------------------------------------------------------------------
 function updatePositions() {
     var position_str = "";
     var dead_zombies = []; // index for dead zombies
@@ -275,64 +275,60 @@ function updatePositions() {
 
     document.getElementById("positions").innerHTML = "positions: " +position_str;
 }
-//------------------------------------------------------------------------------------------------------------
-/* Adam's update Positions -----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------*/
+// Adam's update Positions -----------------------------------------------------------------------------------
 function updatePositions() {
     var position_str = "";
+    var dead_zombies = []; // index for dead zombies
+    myGameArea.clear();
     for (var i=0; i < zombies.length; i++) 
     {
         var pos_index = zombies[i].position_index;
 	if(zombies[i].zombieLane == "center")
 	{	
-		if(zombies[i].position_y <20)
+		if(zombies[i].position_y <240)
 		{
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;;
+			zombies[i].position_y+=zombies[i].speed
 		}	
 	}
 	else if(zombies[i].zombieLane == "right")
 	{
-		if(zombies[i].position_x < 10 && zombies[i].position_y == 0)
+		if(zombies[i].position_x < 450 && zombies[i].position_y == 0)
 		{		
-			zombies[i].position_x = x_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_x+=zombies[i].speed
 		}
-		else if(zombies[i].position_x == 10 && zombies[i].position_y < 20)
+		else if(zombies[i].position_x == 450 && zombies[i].position_y < 240)
 		{		
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_y+=zombies[i].speed
 		}
-		else if(zombies[i].position_x > 5 && zombies[i].position_y == 20)
+		else if(zombies[i].position_x > 225 && zombies[i].position_y == 240)
 		{		
-			zombies[i].position_x = x_positions[pos_index-1];
-			zombies[i].position_index++;
+			zombies[i].position_x-=zombies[i].speed
 			
 		}
 	}
 	else
 	{
-		if(zombies[i].position_x > 0 && zombies[i].position_y == 0)
+		if(zombies[i].position_x > 30 && zombies[i].position_y == 0)
 		{		
-			zombies[i].position_x = x_positions[pos_index-1];
-			zombies[i].position_index++;
+			zombies[i].position_x-=zombies[i].speed
 		}
-		else if(zombies[i].position_x == 0 && zombies[i].position_y < 20)
+		else if(zombies[i].position_x == 30 && zombies[i].position_y < 240)
 		{		
-			zombies[i].position_y = y_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_y+=zombies[i].speed
 		}
-		else if(zombies[i].position_x < 5 && zombies[i].position_y == 20)
+		else if(zombies[i].position_x < 225 && zombies[i].position_y == 240)
 		{		
-			zombies[i].position_x = x_positions[pos_index+1];
-			zombies[i].position_index++;
+			zombies[i].position_x+=zombies[i].speed
 		}
 	}
+	myGameArea.moveWhere(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
 	position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +", "+zombies[i].zombieLane+"]";
     }
     
     document.getElementById("positions").innerHTML = "positions: " +position_str;
 }
-----------------------------------------------------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------------------------------------------------*/
 var myGamePiece;
 /*
 var a_canvas = document.getElementById("canv");

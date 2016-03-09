@@ -23,6 +23,8 @@
     <br>
     <button onclick="start();myGameArea.start();">start</button>
     <br>
+    <button onclick="pickLane();">Pick Lane</button>
+    <br>
     tower x: <input type="text" id="tower_x">
     <br>
     tower y: <input type="text" id="tower_y">
