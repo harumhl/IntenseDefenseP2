@@ -10,7 +10,8 @@ var lane_position = "center";
 var money = 1000; // money for the offensive player
 var zombies = []; // keeps all (alive) zombie objects
 var towers = [];  // keeps all (alive) tower objects
-
+var xMax = 676;
+var yMax = 733;
 // for tower purchase
 var is_tower_selected = false;
 var tower_selection; // same as string towerType, but glocal
@@ -90,8 +91,8 @@ myGameArea = {
 		
     },
     clear : function() { // clears out the canvas
-        this.context.clearRect(0,0,676,733);
-	this.context.drawImage(background,0,0, 676, 733);
+        this.context.clearRect(0,0,xMax,yMax);
+	this.context.drawImage(background,0,0, xMax, yMax);
     },
     moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
@@ -144,14 +145,14 @@ function addZombie(zombieType) {
         window.alert("Not Enough Money");
         return;
     }
-    myGameArea.addZombie(zombieType, 240, 0);
+    myGameArea.addZombie(zombieType, xMax/2, 0);
     
     if (zombieType == "standard") {
         zombies.push({
                      type: "standard",
                      health: 100,
                      speed: 5,
-                     position_x: 240,
+                     position_x: xMax/2,
                      position_y: 0,
                      lane: lane_position
                      });
@@ -162,7 +163,7 @@ function addZombie(zombieType) {
                      type: "strong",
                      health: 300,
                      speed: 2,
-                     position_x: 240,
+                     position_x: xMax/2,
                      position_y: 0,
                      lane: lane_position
                      });
@@ -173,7 +174,7 @@ function addZombie(zombieType) {
                      type: "healing",
                      health: 300,
                      speed: 2,
-                     position_x: 240,
+                     position_x: xMax/2,
                      position_y: 0,
                      lane: lane_position
                      });
@@ -184,7 +185,7 @@ function addZombie(zombieType) {
                      type: "generations",
                      health: 300,
                      speed: 2,
-                     position_x: 240,
+                     position_x: xMax/2,
                      position_y: 0,
                      lane: lane_position
                      });
@@ -303,21 +304,21 @@ function updatePositions() {
     
     for (var i=0; i < zombies.length; i++) {
         
-        if (zombies[i].lane == "center" && zombies[i].position_y < 240)
+        if (zombies[i].lane == "center" && zombies[i].position_y < yMax-30)
         {
             zombies[i].position_y += zombies[i].speed;
         }
         else if (zombies[i].lane == "right")
         {
-            if (zombies[i].position_x < 450 && zombies[i].position_y == 0)
+            if (zombies[i].position_x < xMax-30 && zombies[i].position_y == 0)
             {
                 zombies[i].position_x += zombies[i].speed;
             }
-            else if (zombies[i].position_x == 450 && zombies[i].position_y < 240)
+            else if (zombies[i].position_x >= xMax-30 && zombies[i].position_y < yMax-30)
             {
                 zombies[i].position_y += zombies[i].speed;
             }
-            else if (zombies[i].position_x > 225 && zombies[i].position_y == 240)
+            else if (zombies[i].position_x > xMax/2-30 && zombies[i].position_y >= yMax-30)
             {		
                 zombies[i].position_x -= zombies[i].speed;
                 
@@ -325,15 +326,15 @@ function updatePositions() {
         }
         else
         {
-            if(zombies[i].position_x > 30 && zombies[i].position_y == 0)
+            if(zombies[i].position_x > 0 && zombies[i].position_y == 0)
             {
                 zombies[i].position_x-=zombies[i].speed
             }
-            else if(zombies[i].position_x == 30 && zombies[i].position_y < 240)
+            else if(zombies[i].position_x <= 30 && zombies[i].position_y < yMax-30)
             {
                 zombies[i].position_y+=zombies[i].speed
             }
-            else if(zombies[i].position_x < 225 && zombies[i].position_y == 240)
+            else if(zombies[i].position_x < xMax/2-15 && zombies[i].position_y >= yMax-30)
             {		
                 zombies[i].position_x+=zombies[i].speed
             }
@@ -482,11 +483,12 @@ function doMouseDown(event) { // Gets mouse position coordinate when click
         
     canvasX = event.pageX - totalOffsetX - document.body.scrollLeft;
     canvasY = event.pageY - totalOffsetY - document.body.scrollTop;
-    
     // Add the tower
     if (is_tower_selected == true) {
-        
-        addTower(tower_selection, canvasX-15, canvasY-15);
+        if(canvasX >0 && canvasX<676 && canvasY>0 && canvasY<733)
+       	 addTower(tower_selection, canvasX-15, canvasY-15);
+	else
+	is_tower_selected = false;
     }
     is_tower_selected = false;
 }
