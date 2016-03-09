@@ -40,9 +40,21 @@ function Tower(type, health, attack_speed, position_x, position_y) {
     this.position_y = position_y;
     
 }
+
+// Adam image testing
+var ctx = document.getElementById('canvas');
+var standardZombie = new Image;
+standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
+var strongZombie = new Image;
+strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
+var zombieImage = new Image;
+//*/
+
+
 // Game Canvas declaration, as well as methods for redraw
 myGameArea = {
     canvas : document.createElement("canvas"),
+  
     start : function() {
         this.canvas.width = 480;
         this.canvas.height = 270;
@@ -53,19 +65,19 @@ myGameArea = {
         this.context.clearRect(0,0,480,270);
     },
     moveWhere : function(x, y, type) {
-        if      (type == "standard")    this.context.fillStyle = "blue";
-        else if (type == "strong")      this.context.fillStyle = "green";
+        if      (type == "standard")    zombieImage = standardZombie;//this.context.fillStyle = "blue";
+        else if (type == "strong")      zombieImage = strongZombie;
         else                            this.context.fillStyle = "red";
         
         if (x == undefined || y == undefined) return;
-        this.context.fillRect((x||150),(y||30),30,30);
+        this.context.drawImage(zombieImage,(x||150),(y||30));//,30,30);
     },
     addZombie : function(type) {
-        if      (type == "standard")    this.context.fillStyle = "blue";
-        else if (type == "strong")      this.context.fillStyle = "green";
+        if      (type == "standard")    this.context.drawImage(standardZombie);//this.context.fillStyle = "blue";
+        else if (type == "strong")      zombieImage = strongZombie;
         else                            this.context.fillStyle = "red";
         
-        this.context.fillRect(60,40,30,30);
+        //this.context.fillRect(60,40,30,30);
     }
 }
 
@@ -309,7 +321,7 @@ function updatePositions() {
 	}
 	else
 	{
-		if(zombies[i].position_x > 30 && zombies[i].position_y == 30)
+		if(zombies[i].position_x > 30 && zombies[i].position_y == 0)
 		{		
 			zombies[i].position_x-=zombies[i].speed
 		}
