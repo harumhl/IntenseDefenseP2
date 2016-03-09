@@ -1,25 +1,35 @@
 
+/*
+    the widths for the left/right/mid panel is a little confusing 
+
+
+
+*/
+
+
+
 #container 
 {
     /*text-align:center*/
-    width: 900px;
+    width: 1000px;
 }
 
 #header
 {
-    width: 900px; /*must be same as container width*/
-    height: 100px;
+    width: 1000px; /*must be same as container width*/
+    height: 130px;
     position: relative; /* will be centered relative to the container*/
-    background-color: cadetblue;
+    /*background-color: cadetblue;*/
     border-bottom: 2px solid #000000; /*black border*/
+    margin-bottom: 5px; /* this will give margin between the title and the rest of the page*/
 }
 
 #leftPanel 
 {
-    
+    text-align: center;
     float: left;
-    width: 140px;
-    height: 400px;
+    width: 144px;
+    height: 450px;
     background-color: yellow;
     border-right: 1px dashed #694717;
 
@@ -27,19 +37,14 @@
 
 #rightPanel 
 {
+    text-align: center;
     float: right;
-    width: 140px;
-    height: 400px;
+    width: 144px;
+    height: 450px;
     background-color: aqua;
     border-left: 1px dashed #694717;
 }
 
-#body
-{
-    margin: auto;
-    width: 600px;
-    padding: 10px 0px 0px 10px; 
-}
 #midPanel 
 {
     /*text-align:left;
@@ -50,7 +55,7 @@
     */
     margin: auto;
     background:Orange;
-    width: 600px;
+    width: 700px;
     padding: 10px 0px 0px 10px; 
 }
 
@@ -60,63 +65,15 @@
     background-color: crimson;
 }
 
-/*
-#container
+/* want to try to give the buttons an effect when user clicks on them
+#button 
 {
-    width:100%;
-    text-align:center;
+  background: url(button.png) no-repeat top;
 }
 
-#leftPane
-{
-    float: left;
-    width: 100px;
-    background-color: Yellow;
-    margin 5px;
-}
 
-#rightPane
+#button: active
 {
-    float: right;
-    width: 100px;
-    background-color: Orange;
-    margin: 5px;
-    
-}
-#midPane
-{
-    /*text-align: left;
-    background: Green;
-    display: inline-block;
-    margin:0 auto;
-    width: (100% - 200px);
-    display: inline-block;
-    padding: 15px;
-    background-color: aqua;
-}
-
-*/
-
-/*
-#mid-box
-{
-    display: inline-block;
-    width: calc (100% - 200px);
-    background: Yellow;
-}
-
-#left-box 
-{
-    display: inline-block;
-    float: left;
-    width 200px;
-    height: 100px;
-}
-#right-box 
-{
-    display: inline-block;
-    float: right;
-    width 200px;
-    height: 100px;
+    background: url(button.png) no-repeat bottom;
 }
 */
