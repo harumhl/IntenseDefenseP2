@@ -11,27 +11,27 @@
     </style>
     
 </head>
-<body>
+<body onload="myGameArea.start()">
     <script src="try2.js"></script>
     
-    <input type="image" src="blue zombie.png" onclick="addStandardZombie()"> standard zombie</button>
     <br>
-    <input type="image" src="green zombie.png" onclick="addStrongZombie()"> strong zombie</button>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/blue zombie.png" onclick="addStandardZombie()"> standard zombie</button>
     <br>
-    <input type="image" src="standard tower.png" onclick="addTower()"> regular tower</button>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/green zombie.png" onclick="addStrongZombie()"> strong zombie</button>
     <br>
-    <button onclick="start();">start</button>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/standard tower.png" onclick="addTower()"> regular tower</button>
+    <br>
+    <button onclick="start();myGameArea.start();">start</button>
     <br>
     <button onclick="pickLane();">Pick Lane</button>
     <br>
     tower x: <input type="text" id="tower_x">
     <br>
     tower y: <input type="text" id="tower_y">
-    <p id="lane"></p>
     <p id="demo"></p>
     <p id="positions"></p>    
     <p id="towers"></p>
-    
+
 </body>
 
 </html>
