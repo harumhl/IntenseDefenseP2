@@ -245,7 +245,7 @@ function addTower(towerType) {
     }
     document.getElementById("towers").innerHTML = "num: "+towers.length +" towers: " +position_str;
     for(var i = 0; i<towers.length; i++)
-		setInterval(function() { towerAttack(towers[i]); }, 500);
+		setInterval(function() { towerAttack(); }, 500);
 }
 
 
@@ -326,9 +326,11 @@ function updatePositions() {
     document.getElementById("positions").innerHTML = "positions: " +position_str;
     
 }
-function towerAttack(tower) {
+function towerAttack() {
     // ASSUME "FIRST IN RANGE"
-
+	for(var i=0; i<towers.length; i++)
+	{
+		var tower = towers[i];
     // AR stands for attack range
     var ar_top    = tower.attack_range[0];
     var ar_bottom = tower.attack_range[1];
@@ -413,6 +415,7 @@ function towerAttack(tower) {
 
     // putting a dot on top of the zombie
     myGameArea.zombieAttacked(zombies[the_front].position_x, zombies[the_front].position_y);
+	}
 }
 
 function pickLane()
