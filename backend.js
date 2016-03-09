@@ -432,3 +432,32 @@ function pickLane()
     
     document.getElementById("lane").innerHTML = "Current Lane: "+lane_arrow+"\n";
 }
+
+
+// MODAL - will be used to display WIN/LOSE to the user
+var modal = document.getElementById('myModal');
+var button = document.getElementById("myButton");
+var span = document.getElementsByClassName("close")[0];
+
+button.onclick = function() {
+    modal.style.display = "block";
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if(event.target == modal){
+         modal.style.display = "none";
+    }
+}
+
+
+
+
+
+
+
+
+
