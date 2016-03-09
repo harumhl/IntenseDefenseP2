@@ -6,20 +6,23 @@ function func(){
 }
 
 
-var lane_position = "center";
-var money = 1000; // money for the offensive player
-var zombies = []; // keeps all (alive) zombie objects
-var towers = [];  // keeps all (alive) tower objects
+
 var xMax = 676;
 var yMax = 733;
 // for tower purchase
+var lane_position = "center";
+var money = 1000; // money for the offensive player
+var baseHealth = 1000;
+var zombies = []; // keeps all (alive) zombie objects
+var towers = [];  // keeps all (alive) tower objects
 var is_tower_selected = false;
 var tower_selection; // same as string towerType, but glocal
+var myGameArea;
 
 var image = new Image(); // TEMP: tried to display zombie/tower image on canvas
 
 // game canvas
-var myGameArea;
+
 
 // Object constructor function
 // You can treat Zombie and Tower as Classes (or rather, Struct)
@@ -74,7 +77,16 @@ var zombieImage = new Image;
 background.onload = function(){
     ctx.drawImage(background,0,0, 676, 733);   
 }
-
+function newRound()
+{
+	lane_position = "center";
+	money = 1000; // money for the offensive player
+	baseHealth = 1000;
+	zombies = []; // keeps all (alive) zombie objects
+	towers = [];  // keeps all (alive) tower objects
+	is_tower_selected = false;
+	myGameArea.clear();
+}
 // Game Canvas declaration, as well as methods for redraw
 myGameArea = {
     canvas : document.getElementById("canvas"), //createElement()
@@ -362,7 +374,13 @@ function updatePositions() {
         // IN THE REAL GAME, WE WILL HAVE TO SEPARATE IF THE ZOMBIE ATTACKS THE BASE OR DIES FROM THE TOWER ATTACK
         if (((zombies[i].position_x <= xMax/2-8 && zombies[i].position_x >= xMax/2-8) && zombies[i].position_y >= yMax-90) ||
             zombies[i].health <= 0) {
+	    baseHealth -= zombies[i].health;
             dead_zombies.push(i);
+	    document.getElementById("base").innerHTML = "Base Health "+baseHealth+"\n";
+	    if(baseHealth <= 0)
+		endRound("attacker");
+	    if(zombies.length == dead_zombies.length && money <= 0)
+		endRound("defender");
             continue;
         }
         
@@ -473,7 +491,14 @@ function towerAttack() {
     myGameArea.zombieAttacked(zombies[the_front].position_x, zombies[the_front].position_y);
 	}
 }
-
+function endRound(winner)
+{
+	if(winner == "attacker")
+		window.alert("Zombies Win!");
+	else
+		window.alert("Defender Wins!");
+	newRound();
+}
 function pickLane()
 {
     var lane_arrow;
