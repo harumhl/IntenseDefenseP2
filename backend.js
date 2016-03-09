@@ -48,12 +48,20 @@ function Tower(type, health, damage, attack_speed, position_x, position_y, attac
 var ctx = document.getElementById('canvas');
 var standardZombie = new Image;
 var strongZombie = new Image;
+var healingZombie = new Image;
+var generationsZombie = new Image;
 var standardTower = new Image;
 var strongTower = new Image;
+var splashTower = new Image;
+var slowTower = new Image;
 standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
+healingZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png";
+generationsZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/generationsZombie.png";
 standardTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/standardTower.png";
 strongTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/strongTower.png";
+splashTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/bombTower.png";
+slowTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/iceTower.png";
 var zombieImage = new Image;
 
 
@@ -76,7 +84,8 @@ myGameArea = {
     moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
         else if (type == "strong")      zombieImage = strongZombie;
-        else                            this.context.fillStyle = "red";
+		else if (type == "healing")     zombieImage = healingZombie;
+		else							zombieImage = generationsZombie;
         
         if (x == undefined || y == undefined) return;
         this.context.drawImage(zombieImage,x,y,30,30);
@@ -84,13 +93,16 @@ myGameArea = {
     addZombie : function(type, x, y) { // TEMP IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
         else if (type == "strong")      zombieImage = strongZombie;
-        else                            this.context.fillStyle = "red";
+		else if (type == "healing")     zombieImage = healingZombie;
+		else							zombieImage = generationsZombie;
         
         this.context.drawImage(zombieImage,x,y,30,30);
     },
     drawTower : function(x, y, type) { // TEMP IMPLEMENTATION
-        if      (type == "regular")     towerImage = standardTower;
-        else if (type == "strong") towerImage = strongTower;
+        if      (type == "standard")    towerImage = standardTower;
+        else if (type == "strong") 		towerImage = strongTower;
+		else if (type == "splash")		towerImage = splashTower;
+		else 							towerImage = slowTower;
         
         this.context.drawImage(towerImage,x,y,30,30);
     },
@@ -183,10 +195,10 @@ function addTower(towerType) {
 	{
 		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
 		
-		myGameArea.drawTower(tower_x, tower_y, "regular");
+		myGameArea.drawTower(tower_x, tower_y, "standard");
 
 		towers.push({
-					type: "regular",
+					type: "standard",
 					health: 150,
 					damage: 30,
 					attack_speed: 3,
@@ -227,14 +239,14 @@ function addTower(towerType) {
 					attack_range: tower_attack_range
 					});
 	}
-	else if(towerType == "freeze")
+	else if(towerType == "slow")
 	{
 		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
 		
-		myGameArea.drawTower(tower_x, tower_y, "freeze");
+		myGameArea.drawTower(tower_x, tower_y, "slow");
 
 		towers.push({
-					type: "freeze",
+					type: "slow",
 					health: 200,
 					damage: 0,
 					attack_speed: 1,

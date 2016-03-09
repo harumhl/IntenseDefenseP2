@@ -43,12 +43,20 @@ function Tower(type, health, damage, attack_speed, position_x, position_y, attac
 var ctx = document.getElementById('canvas');
 var standardZombie = new Image;
 var strongZombie = new Image;
+var healingZombie = new Image;
+var generationsZombie = new Image;
 var standardTower = new Image;
 var strongTower = new Image;
+var splashTower = new Image;
+var slowTower = new Image;
 standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
+healingZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png";
+generationsZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/generationsZombie.png";
 standardTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/standardTower.png";
 strongTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/strongTower.png";
+splashTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/splashTower.png";
+slowTower.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/slowTower.png";
 var zombieImage = new Image;
 
 
