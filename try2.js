@@ -1,430 +1,351 @@
 
 //class Zombie {}
-var lane = "center";
+
+var lane_position = "center";
 var money = 1000; // money for the offensive player
 var zombies = []; // keeps all (alive) zombie objects
 var towers = [];  // keeps all (alive) tower objects
 
-// (x,y) coordinate path for the zombies
-var x_positions = [60,90,120,150,180,210,240,270,300,330,360,390,420, 420,420,420,420,420,420,420];
-var y_positions = [40,40,40,40,40,40,40,40,40,40,40,40,40, 70,100,130,160,190,220,250];
-
-/* Adams pathing stuff
-var x_positions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-var y_positions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-*/
-
+var image = new Image(); // TEMP: tried to display zombie/tower image on canvas
 
 // game canvas
 var myGameArea;
 
 // Object constructor function
-function Zombie(type, health, speed, position_x, position_y, position_index, zombieLane) {
+// You can treat Zombie and Tower as Classes (or rather, Struct)
+function Zombie(type, health, speed, position_x, position_y, lane) {
     this.type = type;
     this.health = health;
     this.speed = speed;
     this.position_x = position_x;
     this.position_y = position_y;
-    this.zombieLane = zombieLane;
-    this.position_index = position_index || 0;
+    this.lane = lane || "center";
+    this.position_index = 0;
     
+    // member functions
     this.damage = function (damages) {
         this.health -= damages;
     };
 }
-function Tower(type, health, attack_speed, position_x, position_y) {
+function Tower(type, health, damage, attack_speed, position_x, position_y, attack_range) {
     this.type = type;
     this.health = health;
+    this.damage = damage;
     this.attach_speed = attach_speed;
     this.position_x = position_x;
     this.position_y = position_y;
-    
+    this.attack_range = attack_range || [-1]; // [top-y, bottom-y, left-x, right-x];
 }
 
-// Adam image testing
+
+// Adam's image testing
+// I THINK WE SHOULD TRY TO GET JUST THE ZOMBIE PICTURE WITHOUT THE ORANGE BOX AROUND IT (I wasn't shouting)
 var ctx = document.getElementById('canvas');
 var standardZombie = new Image;
-standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 var strongZombie = new Image;
+
+standardZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png";
 strongZombie.src = "http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png";
+
 var zombieImage = new Image;
-//*/
+
 
 
 // Game Canvas declaration, as well as methods for redraw
 myGameArea = {
     canvas : document.createElement("canvas"),
-  
-    start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
+    
+    // functions related to the canvas
+    drawCanvas : function() {
+        this.canvas.width = 480; // temporary dimension
+        this.canvas.height = 290;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        document.getElementById("lane").innerHTML = "Current Lane: "+'\u2191'+"\n";
     },
-    clear : function() {
+    clear : function() { // clears out the canvas
         this.context.clearRect(0,0,480,270);
     },
-    moveWhere : function(x, y, type) {
-        if      (type == "standard")    zombieImage = standardZombie;//this.context.fillStyle = "blue";
+    moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
+        if      (type == "standard")    zombieImage = standardZombie;
         else if (type == "strong")      zombieImage = strongZombie;
         else                            this.context.fillStyle = "red";
         
         if (x == undefined || y == undefined) return;
-        this.context.drawImage(zombieImage,(x||150),(y||30),30,30);
+        this.context.drawImage(zombieImage,x,y,30,30);
     },
-    addZombie : function(type) {
-        if      (type == "standard")     zombieImage = standardZombie;//this.context.fillStyle = "blue";
-        else if (type == "strong")       zombieImage = strongZombie;
+    addZombie : function(type, x, y) { // TEMP IMPLEMENTATION
+        if      (type == "standard")    zombieImage = standardZombie;
+        else if (type == "strong")      zombieImage = strongZombie;
         else                            this.context.fillStyle = "red";
         
-        this.context.drawImage(zombieImage,60,40,30,30);
+        this.context.drawImage(zombieImage,x,y,30,30);
+    },
+    drawTower : function(x, y, type) { // TEMP IMPLEMENTATION
+        if      (type == "regular")     this.context.fillStyle = "yellow";
+        else                            this.context.fillStyle = "yellow";
+        
+        this.context.fillRect(x,y,30,30);
+    },
+    zombieAttacked : function(x, y) {
+
+        this.context.fillStyle = "red";
+        this.context.fillRect(x+15,y+15,5,5);
+    },
+    loadImage : function() {
+        /*
+        image.src = "/Users/HaruLee/GitHub/IntenseDefenseP2D1/standard tower.png";
+        image.onload = function() {
+            document.getElementById("demo").innerHTML = "LOADED?!";
+            this.context.drawImage(image, 100, 100);
+        }
+        document.getElementById("positions").innerHTML = " image size: " +image.x +"_" +image.y;
+        */
     }
+
 }
 
 // Adding zombies
-
-// Haru's add methods-----------------------------------------------------------------
-/*function addStandardZombie() {
-    if (money < 100) {
+function addZombie(zombieType) {
+    if ((zombieType == "standard" && money < 100) ||
+        (zombieType == "strong"   && money < 200))
+    {
         window.alert("Not Enough Money");
         return;
     }
-    myGameArea.addZombie("standard");
-    zombies.push({
-                 type: "standard",
-                 health: 100,
-                 speed: 5,
-                 position_x: 0,
-                 position_y: 0,
-                 position_index: 0
-                 });
-    money -= 100;
+    myGameArea.addZombie(zombieType, 240, 0);
+    
+    if (zombieType == "standard") {
+        zombies.push({
+                     type: "standard",
+                     health: 100,
+                     speed: 5,
+                     position_x: 240,
+                     position_y: 0,
+                     lane: lane_position
+                     });
+        money -= 100;
+    }
+    else if (zombieType == "strong") {
+        zombies.push({
+                     type: "strong",
+                     health: 300,
+                     speed: 2,
+                     position_x: 240,
+                     position_y: 0,
+                     lane: lane_position
+                     });
+        money -= 200;
+    }
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
-}
-function addStrongZombie() {
-    if (money < 200) {
-        window.alert("Not Enough Money");
-        return;
-    }
-    myGameArea.addZombie("strong");
-    zombies.push({
-                 type: "strong",
-                 health: 300,
-                 speed: 2,
-                 position_x: 0,
-                 position_y: 0,
-                 position_index: 0
-                 });
-    money -= 200;
-    document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
-    "\n" + "Money left: " + money;
-}*/
-//-------------------------------------------------------------------------------------
-// Adam's add methods -----------------------------------------------------------------
-function addStandardZombie() {
-    if (money < 100) {
-        window.alert("Not Enough Money");
-        return;
-    }
-   if(lane == "center")
-    {
-	    zombies.push({
-		         type: "standard",
-		         health: 100,
-		         speed: 5,
-		         position_x: 240,
-		         position_y: 0,
-		         position_index: 0,
-			 zombieLane: "center"
-		         });
-    }
-    else if(lane == "right")
-    {
-	zombies.push({
-		         type: "standard",
-		         health: 100,
-		         speed: 5,
-		         position_x: 240,
-		         position_y: 0,
-		         position_index: 0,
-			 zombieLane: "right"
-		         });
-    }
-    else
-    {
-	zombies.push({
-		         type: "standard",
-		         health: 100,
-		         speed: 5,
-		         position_x: 240,
-		         position_y: 0,
-		         position_index: 0,
-			 zombieLane: "left"
-		         });
-    }
-    money -= 100;
-    document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
-    "\n" + "Money left: " + money;
-}
-function addStrongZombie() {
-    if (money < 200) {
-        window.alert("Not Enough Money");
-        return;
-    }
-    if(lane == "center")
-    {
-	    zombies.push({
-		         type: "strong",
-                 health: 300,
-                 speed: 2,
-                 position_x: 240,
-                 position_y: 0,
-                 position_index: 0,
-		 zombieLane: "center"
-		         });
-    }
-    else if(lane == "right")
-    {
-	zombies.push({
-		         type: "strong",
-                 health: 300,
-                 speed: 2,
-                 position_x: 240,
-                 position_y: 0,
-                 position_index: 0,
-			 zombieLane: "right"
-		         });
-    }
-    else
-    {
-	zombies.push({
-	         type: "strong",
-        	 health: 300,
-       		  speed: 2,
-      		   position_x: 240,
-        	 position_y: 0,
-       		  position_index: 0,
-		 zombieLane: "left"
-	         });
-    }
-    money -= 200;
-    document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
-    "\n" + "Money left: " + money;
-}
-/*----------------------------------------------------------------------------------*/
-function pickLane()
-{
-	if(lane == "center")
-		lane = "right";
-	else if(lane == "right")
-		lane = "left";
-	else
-		lane = "center";
-
-	document.getElementById("demo").innerHTML = "Current Lane "+lane+"\n";
 }
 
 // Adding towers
 function addTower() {
-    document.getElementById("towers").innerHTML = "accept input: ";
+    
     // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
-    var tower_x = document.getElementById("tower_x").value || 0;
-    var tower_y = document.getElementById("tower_y").value || 0;
+    var tower_x = document.getElementById("tower_x").value || 270; // TEMP SET OF DEFAULT AS 90
+    var tower_y = document.getElementById("tower_y").value || 90;
+
+    // I AM NOT SO SURE ABOUT THE RANGE!
+    // SINCE THE TOWER POSITION IS NOT THE CENTER OF THE DRAWING BUT THE LEFT TOP
+    var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
     
-    
-    document.getElementById("towers").innerHTML = "accept input x: [" +tower_x +", " +tower_y +"]";
+    myGameArea.drawTower(tower_x, tower_y, "regular");
+
     towers.push({
                 type: "regular",
                 health: 150,
+                damage: 30,
                 attack_speed: 3,
                 position_x: tower_x,
-                position_y: tower_y
+                position_y: tower_y,
+                attack_range: tower_attack_range
                 });
+    // for print out
     var position_str = "";
     for (var i=0; i < towers.length; i++) {
         position_str += " [" +towers[i].position_x + ", " + towers[i].position_y +"]";
     }
     document.getElementById("towers").innerHTML = "num: "+towers.length +" towers: " +position_str;
+    
+    setInterval(function() { towerAttack(towers[towers.length-1]); }, 500);
 }
 
 
 // Updating the zombies' positions every second
 function start() {
-    setInterval(updatePositions, 1000); // 1000 miliseconds = 1 sec
+    setInterval(updatePositions, 200); // 1000 miliseconds = 1 sec
 }
-/*Haru's update Positions ---------------------------------------------------------------------------------
 function updatePositions() {
     var position_str = "";
-    var dead_zombies = []; // index for dead zombies
+    var dead_zombies = []; // store indices for dead zombies
     
     myGameArea.clear();
     
+    // simply redrawing the towers again
+    for (var i=0; i < towers.length; i++) {
+        myGameArea.drawTower(towers[i].position_x, towers[i].position_y, towers[i].type);
+    }
+    
     for (var i=0; i < zombies.length; i++) {
-        var pos_index = zombies[i].position_index;
-        zombies[i].position_x = x_positions[pos_index+1];
-        zombies[i].position_y = y_positions[pos_index+1];
-        zombies[i].position_index++;
         
-        if (zombies[i].position_x == undefined || zombies[i].position_y == undefined ||
+        if (zombies[i].lane == "center" && zombies[i].position_y < 240)
+        {
+            zombies[i].position_y += zombies[i].speed;
+        }
+        else if (zombies[i].lane == "right")
+        {
+            if (zombies[i].position_x < 450 && zombies[i].position_y == 0)
+            {
+                zombies[i].position_x += zombies[i].speed;
+            }
+            else if (zombies[i].position_x == 450 && zombies[i].position_y < 240)
+            {
+                zombies[i].position_y += zombies[i].speed;
+            }
+            else if (zombies[i].position_x > 225 && zombies[i].position_y == 240)
+            {		
+                zombies[i].position_x -= zombies[i].speed;
+                
+            }
+        }
+        else
+        {
+            if(zombies[i].position_x > 30 && zombies[i].position_y == 0)
+            {
+                zombies[i].position_x-=zombies[i].speed
+            }
+            else if(zombies[i].position_x == 30 && zombies[i].position_y < 240)
+            {
+                zombies[i].position_y+=zombies[i].speed
+            }
+            else if(zombies[i].position_x < 225 && zombies[i].position_y == 240)
+            {		
+                zombies[i].position_x+=zombies[i].speed
+            }
+        }
+        
+        // DEAD?
+        // IN THE REAL GAME, WE WILL HAVE TO SEPARATE IF THE ZOMBIE ATTACKS THE BASE OR DIES FROM THE TOWER ATTACK
+        if (((zombies[i].position_x < 242 && zombies[i].position_x > 225) && zombies[i].position_y > 235) ||
             zombies[i].health <= 0) {
             dead_zombies.push(i);
             continue;
         }
         
-        myGameArea.moveWhere(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
+        myGameArea.moveZombie(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
         
-        position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +"]";
+        position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +", health: " +zombies[i].health +"]";
     }
-    for (var i=0; i < dead_zombies.length; i++) { // delete all dead zombies
+    
+    // delete all dead zombies
+    for (var i=0; i < dead_zombies.length; i++) {
         zombies.splice(dead_zombies[i], 1);
     }
-    if (dead_zombies.length > 0)
+    if (dead_zombies.length > 0) // update how many zombies alive
         document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
 
-    dead_zombies = []; // empties the array
-
     document.getElementById("positions").innerHTML = "positions: " +position_str;
+    
 }
-//------------------------------------------------------------------------------------------------------------*/
-// Adam's update Positions -----------------------------------------------------------------------------------
-function updatePositions() {
-    var position_str = "";
-    var dead_zombies = []; // index for dead zombies
-    myGameArea.clear();
-    for (var i=0; i < zombies.length; i++) 
-    {
-        var pos_index = zombies[i].position_index;
-	if(zombies[i].zombieLane == "center")
-	{	
-		if(zombies[i].position_y <240)
-		{
-			zombies[i].position_y+=zombies[i].speed
-		}	
-	}
-	else if(zombies[i].zombieLane == "right")
-	{
-		if(zombies[i].position_x < 450 && zombies[i].position_y == 0)
-		{		
-			zombies[i].position_x+=zombies[i].speed
-		}
-		else if(zombies[i].position_x == 450 && zombies[i].position_y < 240)
-		{		
-			zombies[i].position_y+=zombies[i].speed
-		}
-		else if(zombies[i].position_x > 225 && zombies[i].position_y == 240)
-		{		
-			zombies[i].position_x-=zombies[i].speed
-			
-		}
-	}
-	else
-	{
-		if(zombies[i].position_x > 30 && zombies[i].position_y == 0)
-		{		
-			zombies[i].position_x-=zombies[i].speed
-		}
-		else if(zombies[i].position_x == 30 && zombies[i].position_y < 240)
-		{		
-			zombies[i].position_y+=zombies[i].speed
-		}
-		else if(zombies[i].position_x < 225 && zombies[i].position_y == 240)
-		{		
-			zombies[i].position_x+=zombies[i].speed
-		}
-	}
-	myGameArea.moveWhere(zombies[i].position_x, zombies[i].position_y, zombies[i].type);
-	position_str += " [" +zombies[i].position_x + ", " + zombies[i].position_y +", "+zombies[i].zombieLane+"]";
+function towerAttack(tower) {
+    // ASSUME "FIRST IN RANGE"
+
+    // AR stands for attack range
+    var ar_top    = tower.attack_range[0];
+    var ar_bottom = tower.attack_range[1];
+    var ar_left   = tower.attack_range[2];
+    var ar_right  = tower.attack_range[3];
+    
+    var within_range = []; // indices of those zombies within the attack range
+    
+    // Searching for zombies within the attack range
+    for (var i=0; i < zombies.length; i++) {
+        
+        if (zombies[i].position_x >= ar_left && zombies[i].position_x <= ar_right &&
+            zombies[i].position_y >= ar_top  && zombies[i].position_y <= ar_bottom)
+        {
+            within_range.push(i);
+        }
     }
     
-    document.getElementById("positions").innerHTML = "positions: " +position_str;
-}
-//----------------------------------------------------------------------------------------------------------------------*/
-var myGamePiece;
-/*
-var a_canvas = document.getElementById("canv");
-var context = canvas.getContext('2d');
-context.rect(100,100,300,300);
-context.fillStyle = 'yellow';
-context.fill();
- */
-/*
- var a_canvas = document.getElementById("canv");
-var context = a_canvas.getContext("2d");
-context.fillStyle = "yellow";
-context.beginPath();
-context.arc(95, 85, 40, 0, 2*Math.PI);
-context.closePath();
-context.fill();
-context.lineWidth = 2;
-context.stroke();
-context.fillStyle = "black";
+    var the_front = -1; // index of the zombie that is in the most front (while within the attack range)
+    var the_front_x = -1;
+    var the_front_y = -1;
 
-context.font = "30px Garamond";
-context.fillText("Hello, World!",15,175);
- */
-/*
- document.getElementById("textbox_1").value='';
- document.getElementById("textbox_2").value='';
- if(document.getElementById("textbox_1").focused){
- document.getElementById("textbox_1").value=text_to_be_inserted;
- }
- function addtext() {
-	var newtext = document.myform.inputtext.value;
-	if (document.myform.placement[1].checked) {
-        document.myform.outputtext.value = "";
+    // Looking for the_front
+    for (var i=0; i < within_range.length; i++) {
+        var index = within_range[i];
+        
+        function downFront(zombie, index) {
+            if (zombie.position_y > the_front_y) {
+                the_front   = index;
+                the_front_y = zombie.position_y;
+            }
+        }
+        function leftFront(zombie, index) {
+            if (zombie.position_x < the_front_x) {
+                the_front   = index;
+                the_front_x = zombie.position_x;
+            }
+        }
+        function rightFront(zombie, index) {
+            if (zombie.position_x > the_front_x) {
+                the_front   = index;
+                the_front_x = zombie.position_x;
+            }
+        }
+
+        // THIS WILL NEED AN UPDATE AS IT ASSUMES THAT A TOWER CAN ONLY ATTACK ONE LANE
+        // WHEREAS A TOWER MAY ATTACK EITHER LEFT/RIGHT LANE AS WELL AS CENTER LANE
+        
+        // THIS ALSO DOES POOR CALCULATION IN THE CORNER AS WELL
+        
+        if (tower.position_x < 240) { // ASSUMING THIS ONLY ATTACKS LEFT LANE
+            
+            if (tower.position_y == 0) { // going left
+                leftFront(zombies[index], index);
+            }
+            else if (tower.position_y > 0 && tower.position_y < 240) { // going down
+                downFront(zombies[index], index);
+            }
+            else { // going right
+                rightFront(zombies[index], index);
+
+            }
+        }
+        else if (tower.position > 270) { // ASSUMING THIS ONLY ATTACKS RIGHT LANE
+            
+            if (tower.position_y == 0) { // going right
+                rightFront(zombies[index], index);
+            }
+            else if (tower.position_y > 0 && tower.position_y < 240) { // going down
+                downFront(zombies[index], index);
+            }
+            else { // going left
+                leftFront(zombies[index], index);
+            }
+        }
+        else { // ASSUMING THIS ONLY ATTACKS CENTER LANE
+            downFront(zombies[index], index);
+        }
     }
-	document.myform.outputtext.value += newtext;
- }
- */
-/*
-var zombie1 = new Zombie("standard", 100, 5, 0); // creating an object
-zombie1.damage(10); // calling the object function
+    if (the_front != -1)
+        zombies[the_front].health -= tower.damage; // there is a function but this will do too
 
-for (var i=0; i < 10; i++) {
-    zombies.push({
-                 type: "standard",
-                 health: 100,
-                 speed: 5,
-                 position: 0
-    });
+    // putting a dot on top of the zombie
+    myGameArea.zombieAttacked(zombies[the_front].position_x, zombies[the_front].position_y);
 }
-for (var counter=0; counter < zombies.length; counter++) {
-    var array_index = 0;
-    if (zombies[i].health <= 0) {
-        zombies.splice(array_index, 1);
-        continue;
-    }
-    array_index++;
+
+function pickLane()
+{
+    var lane_arrow;
+    if      (lane_position == "center") { lane_position = "right";  lane_arrow = '\u2192';}
+    else if (lane_position == "right")  { lane_position = "left";   lane_arrow = '\u2190';}
+    else                                { lane_position = "center"; lane_arrow = '\u2191';}
+    
+    document.getElementById("lane").innerHTML = "Current Lane: "+lane_arrow+"\n";
 }
-// function expression example
-var x = function (a, b) { return a * b; };
-var z = x(4, 3);
-
-*/
-/*
- JavaScript function definitions do not specify data types for parameters.
- 
- JavaScript functions do not perform type checking on the passed arguments.
- 
- JavaScript functions do not check the number of arguments received.
- 
- If a function is called with missing arguments (less than declared), the missing values are set to: undefined
- 
- If a function is called with too many arguments (more than declared), these arguments can be reached using the arguments object.
- example: function findMax() --> findMax(4,5,6) --> access the arguments with arguments[i]
- 
- */
-/*
-var add = (function () {
-           javascript counter = 0;
-           return function () {return counter+=1;};
-           })();
-
-add();
-add();
-add(); // counter is 3
-
- This add function above allows counter variable to be used only in add (vs making it global)
- while avoiding re-declaration of the variable whenever we call the function*/
