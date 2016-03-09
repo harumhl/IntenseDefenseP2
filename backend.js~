@@ -91,8 +91,22 @@ myGameArea = {
 		
     },
     clear : function() { // clears out the canvas
-        this.context.clearRect(0,0,676,733);
-	this.context.drawImage(background,0,0, 676, 733);
+        this.context.clearRect(0,0,xMax,yMax);
+	this.context.drawImage(background,0,0, xMax, yMax);
+	for(var x = 0; x<xMax; x+=30)
+	{
+		ctx.beginPath();
+		ctx.moveTo(x-2,0);
+		ctx.lineTo(x-2,yMax);
+		ctx.stroke();
+	}
+	for(var y = 0; y<yMax; y+=30)
+	{
+		ctx.beginPath();
+		ctx.moveTo(0,y-2);
+		ctx.lineTo(xMax,y-2);
+		ctx.stroke();
+	}
     },
     moveZombie : function(x, y, type) { // TEMP NAME + IMPLEMENTATION
         if      (type == "standard")    zombieImage = standardZombie;
@@ -145,15 +159,15 @@ function addZombie(zombieType) {
         window.alert("Not Enough Money");
         return;
     }
-    myGameArea.addZombie(zombieType, xMax/2, 0);
+    myGameArea.addZombie(zombieType, xMax/2-8, 45);
     
     if (zombieType == "standard") {
         zombies.push({
                      type: "standard",
                      health: 100,
                      speed: 5,
-                     position_x: xMax/2,
-                     position_y: 0,
+                     position_x: xMax/2-8,
+                     position_y: 45,
                      lane: lane_position
                      });
         money -= 100;
@@ -163,8 +177,8 @@ function addZombie(zombieType) {
                      type: "strong",
                      health: 300,
                      speed: 2,
-                     position_x: xMax/2,
-                     position_y: 0,
+                     position_x: xMax/2-8,
+                     position_y: 45,
                      lane: lane_position
                      });
         money -= 200;
@@ -174,8 +188,8 @@ function addZombie(zombieType) {
                      type: "healing",
                      health: 300,
                      speed: 2,
-                     position_x: xMax/2,
-                     position_y: 0,
+                     position_x: xMax/2-8,
+                     position_y: 45,
                      lane: lane_position
                      });
         money -= 200;
@@ -185,8 +199,8 @@ function addZombie(zombieType) {
                      type: "generations",
                      health: 300,
                      speed: 2,
-                     position_x: xMax/2,
-                     position_y: 0,
+                     position_x: xMax/2-8,
+                     position_y: 45,
                      lane: lane_position
                      });
         money -= 200;
@@ -304,45 +318,49 @@ function updatePositions() {
     
     for (var i=0; i < zombies.length; i++) {
         
-        if (zombies[i].lane == "center" && zombies[i].position_y < yMax-30)
+        if (zombies[i].lane == "center" && zombies[i].position_y < yMax-90)
         {
             zombies[i].position_y += zombies[i].speed;
         }
         else if (zombies[i].lane == "right")
         {
-            if (zombies[i].position_x < xMax-30 && zombies[i].position_y == 0)
+            if (zombies[i].position_x < xMax-90 && zombies[i].position_y <= 45)
             {
                 zombies[i].position_x += zombies[i].speed;
             }
-            else if (zombies[i].position_x >= xMax-30 && zombies[i].position_y < yMax-30)
+            else if (zombies[i].position_x >= xMax-90 && zombies[i].position_y < yMax-150)
             {
                 zombies[i].position_y += zombies[i].speed;
             }
-            else if (zombies[i].position_x > xMax/2-30 && zombies[i].position_y >= yMax-30)
+            else if (zombies[i].position_x > xMax/2-8 && zombies[i].position_y >= yMax-150)
             {		
                 zombies[i].position_x -= zombies[i].speed;
                 
             }
+	    else
+		zombies[i].lane = "center";
         }
         else
         {
-            if(zombies[i].position_x > 0 && zombies[i].position_y == 0)
+            if(zombies[i].position_x > 65 && zombies[i].position_y <= 45)
             {
                 zombies[i].position_x-=zombies[i].speed
             }
-            else if(zombies[i].position_x <= 30 && zombies[i].position_y < yMax-30)
+            else if(zombies[i].position_x <= 65 && zombies[i].position_y < yMax-150)
             {
                 zombies[i].position_y+=zombies[i].speed
             }
-            else if(zombies[i].position_x < xMax/2-15 && zombies[i].position_y >= yMax-30)
+            else if(zombies[i].position_x < xMax/2-8 && zombies[i].position_y >= yMax-150)
             {		
                 zombies[i].position_x+=zombies[i].speed
             }
+	    else
+		zombies[i].lane = "center";
         }
         
         // DEAD?
         // IN THE REAL GAME, WE WILL HAVE TO SEPARATE IF THE ZOMBIE ATTACKS THE BASE OR DIES FROM THE TOWER ATTACK
-        if (((zombies[i].position_x < 242 && zombies[i].position_x > 225) && zombies[i].position_y > 235) ||
+        if (((zombies[i].position_x <= xMax/2-8 && zombies[i].position_x >= xMax/2-8) && zombies[i].position_y >= yMax-90) ||
             zombies[i].health <= 0) {
             dead_zombies.push(i);
             continue;
