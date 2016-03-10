@@ -9,6 +9,7 @@ function func(){
 
 var xMax = 676;
 var yMax = 733;
+var generationsBalancer = 2;
 // for tower purchase
 var lane_position = "center";
 var money = 1000; // money for the offensive player
@@ -220,12 +221,28 @@ function addZombie(zombieType) {
     document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
     "\n" + "Money left: " + money;
 }
-
+function generationDeath(deathPos_x, deathPos_y, deathLane)
+{
+    for(var i = 0; i< generationsBalancer; i++)
+    {
+	myGameArea.addZombie("standard", deathPos_x, deathPos_y);
+        zombies.push({
+                     type: "standard",
+                     health: 100,
+                     speed: 5,
+                     position_x: deathPos_x,
+                     position_y: deathPos_y,
+                     lane: deathLane
+                     });
+    }	
+    document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
+    "\n" + "Money left: " + money;  
+}
 // Adding towers: selectTower -> doMouseDown (mouse click on map) -> addTower
 function selectTower(towerType) {
     is_tower_selected = true;
-    
     tower_selection = towerType;
+	
 }
 
 function addTower(towerType, tower_x, tower_y) {
@@ -374,6 +391,10 @@ function updatePositions() {
         // IN THE REAL GAME, WE WILL HAVE TO SEPARATE IF THE ZOMBIE ATTACKS THE BASE OR DIES FROM THE TOWER ATTACK
         if (((zombies[i].position_x <= xMax/2-8 && zombies[i].position_x >= xMax/2-8) && zombies[i].position_y >= yMax-90) ||
             zombies[i].health <= 0) {
+	    if(zombies[i].type == "generations" && zombies[i].health<=0)
+	    {
+		generationDeath(zombies[i].position_x, zombies[i].position_y, zombies[i].zombieLane);
+	    }
 	    baseHealth -= zombies[i].health;
             dead_zombies.push(i);
 	    document.getElementById("base").innerHTML = "Base Health "+baseHealth+"\n";
@@ -535,3 +556,4 @@ function doMouseDown(event) { // Gets mouse position coordinate when click
     }
     is_tower_selected = false;
 }
+
