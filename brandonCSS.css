@@ -62,6 +62,10 @@
 
 /* want to try to give the buttons an effect when user clicks on them*/
 /*#button 
+=======
+/* want to try to give the buttons an effect when user clicks on them
+#button 
+>>>>>>> master
 {
   background: url(button.png) no-repeat top;
 }
@@ -71,8 +75,6 @@
 {
     background: url(button.png) no-repeat bottom;
 }*/
-
-
 
 /* MODAL - will be used to display WIN/LOSE to the user*/
 .modal { /* this is the background for the modal */
@@ -111,15 +113,3 @@
     text-decoration: none;
     cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-
-
-

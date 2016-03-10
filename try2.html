@@ -9,11 +9,30 @@
             background-color: #f1f1f1;
         }
     </style>
-</head>
-<body onload="startGame()">
-  <script>
     
-  </script>
+</head>
+<body onload="myGameArea.drawCanvas();start();">
+    <script src="try2.js"></script>
+    
+    <br>
+    <input type="image" src="blue zombie.png" onclick="addZombie('standard')" height="48"> standard zombie</button>
+    <br>
+    <input type="image" src="green zombie.png" onclick="addZombie('strong')"  height="48"> strong zombie</button>
+    <br>
+    <input type="image" src="standard tower.png" onclick="addTower('standard')"  height="48"> regular tower</button>
+    <br>
+	<input type="image" src="strong tower.png" onclick="addTower('strong')"  height="48"> strong tower</button>
+    <br>
+    <button onclick="pickLane()">Pick Lane</button>
+    <p id="lane"></p>
+    <br>
+    tower x: <input type="text" id="tower_x">
+    <br>
+    tower y: <input type="text" id="tower_y">
+    <p id="demo"></p>
+    <p id="positions"></p>    
+    <p id="towers"></p>
+
 </body>
 
 </html>

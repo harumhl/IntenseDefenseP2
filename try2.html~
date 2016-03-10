@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        canvas {
+            border:1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+    </style>
+    
+</head>
+<body onload="myGameArea.start()">
+    <script src="try2.js"></script>
+    
+    <br>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/blue zombie.png" onclick="addStandardZombie()"> standard zombie</button>
+    <br>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/green zombie.png" onclick="addStrongZombie()"> strong zombie</button>
+    <br>
+    <input type="image" src="/Users/HaruLee/GitHub/IntenseDefenseP2D1/standard tower.png" onclick="addTower()"> regular tower</button>
+    <br>
+    <button onclick="start();myGameArea.start();">start</button>
+    <br>
+    <button onclick="pickLane();">Pick Lane</button>
+    <br>
+    tower x: <input type="text" id="tower_x">
+    <br>
+    tower y: <input type="text" id="tower_y">
+    <p id="demo"></p>
+    <p id="positions"></p>    
+    <p id="towers"></p>
+
+</body>
+
+</html>
