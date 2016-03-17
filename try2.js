@@ -9,7 +9,7 @@ var towers = [];  // keeps all (alive) tower objects
 var image = new Image(); // TEMP: tried to display zombie/tower image on canvas
 
 // game canvas
-var myGameArea;
+var myGameArea; //
 
 // Object constructor function
 // You can treat Zombie and Tower as Classes (or rather, Struct)
