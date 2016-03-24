@@ -1,32 +1,23 @@
  /* Back-end JS */
 //class Zombie {}
 
-function func(){
-    window.alert("ADFGHSFGJHSFGJ");
-}
-
-
-
 var xMax = 676;
 var yMax = 733;
 var generationsBalancer = 2;
-// for tower purchase
 var lane_position = "center";
 var money = 1000; // money for the offensive player
 var baseHealth = 1000;
 var zombies = []; // keeps all (alive) zombie objects
 var towers = [];  // keeps all (alive) tower objects
+var myGameArea; // game canvas
+
+// for tower purchase
 var is_tower_selected = false;
 var tower_selection; // same as string towerType, but glocal
-var myGameArea;
-
-var image = new Image(); // TEMP: tried to display zombie/tower image on canvas
-
-// game canvas
 
 
-// Object constructor function
-// You can treat Zombie and Tower as Classes (or rather, Struct)
+
+// Object constructor function // You can treat Zombie and Tower as Classes (or rather, Struct)
 function Zombie(type, health, speed, position_x, position_y, lane) {
     this.type = type;
     this.health = health;
@@ -254,10 +245,11 @@ function addTower(towerType, tower_x, tower_y) {
     // I AM NOT SO SURE ABOUT THE RANGE!
     // SINCE THE TOWER POSITION IS NOT THE CENTER OF THE DRAWING BUT THE LEFT TOP
     
+    // var t_attack_range = {top:tower_y-30, bottom:tower_y+60, left:tower_x-30, right:tower_x+60};
+    var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
 
     if(towerType == "regular")
 	{
-		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
 		
 		myGameArea.drawTower(tower_x, tower_y, "regular");
 
@@ -273,8 +265,6 @@ function addTower(towerType, tower_x, tower_y) {
 	}
 	else if(towerType == "strong")
 	{
-		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
-		
 		myGameArea.drawTower(tower_x, tower_y, "strong");
 
 		towers.push({
@@ -289,8 +279,6 @@ function addTower(towerType, tower_x, tower_y) {
 	}
 	else if(towerType == "splash")
 	{
-		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
-		
 		myGameArea.drawTower(tower_x, tower_y, "splash");
 
 		towers.push({
@@ -305,8 +293,6 @@ function addTower(towerType, tower_x, tower_y) {
 	}
 	else if(towerType == "slow")
 	{
-		var tower_attack_range = [tower_y-30, tower_y+60, tower_x-30, tower_x+60];
-		
 		myGameArea.drawTower(tower_x, tower_y, "slow");
 
 		towers.push({
