@@ -15,6 +15,7 @@ function preload() {
     game.load.image('title','images/Title.png');
     game.load.image('map','images/map.png');
     game.load.spritesheet('standardZombie', 'images/Zombies/standardZombie.png');
+    game.load.spritesheet('strongZombie', 'images/Zombies/strongZombie.png');
     
     // WALKIN' PLAYER
     game.load.spritesheet('dude', 'dude.png', 32, 48);
@@ -26,13 +27,16 @@ function create() {
     game.add.sprite(0,0,'title');
     game.add.sprite(144,129,'map');
     
+    // Creating group objects
     buttonGroup = game.add.group();
     zombieGroup = game.add.group();
     
-    var standardZombieButton =game.make.button(40, 160,'standardZombie', buyZombie, this, 0, 0, 0);
-    window.rich = standardZombieButton;
+    var standardZombieButton =game.make.button(40, 160,'standardZombie', function(){buyZombie("standard");}, this, 0, 0, 0);
+    var strongZombieButton  = game.make.button(40, 320,'strongZombie', function(){buyZombie("strong");}, this, 0, 0, 0);
     
+    // Attaching buttons to the screen
     buttonGroup.add(standardZombieButton);
+    buttonGroup.add(strongZombieButton);
     
     // WALKIN' PLAYER
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -45,9 +49,14 @@ function create() {
     player.animations.add('right', [5, 6, 7, 8], 4, true);
     cursors = game.input.keyboard.createCursorKeys();
 }
-function buyZombie() {
-    zombieGroup.add( game.add.sprite(450,160,'standardZombie') );
+function buyZombie(type) {
+    
+    if (type == "standard")
+        zombieGroup.add( game.add.sprite(450,160,'standardZombie') );
+    else if (type == "strong")
+        zombieGroup.add( game.add.sprite(450,160,'strongZombie') );
 }
+
 
 function update() {
     
