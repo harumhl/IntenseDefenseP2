@@ -11,6 +11,8 @@ var zombieGroup;
 
 /* most of the time you need these next 3 functions to run games */
 function preload() {
+    var playerName = prompt("Please enter your name", "name");
+    localStorage.setItem("playerName", playerName);
     
     game.load.image('title','images/Title.png');
     game.load.image('map','images/map.png');
@@ -37,6 +39,7 @@ function create() {
     // Attaching buttons to the screen
     buttonGroup.add(standardZombieButton);
     buttonGroup.add(strongZombieButton);
+
     
     // WALKIN' PLAYER
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -60,8 +63,11 @@ function buyZombie(type) {
 
 function update() {
     
+    // Change settings for every zombie elements
     zombieGroup.forEach(function(zombie) {
-                       zombie.position.y += 1;
+                       
+        zombie.position.y += 1;
+                        
     }, this);
     
     //  Reset the players velocity (movement)
