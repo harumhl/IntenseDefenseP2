@@ -7,6 +7,7 @@ var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { prelo
 var player;
 var cursors;
 var buttonGroup;
+var zombieGroup;
 
 /* most of the time you need these next 3 functions to run games */
 function preload() {
@@ -26,6 +27,7 @@ function create() {
     game.add.sprite(144,129,'map');
     
     buttonGroup = game.add.group();
+    zombieGroup = game.add.group();
     
     var standardZombieButton =game.make.button(40, 160,'standardZombie', buyZombie, this, 0, 0, 0);
     window.rich = standardZombieButton;
@@ -44,13 +46,14 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 function buyZombie() {
-    game.add.sprite(450,160,'standardZombie');
+    zombieGroup.add( game.add.sprite(450,160,'standardZombie') );
 }
 
 function update() {
     
-    //var temp = buttonGroup.getAt(0); // not button but zombie
-    
+    zombieGroup.forEach(function(zombie) {
+                       zombie.position.y += 1;
+    }, this);
     
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
