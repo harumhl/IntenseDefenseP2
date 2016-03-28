@@ -10,6 +10,7 @@ var baseHealth = 1000;
 var zombies = []; // keeps all (alive) zombie objects
 var towers = [];  // keeps all (alive) tower objects
 var myGameArea; // game canvas
+var  state;
 
 // for tower purchase
 var is_tower_selected = false;
@@ -77,7 +78,19 @@ window.onload = function() {
   socket.onmessage = function(event) 
   {
   	var message = event.data;
-	if(message.substring(0,9) == 'addZombie')
+	if(message == 'Attacker'){
+		state = 'attacker';
+		console.log(state);
+	}
+	else if(message == 'Defender'){
+		state = 'defender';
+		console.log(state);
+	}
+	else if(message == 'Observer'){
+		state = 'observer';
+		console.log(state);
+	}
+	else if(message.substring(0,9) == 'addZombie')
 		addZombie(message.substring(9, message.length));
 	else
 	{
@@ -206,6 +219,7 @@ myGameArea = {
 
 // Adding zombies
 function sendAddZombie(zombieType){
+	if(state == 'attacker')
 		socket.send("addZombie"+zombieType);
 }
 function addZombie(zombieType) {
@@ -607,7 +621,7 @@ function doMouseDown(event) { // Gets mouse position coordinate when click
     canvasX = event.pageX - totalOffsetX - document.body.scrollLeft;
     canvasY = event.pageY - totalOffsetY - document.body.scrollTop;
     // Add the tower
-    if (is_tower_selected == true) {
+    if (is_tower_selected == true && state == 'defender') {
         if(canvasX >0 && canvasX<676 && canvasY>0 && canvasY<733)
        	 socket.send('addTower,'+tower_selection+','+(canvasX-15)+','+(canvasY-15));
 	else

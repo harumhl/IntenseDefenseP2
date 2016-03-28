@@ -2,6 +2,7 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var connections = [];
+var numConnected = 0;
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
@@ -36,6 +37,13 @@ wsServer.on('request', function(request) {
 
     var connection = request.accept('echo-protocol', request.origin);
     connections.push(connection);
+	if(numConnected == 0)
+		connection.sendUTF('Attacker');
+	else if(numConnected == 1)
+		connection.sendUTF('Defender');
+	else
+		connection.sendUTF('Observer');
+	numConnected++;
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -53,6 +61,7 @@ wsServer.on('request', function(request) {
     });
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+		numConnected--;
     });
 });
 
