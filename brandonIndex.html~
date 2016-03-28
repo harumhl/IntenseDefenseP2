@@ -32,16 +32,16 @@
         <div id ="leftPanel">
             Offensive Zombies
             <br>
-            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png" onclick="sendAddZombie('standard')"></button>
+            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/greenZombie.png" onclick="addZombie('standard')"></button>
                 <br>Standard Zombie
         
-            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png" onclick="sendAddZombie('strong')"></button>
+            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/blueZombie.png" onclick="addZombie('strong')"></button>
                 <br>Strong Zombie
         
-            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png" onclick="sendAddZombie('healing')"></button>
+            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/healingZombie.png" onclick="addZombie('healing')"></button>
                 <br>Healing Zombie
         
-            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/generationsZombie.png" onclick="sendAddZombie('generations')"></button>
+            <input type="image" id="button" src="http://www.googledrive.com/host/0B48gj1-oLHONUGQ5Q3VvSFFEalk/generationsZombie.png" onclick="addZombie('generations')"></button>
                 <br>Generations Zombie
     
             <!-- Temporary location for next 2 lines -->

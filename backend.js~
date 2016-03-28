@@ -205,9 +205,6 @@ myGameArea = {
 }
 
 // Adding zombies
-function sendAddZombie(zombieType){
-		socket.send("addZombie"+zombieType);
-}
 function addZombie(zombieType) {
     if ((zombieType == "standard" && money < 100) ||
         (zombieType == "strong"   && money < 200))
@@ -215,6 +212,7 @@ function addZombie(zombieType) {
         window.alert("Not Enough Money");
         return;
     }
+    socket.send("addZombie"+zombieType);
     myGameArea.addZombie(zombieType, xMax/2-8, 45);
     
     if (zombieType == "standard") {
