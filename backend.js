@@ -81,14 +81,17 @@ window.onload = function() {
 	if(message == 'Attacker'){
 		state = 'attacker';
 		console.log(state);
+		document.getElementById("state").innerHTML = "Attacker";
 	}
 	else if(message == 'Defender'){
 		state = 'defender';
 		console.log(state);
+		document.getElementById("state").innerHTML = "Defender";
 	}
 	else if(message == 'Observer'){
 		state = 'observer';
 		console.log(state);
+		document.getElementById("state").innerHTML = "Observer";
 	}
 	else if(message.substring(0,9) == 'addZombie')
 		addZombie(message.substring(9, message.length));
