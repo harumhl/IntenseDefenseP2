@@ -2,6 +2,14 @@
 
 var dudeSprite;
 
+Zombie = function(type, lane) {
+    this.type = type;
+    this.lane = lane;
+}
+Zombie.prototype.damage = function(damage) {
+    this.health -= damage;
+}
+
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 
 var player;
