@@ -28,7 +28,72 @@ function preload() {
     // WALKIN' PLAYER
     game.load.spritesheet('dude', 'dude.png', 32, 48);
 }
-
+window.onload = function() {
+  // Create a new WebSocket.
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11745', "echo-protocol");
+  
+  // Handle messages sent by the server.
+  socket.onmessage = function(event) 
+  {
+  	var message = event.data;
+	if(message == 'Attacker'){
+		state = 'attacker';
+		console.log(state);
+		document.getElementById("state").innerHTML = "Attacker";
+	}
+	else if(message == 'Defender'){
+		state = 'defender';
+		console.log(state);
+		document.getElementById("state").innerHTML = "Defender";
+	}
+	else if(message == 'Observer'){
+		state = 'observer';
+		console.log(state);
+		document.getElementById("state").innerHTML = "Observer";
+	}
+	else if(message.substring(0,9) == 'addZombie')
+		buyZombie(message.substring(9, message.length));
+	else
+	{
+		var commaCounter = 0;
+           	var towerType = '';
+		var pos_x = '';
+		var pos_y = '';		
+		for(i = 0; i<message.length; i++)
+		{
+			if(commaCounter<1)
+			{
+				if(message[i] == ',')
+					commaCounter++			
+			}			
+			else if(commaCounter == 1)
+			{
+				console.log(message[i]);
+				if(message[i] != ',')
+					towerType += message[i];
+				else
+					commaCounter++;			
+			}
+			else if(commaCounter == 2)
+			{
+				if(message[i] != ',')
+					pos_x += message[i];
+				else
+					commaCounter++;			
+			}
+			else
+			    pos_y+=message[i];
+			
+		}
+		console.log(towerType+' '+pos_x+' '+pos_y);
+		addTower(towerType, pos_x, pos_y);	
+	}
+  };
+}
+  function sendAddZombie(zombieType){
+	if(state == 'attacker')
+		socket.send("addZombie"+zombieType);
+}
 function create() {
     /* load images on the background */
     game.stage.backgroundColor = "#FFFF00"; // background color for button panel
@@ -44,8 +109,8 @@ function create() {
     towerGroup  = game.add.group();
     
     // Creating each button
-    var standardZombieButton = game.make.button(40, 160, 'standardZombie', function(){buyZombie("standard");}, this, 0, 0, 0);
-    var strongZombieButton  =  game.make.button(40, 320, 'strongZombie', function(){buyZombie("strong");}, this, 0, 0, 0);
+    var standardZombieButton = game.make.button(40, 160, 'standardZombie', function(){sendAddZombie("standard");}, this, 0, 0, 0);
+    var strongZombieButton  =  game.make.button(40, 320, 'strongZombie', function(){sendAddZombie("strong");}, this, 0, 0, 0);
     
     var minigunTowerButton  =  game.make.button(870, 160, 'minigunTower', function(){buyTower("minigun");}, this, 0, 0, 0);
     
