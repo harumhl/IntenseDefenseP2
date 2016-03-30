@@ -8,8 +8,8 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
-server.listen(11745, function() {
-    console.log((new Date()) + 'Intese Defense Server is listening on port 11745');
+server.listen(11998, function() {
+    console.log((new Date()) + 'Intese Defense Server is listening on port 11998');
 });
 
 wsServer = new WebSocketServer({

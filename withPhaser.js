@@ -29,16 +29,16 @@ function preload() {
     
     game.load.image('title','images/Title.png');
     game.load.image('map','images/map.png');
-    game.load.spritesheet('standardZombie', 'images/Zombies/standardZombie.png');
-    game.load.spritesheet('strongZombie', 'images/Zombies/strongZombie.png');
-    game.load.spritesheet('minigunTower', 'images/Towers/tower_minigun.png');
+    game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
+    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrongButton.png');
+    game.load.spritesheet('minigunTower', 'images/Towers/towerMinigunButton.png');
     
     // WALKIN' PLAYER
     game.load.spritesheet('dude', 'dude.png', 32, 48);
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11745', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11998', "echo-protocol");
   
   // Handle messages sent by the server.
   socket.onmessage = function(event) 
