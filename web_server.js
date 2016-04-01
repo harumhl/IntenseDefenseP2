@@ -1,15 +1,17 @@
 var express = require('express');
 var app = express();
-
 app.use('/static', express.static('static'));
+var path = require('path');
 
-// socket.io stuff goes here ...
-
+// viewed at http://localhost:8080
 app.get('/', function(req, res) {
-  res.send('hello world');
+	console.log('sending file '+__dirname+'/withPhaser.html');
+    res.sendFile(__dirname + '/static/withPhaser.html');
 });
 
-app.listen(13000, function () {
-  console.log('Example app listening on port 13000!');
-});
 
+app.listen(13001, function(){
+console.log(__dirname);
+console.log('Example app listening on port13001');
+
+});
