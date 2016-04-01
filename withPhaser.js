@@ -1,5 +1,7 @@
 /* game.js */
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
+var text;//temp
+var bulletTravelTime = 200;
 
 // Zombie Class
 Zombie = function(type, lane, health, speed, spriteName) {
@@ -8,12 +10,18 @@ Zombie = function(type, lane, health, speed, spriteName) {
     this.health = health;
     this.speed = speed;
     
-    this.x = 450;
-    this.y = 160;
+    //this.position_x = 450;
+    this.x = 450+36;
+    this.y = 160+36;
     this.alive = true;
-   
-    this.image = game.add.sprite(this.x, this.y, spriteName);
     
+    //this.created = this.game.time.now;
+   
+    this.image = game.add.sprite(this.x-36, this.y-36, spriteName);
+/*
+    if      (this.type == "standard") this.y += bulletTravelTime*1 +10; //created*__
+    else if (this.type == "strong")   this.y += bulletTravelTime*0.3;
+*/
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 Zombie.prototype.move = function() {
@@ -27,14 +35,16 @@ Zombie.prototype.move = function() {
         this.image.y += 0.3;
     }    
 };
-Zombie.prototype.damage = function() {
-    this.health -= 1;
-    
+Zombie.prototype.damage = function(damage, bullet) { // I SHOULD NOT NEED THE 2ND ARG
+    this.health -= damage;
+     game.debug.text( "damage!"+this.health,100,450);
+
     if (this.health <= 0) {
         
         this.alive = false;
         
         this.image.kill();
+        bullet.kill();
         
         return true;
     }
@@ -76,7 +86,10 @@ Tower.prototype.attack = function(underAttack) {
         var offset =36; // should be 36
         bullet.reset(this.x+offset, this.y+offset);
 
-        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 300, 500);
+        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 500, bulletTravelTime);
+        
+        // applying damage to zombie
+        underAttack.damage(34, bullet);
     }
 };
 Tower.prototype.update = function() {};
@@ -258,6 +271,13 @@ function update() {
 
     // Change settings for every zombie elements
     for (var i=0; i< zombieArray.length; i++) {
+        
+        if (zombieArray[i].alive == false) {
+            zombieArray.splice(i, 1);
+            continue;
+        }
+
+        
         zombieArray[i].move();
         
         game.debug.text( "zombie number "+i+zombieArray[i].type, 20*i, 20*i);
@@ -348,9 +368,9 @@ function update() {
         //game.debug.text( "under attack zombie index (inside withinRangeArray) : "+frontIndex+"_"+withinRangeArray[frontIndex] +"_"+zombieArray[withinRangeArray[frontIndex]].type+"_"+withinRangeArray.length+"_"+int, 150,150);
 
         // 3. attack!
-        game.physics.arcade.overlap(towerBullets, zombieArray, 
-        function(bullet,zombie){bullet.kill();game.debug.text("BULLET KILLED",330,330);}, null, this);
-
+        var istrue = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image, 
+            function(zombie,bullet){bullet.kill();}, null, this);
+        
         towerArray[i].attack(zombieArray[frontIndex]);
                   index++;  
 
