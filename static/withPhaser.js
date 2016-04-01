@@ -50,8 +50,6 @@ function preload() {
     game.load.spritesheet('bombTower', 'images/Towers/towerBombButton.png');
     //zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
-    // WALKIN' PLAYER
-    game.load.spritesheet('dude', 'dude.png', 32, 48);
 }
 window.onload = function() {
   // Create a new WebSocket.
@@ -176,17 +174,6 @@ function create() {
 
     // Enabling cursor tracker
     cursors = game.input.keyboard.createCursorKeys();
-
-    // WALKIN' PLAYER
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    player = game.add.sprite(150, 150, 'dude');
-    game.physics.arcade.enable(player);
-    player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
-    player.body.collideWorldBounds = true;
-    player.animations.add('left', [0, 1, 2, 3], 4, true);
-    player.animations.add('right', [5, 6, 7, 8], 4, true);
-    cursors = game.input.keyboard.createCursorKeys();
 }
 function buyZombie(type) {
     
@@ -255,31 +242,5 @@ function update() {
 	var message = JSON.stringify(zombieStatArray);
 	//console.log(message);
 	socket.send(message);
-	}
-    
-    //  Reset the players velocity (movement)
-    player.body.velocity.x = 0;
-    
-    if (cursors.left.isDown)
-    {
-        //  Move to the left
-        player.body.velocity.x = -50;
-        
-        player.animations.play('left');
-    }
-    else if (cursors.right.isDown)
-    {
-        //  Move to the right
-        player.body.velocity.x = 50;
-        
-        player.animations.play('right');
-    }
-    else
-    {
-        //  Stand still
-        player.animations.stop();
-        
-        player.frame = 4;
-    }
-    
+	}    
 }
