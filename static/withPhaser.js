@@ -12,16 +12,24 @@ Zombie.prototype.damage = function(damage) {
 
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 
+var lane = 'left';
 var player;
 var cursors;
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons
 var zombieGroup; // array of zombies
 var towerGroup;  // array of towers
-
-
+var zombieStatArray = [];
+var state;
 var gTowerType = ""; // flag && global variable for tower placement - g for global
 
-
+function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
+{
+	this.lane = _lane;
+	this.pos_x = _pos_x;
+	this.pos_y = _pos_y;
+	this.health = _health;
+	this.speed = _speed;
+}
 /* most of the time you need these next 3 functions to run games */
 function preload() {
     var playerName = prompt("Please enter your name", "name");
@@ -38,12 +46,12 @@ function preload() {
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11998', "echo-protocol");
-  
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11997', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) 
   {
-  	var message = event.data;
+	  var message = event.data;
+	 // var type = 'string';
 	if(message == 'Attacker'){
 		state = 'attacker';
 		console.log(state);
@@ -59,12 +67,14 @@ window.onload = function() {
 		console.log(state);
 		document.getElementById("state").innerHTML = "Observer";
 	}
-	else if(message.substring(0,9) == 'addZombie')
+	else if(message.length > 9 && message.substring(0,9) == 'addZombie')
 		buyZombie(message.substring(9, message.length));
-	else
+	else if(message == 'incoming')
+		incoming = true;
+	else if(message.length > 8 && message.substring(0,8) == 'addTower')
 	{
 		var commaCounter = 0;
-           	var towerType = '';
+		var towerType = '';
 		var pos_x = '';
 		var pos_y = '';		
 		for(i = 0; i<message.length; i++)
@@ -90,13 +100,24 @@ window.onload = function() {
 					commaCounter++;			
 			}
 			else
-			    pos_y+=message[i];
+				pos_y+=message[i];
 			
 		}
 		console.log(towerType+' '+pos_x+' '+pos_y);
 		addTower(towerType, pos_x, pos_y);	
 	}
-  };
+	else
+	{
+		zombieStatArray = JSON.parse(message);
+		var i = 0;
+			zombieGroup.forEach(function(zombie) {
+                       
+			zombie.position.y = zombieStatArray[i].pos_y;
+			zombie.position.x = zombieStatArray[i].pos_x;
+            i++;            
+			}, this);
+	}
+  }	
 }
   function sendAddZombie(zombieType){
 	if(state == 'attacker')
@@ -143,10 +164,14 @@ function create() {
 }
 function buyZombie(type) {
     
-    if (type == "standard")
+    if (type == "standard"){
         zombieGroup.add( game.add.sprite(450,160,'standardZombie') );
-    else if (type == "strong")
+		zombieStatArray.push(new zombieStat(lane, 450, 160, 10000, 1));
+	}
+    else if (type == "strong"){
         zombieGroup.add( game.add.sprite(450,160,'strongZombie') );
+		zombieStatArray.push(new zombieStat(lane, 450, 160, 10000, 1));
+	}
 }
 
 function buyTower(type) {
@@ -171,11 +196,11 @@ function mouseClick(item) {
 function update() {
 
     // Change settings for every zombie elements
-    zombieGroup.forEach(function(zombie) {
-                       
-        zombie.position.y += 1;
-                        
-    }, this);
+    if(state == 'attacker' && zombieStatArray.length > 0){
+	var message = JSON.stringify(zombieStatArray);
+	console.log(message);
+	socket.send(message);
+	}
     
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
