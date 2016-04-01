@@ -5,8 +5,6 @@ var connections = [];
 var numConnected = 0;
 var binaryModifier = 0;
 var zombieGroup;
-var xMax = 800;
-var yMax = 800;
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
@@ -68,7 +66,7 @@ wsServer.on('request', function(request) {
 				}*/
 				for (var i=0; i<zombieStatArray.length; i++) {
 					console.log(zombieStatArray[i].pos_x+' '+zombieStatArray[i].pos_y+' '+zombieStatArray[i].speed)
-					if (zombieStatArray[i].lane == "center" && zombieStatArray[i].pos_y < yMax-90)
+					if (zombieStatArray[i].lane == "center" && zombieStatArray[i].pos_y < 775)
 					{
 						zombieStatArray[i].pos_y += zombieStatArray[i].speed;
 					}

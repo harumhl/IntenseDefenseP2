@@ -178,12 +178,16 @@ function create() {
 function buyZombie(type) {
     
     if (type == "standard"){
-        zombieGroup.add( game.add.sprite(450,160,'standardZombie') );
-		zombieStatArray.push(new zombieStat(lane, 450, 160, 10000, 1));
+		var zombieTemp = game.add.sprite(470,160,'standardZombie')
+		zombieTemp.scale.setTo(.5);
+        zombieGroup.add( zombieTemp );
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
 	}
     else if (type == "strong"){
-        zombieGroup.add( game.add.sprite(450,160,'strongZombie') );
-		zombieStatArray.push(new zombieStat(lane, 450, 160, 10000, 1));
+		var zombieTemp = game.add.sprite(470,160,'strongZombie')
+		zombieTemp.scale.setTo(.5);
+        zombieGroup.add( zombieTemp );
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
 	}
 }
 
