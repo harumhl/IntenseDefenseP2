@@ -59,8 +59,8 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, 
     this.damage = damage;
     this.speed = speed;
     // this.range = range; // make int if we use distanceBetween - from center
-    this.x = x;
-    this.y = y;
+    this.x = x-18;
+    this.y = y-18;
     this.bullets = bullets;
     this.game = game;
     this.alive = true;
@@ -68,7 +68,7 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, 
     this.nextFire = 0;
     
     this.image = game.add.sprite(this.x, this.y, spriteName);
-    
+    this.image.scale.setTo(0.5);
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 Tower.prototype.attack = function(underAttack) {
@@ -132,13 +132,25 @@ function preload() {
     game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrongButton.png');
     game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealingButton.png');
     game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerationsButton.png');
-    //towers
-    game.load.spritesheet('minigunTower', 'images/Towers/standardTower.png');
-    game.load.spritesheet('shotgunTower', 'images/Towers/shotgunTower.png');
-    game.load.spritesheet('iceTower', 'images/Towers/gumTower.png');
-    game.load.spritesheet('bombTower', 'images/Towers/bombTower.png');
-    //zombie path button
+	
+	//zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
+	
+    //tower buttons
+   game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
+    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
+    game.load.spritesheet('iceTowerButton', 'images/Towers/towerGumButton.png');
+    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
+	
+	
+	//towers
+	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+    game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
+    game.load.spritesheet('iceTower', 'images/Towers/towerGum.png');
+    game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
+	
+	
+    
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
     game.load.image('bullet', 'images/bullet.png');
@@ -204,7 +216,7 @@ window.onload = function() {
 			
 		}
 		//console.log(towerType+' '+pos_x+' '+pos_y);
-		towerGroup.add( game.add.sprite(pos_x, pos_y,towerType+'Tower') );
+		//towerGroup.add( game.add.sprite(pos_x, pos_y,towerType+'Tower') );
 		towerArray.push(new Tower(towerType, 100, 34, 5, 0, pos_x, pos_y, 'minigunTower', towerBullets, game));
 		
 	}
@@ -242,15 +254,29 @@ function create() {
     
  // Creating each button
     // Zombie Buttons
+	
+	/*
+	game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
+    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
+    game.load.spritesheet('iceTowerButton', 'images/Towers/towerGumButton.png');
+    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
+	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+    game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
+    game.load.spritesheet('iceTower', 'images/Towers/towerGum.png');
+    game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
+	*/
+	
+	
+	
     var standardZombieButton = game.make.button(40, 160, 'standardZombie', function(){sendAddZombie("standard");}, this, 0, 0, 0);
     var strongZombieButton  =  game.make.button(40, 320, 'strongZombie', function(){sendAddZombie("strong");}, this, 0, 0, 0);
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombie', function(){sendAddZombie("healing");}, this, 0, 0, 0);
     var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombie', function(){sendAddZombie("generations");}, this, 0, 0, 0);
     // Tower Buttons
-    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTower', function(){buyTower("minigun");}, this, 0, 0, 0);
-    var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTower', function(){buyTower("shotgun");}, this, 0, 0, 0);
-    var iceTowerButton  =  game.make.button(870, 480, 'iceTower', function(){buyTower("ice");}, this, 0, 0, 0);
-    var bombTowerButton  =  game.make.button(870, 640, 'bombTower', function(){buyTower("bomb");}, this, 0, 0, 0);
+    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
+    var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
+    var iceTowerButton  =  game.make.button(870, 480, 'iceTowerButton', function(){buyTower("ice");}, this, 0, 0, 0);
+    var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
     //zombie path button (the red arrow on top of map)
     var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
     currentPathFrame = 0;
