@@ -1,7 +1,7 @@
 /* game.js */
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 var text;//temp
-var bulletTravelTime = 200;
+var bulletTravelTime = 300;
 var lane = 'center';
 var towerBullets; // temp temp temp
 
@@ -13,13 +13,14 @@ Zombie = function(type, lane, health, speed, spriteName) {
     this.speed = speed;
     
     //this.position_x = 450;
-    this.x = 450+36;
-    this.y = 160+36;
+    this.x = 470;
+    this.y = 160;
     this.alive = true;
     
     //this.created = this.game.time.now;
     
     this.image = game.add.sprite(this.x-36, this.y-36, spriteName);
+	this.image.scale.setTo(0.5);
     /*
      if      (this.type == "standard") this.y += bulletTravelTime*1 +10; //created*__
      else if (this.type == "strong")   this.y += bulletTravelTime*0.3;
@@ -36,7 +37,7 @@ Zombie.prototype.move = function(pos_x, pos_y) {
 };
 Zombie.prototype.damage = function(damage, bullet) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
-    game.debug.text( "damage!"+this.health,100,450);
+    //game.debug.text( "damage!"+this.health,100,450);
     
     if (this.health <= 0) {
         
@@ -71,12 +72,12 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, 
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 Tower.prototype.attack = function(underAttack) {
-    game.debug.text( "attack..."+this.bullets.countDead(),100,400);
+   // game.debug.text( "attack..."+this.bullets.countDead(),100,400);
     
     
     if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0)
     {
-        game.debug.text( "fire!"+this.bullets.countDead(),100,420);
+        //game.debug.text( "fire!"+this.bullets.countDead(),100,420);
         
         this.nextFire = this.game.time.now + this.fireRate;
         
@@ -132,10 +133,10 @@ function preload() {
     game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealingButton.png');
     game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerationsButton.png');
     //towers
-    game.load.spritesheet('minigunTower', 'images/Towers/towerMinigunButton.png');
-    game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgunButton.png');
-    game.load.spritesheet('iceTower', 'images/Towers/towerIceButton.png');
-    game.load.spritesheet('bombTower', 'images/Towers/towerBombButton.png');
+    game.load.spritesheet('minigunTower', 'images/Towers/standardTower.png');
+    game.load.spritesheet('shotgunTower', 'images/Towers/shotgunTower.png');
+    game.load.spritesheet('iceTower', 'images/Towers/gumTower.png');
+    game.load.spritesheet('bombTower', 'images/Towers/bombTower.png');
     //zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
     
@@ -371,30 +372,9 @@ function update() {
 	var message = JSON.stringify(zombieStatArray);
 	//console.log(message);
 	socket.send(message);
-	}
-	/*if(state == 'attacker' && zombieArray.length > 0){
-	var message = JSON.stringify(zombieArray);
-	//console.log(message);
-	socket.send(message);
-	}*/
+	}  
     
-    
-    // Change settings for every zombie elements
-    /*for (var i=0; i< zombieArray.length; i++) {
-        
-        if (zombieArray[i].alive == false) {
-            zombieArray.splice(i, 1);
-            continue;
-        }
-        
-        
-        zombieArray[i].move();
-        
-        game.debug.text( "zombie number "+i+zombieArray[i].type, 20*i, 20*i);
-    }*/
-    
-    
-        game.debug.text( "update does work"+towerArray.length, 150, 150);
+        //game.debug.text( "update does work"+towerArray.length, 150, 150);
 
     // Applying tower attacks
     var withinRangeArray = []; // empty array now
@@ -407,7 +387,7 @@ function update() {
         
         var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
-        game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
+        //game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
         
         index = 0;
         
@@ -416,12 +396,12 @@ function update() {
         // 1. Picking the zombies within range
         // I CAn USE DISTANCEBETWEEN FUNCTION TO GET CIRCULAR ATTACK RANGE
         for (var j=0; j< zombieArray.length; j++) {
-			game.debug.text("for loop ya",200,200);
+			//game.debug.text("for loop ya",200,200);
             var leftRange   = towerCenterX - towerSize *5/2;
             var rightRange  = towerCenterX + towerSize *5/2;
             var topRange    = towerCenterY - towerSize *5/2;
             var bottomRange = towerCenterY + towerSize *5/2;
-            game.debug.text( "for loop "+towerCenterX+"_"+towerCenterY+"_"+leftRange+"_"+rightRange+"_"+topRange+"_"+bottomRange+"___"+zombieArray[j].x+"_"+zombieArray[j].y, 250,450+i*10);
+           // game.debug.text( "for loop "+towerCenterX+"_"+towerCenterY+"_"+leftRange+"_"+rightRange+"_"+topRange+"_"+bottomRange+"___"+zombieArray[j].x+"_"+zombieArray[j].y, 250,450+i*10);
 
             if (leftRange < zombieArray[j].x && zombieArray[j].x < rightRange &&
                 topRange  < zombieArray[j].y && zombieArray[j].y < bottomRange) {
@@ -430,10 +410,10 @@ function update() {
             }
         }
         
-        game.debug.text( "withinRangeArray size: "+withinRangeArray.length, 100,250+i*20);
+       // game.debug.text( "withinRangeArray size: "+withinRangeArray.length, 100,250+i*20);
         
-        if (withinRangeArray.length > 0)
-            game.debug.text(" first attack: "+withinRangeArray[0].type, 200, 320+i*20);
+        //if (withinRangeArray.length > 0)
+           // game.debug.text(" first attack: "+withinRangeArray[0].type, 200, 320+i*20);
         
         // 2. Choosing the specific one to attack
         
@@ -443,13 +423,13 @@ function update() {
         
         var int = 0;
         for (var j=0; j< withinRangeArray.length; j++) {
-            game.debug.text( "frontIndex change: "+frontIndex+"_"+withinRangeArray[j]+"_"+zombieArray[withinRangeArray[j]].type+"_"+zombieArray[withinRangeArray[j]].y +"_"+zombieArray[frontIndex].type, 250,350+i*20);
+           // game.debug.text( "frontIndex change: "+frontIndex+"_"+withinRangeArray[j]+"_"+zombieArray[withinRangeArray[j]].type+"_"+zombieArray[withinRangeArray[j]].y +"_"+zombieArray[frontIndex].type, 250,350+i*20);
             
             
             // placed ahead in terms of y-coordinate
             // Instead of having a zombie > frontZombie (then it crashes when they are on top of each other)
             if (zombieArray[withinRangeArray[j]].y - zombieArray[frontIndex].y > 1) {
-                game.debug.text( "new frontIndex: "+withinRangeArray[j], 250,280+i*20);
+                //game.debug.text( "new frontIndex: "+withinRangeArray[j], 250,280+i*20);
                 frontIndex = withinRangeArray[j];
                 int++;
             }
