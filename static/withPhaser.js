@@ -3,6 +3,7 @@ var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { prelo
 var text;//temp
 var bulletTravelTime = 200;
 var lane = 'center';
+var towerBullets; // temp temp temp
 
 // Zombie Class
 Zombie = function(type, lane, health, speed, spriteName) {
@@ -54,7 +55,7 @@ Zombie.prototype.damage = function(damage, bullet) { // I SHOULD NOT NEED THE 2N
 Zombie.prototype.update = function() {};
 
 // Tower Class
-Tower = function(type, health, damage, speed, range, x, y, spriteName, towerBullets, game) {
+Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, game) {
     this.type = type;
     this.health = health;
     this.damage = damage;
@@ -62,7 +63,7 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, towerBull
     // this.range = range; // make int if we use distanceBetween - from center
     this.x = x;
     this.y = y;
-    this.bullets = towerBullets;
+    this.bullets = bullets;
     this.game = game;
     this.alive = true;
     this.fireRate = 1000;
@@ -85,10 +86,10 @@ Tower.prototype.attack = function(underAttack) {
         var bullet = this.bullets.getFirstDead();
         
         var offset =36; // should be 36
-        bullet.reset(this.x+offset, this.y+offset);
+        bullet.reset(parseInt(this.x)+parseInt(offset), parseInt(this.y)+parseInt(offset));
         
-        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 500, bulletTravelTime);
-        
+        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 500, 500);
+
         // applying damage to zombie
         underAttack.damage(34, bullet);
     }
@@ -108,7 +109,6 @@ var towerArray = []; // array of towers
 
 var state;
 var gTowerType = ""; // flag && global variable for tower placement - g for global
-var towerBullets; // temp temp temp
 
 function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
 {
@@ -143,7 +143,7 @@ function preload() {
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
-    game.load.image('bullet', 'bullet.png');
+    game.load.image('bullet', 'images/bullet.png');
 
 }
 window.onload = function() {
