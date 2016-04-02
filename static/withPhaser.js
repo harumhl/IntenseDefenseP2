@@ -2,7 +2,7 @@
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 var text;//temp
 var bulletTravelTime = 200;
-
+var lane = 'center';
 
 // Zombie Class
 Zombie = function(type, lane, health, speed, spriteName) {
@@ -96,7 +96,7 @@ Tower.prototype.attack = function(underAttack) {
 Tower.prototype.update = function() {};
 
 
-var lane = 'center';
+
 var player;
 var cursors;
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons
@@ -151,7 +151,7 @@ window.onload = function() {
   socket = new WebSocket('ws://compute.cse.tamu.edu:11997', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) 
-  {/*
+	 {
 	  var message = event.data;
 	 // var type = 'string';
 	if(message == 'Attacker'){
@@ -206,25 +206,26 @@ window.onload = function() {
 			
 		}
 		//console.log(towerType+' '+pos_x+' '+pos_y);
-		addTower(towerType, pos_x, pos_y);	
+		towerGroup.add( game.add.sprite(pos_x, pos_y,towerType+'Tower') );
+		towerArray.push(new Tower(towerType, 100, 34, 5, 0, pos_x, pos_y, 'minigunTower', towerBullets, game));
+		
 	}
 	else
 	{
 		zombieStatArray = JSON.parse(message);
 		var i = 0;
 			zombieGroup.forEach(function(zombie) {
-                       
 			zombie.position.y = zombieStatArray[i].pos_y;
 			zombie.position.x = zombieStatArray[i].pos_x;
             i++;            
 			}, this);
 	}
-  */}
+	 }
 }
   function sendAddZombie(zombieType){
-      buyZombie(zombieType, "center");
-	//if(state == 'attacker')
-	//	socket.send("addZombie"+zombieType);
+      //buyZombie(zombieType, "center");
+	if(state == 'attacker')
+		socket.send("addZombie"+zombieType);
 }
 function create() {
     //  Resize our game world to be a 2000 x 2000 square
@@ -285,19 +286,35 @@ function create() {
     towerBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
 
 }
-function buyZombie(type, lane) {
+function buyZombie(type) {
     
     if (type == "standard"){
 		var zombieTemp = game.add.sprite(470,160,'standardZombie')
 		zombieTemp.scale.setTo(.5);
         zombieGroup.add( zombieTemp );
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
+		zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
 	}
     else if (type == "strong"){
 		var zombieTemp = game.add.sprite(470,160,'strongZombie')
 		zombieTemp.scale.setTo(.5);
         zombieGroup.add( zombieTemp );
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 200, 1));
+		zombieArray.push(new Zombie(type, lane, 200, 2, 'strongZombie'));
+	}
+	else if (type == "healing"){
+		var zombieTemp = game.add.sprite(470,160,'healingZombie')
+		zombieTemp.scale.setTo(.5);
+        zombieGroup.add( zombieTemp );
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
+		zombieArray.push(new Zombie(type, lane, 200, 2, 'healingZombie'));
+	}
+    else if (type == "generations"){
+		var zombieTemp = game.add.sprite(470,160,'generationsZombie')
+		zombieTemp.scale.setTo(.5);
+        zombieGroup.add( zombieTemp );
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
+		zombieArray.push(new Zombie(type, lane, 200, 2, 'generationsZombie'));
 	}
     /*
     if (type == "standard")
@@ -318,26 +335,25 @@ function buyTower(type) {
 }
 function mouseClick(item) {
     
+    var offset = 0;
     if (gTowerType == "minigun") {
-        var offset = 36; // Mouse click is top left corner, changing that to middle
-        towerGroup.add( game.add.sprite(game.input.mousePointer.x-offset,
-                                        game.input.mousePointer.y-offset,'minigunTower') );
+        offset = 36; // Mouse click is top left corner, changing that to middle      
     }
-    else return;
-
-    gTowerType = "";
-    /*
-    var offset = 36; // Mouse click is top left corner, changing that to middle
-    
-    if (gTowerType == "minigun") {
-        towerArray.push(new Tower(gTowerType, 100, 5, 3, 0, game.input.mousePointer.x-offset,
-                                  game.input.mousePointer.y-offset, 'minigunTower', towerBullets, game));
-        game.debug.text( "tower pushed", 200,300);
+	else if (gTowerType == "shotgun") {
+        offset = 36; // Mouse click is top left corner, changing that to middle      
     }
-    else return;
-    
+	else if (gTowerType == "ice") {
+        offset = 36; // Mouse click is top left corner, changing that to middle      
+    }
+	else if (gTowerType == "bomb") {
+        offset = 36; // Mouse click is top left corner, changing that to middle      
+    }
+	else
+		return;
+	var pos_x = game.input.mousePointer.x-offset;
+	var pos_y = game.input.mousePointer.y-offset;
+	socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
     gTowerType = "";
-     */
 
 }
 function changePath(){
@@ -378,9 +394,9 @@ function update() {
 	//console.log(message);
 	socket.send(message);
 	}
+
     
     
-    /*
     // Change settings for every zombie elements
     for (var i=0; i< zombieArray.length; i++) {
         
@@ -396,7 +412,8 @@ function update() {
     }
     
     
-    
+        game.debug.text( "update does work"+towerArray.length, 150, 150);
+
     // Applying tower attacks
     var withinRangeArray = []; // empty array now
     var index = 0;
@@ -405,10 +422,10 @@ function update() {
     
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
-        game.debug.text( "within towerGroup "+i, 400,400+i*10);
         
-        var towerCenterX = towerArray[i].x + offset;
-        var towerCenterY = towerArray[i].y + offset;
+        var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
+        var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
+        game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
         
         index = 0;
         
@@ -417,11 +434,13 @@ function update() {
         // 1. Picking the zombies within range
         // I CAn USE DISTANCEBETWEEN FUNCTION TO GET CIRCULAR ATTACK RANGE
         for (var j=0; j< zombieArray.length; j++) {
+			game.debug.text("for loop ya",200,200);
             var leftRange   = towerCenterX - towerSize *5/2;
             var rightRange  = towerCenterX + towerSize *5/2;
             var topRange    = towerCenterY - towerSize *5/2;
             var bottomRange = towerCenterY + towerSize *5/2;
-            
+            game.debug.text( "for loop "+towerCenterX+"_"+towerCenterY+"_"+leftRange+"_"+rightRange+"_"+topRange+"_"+bottomRange+"___"+zombieArray[j].x+"_"+zombieArray[j].y, 250,450+i*10);
+
             if (leftRange < zombieArray[j].x && zombieArray[j].x < rightRange &&
                 topRange  < zombieArray[j].y && zombieArray[j].y < bottomRange) {
                 
@@ -452,27 +471,23 @@ function update() {
                 frontIndex = withinRangeArray[j];
                 int++;
             }
-            /*
+            
              // last x-value changing lane
-             else if (zombieArray[withinRangeArray[i]].y == frontY && frontY == 700) { // 700 IS NOT FIXED!!!
+             else if (zombieArray[withinRangeArray[i]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 700) { // 700 IS NOT FIXED!!!
              
              // closer to the base in x value
-             if (Math.abs(zombieArray[withinRangeArray[i]].y-485) < Math.abs(frontY-485)) { // 485 NOT FIXED!!
-             frontX = zombieArray[withinRangeArray[i]].x;
-             frontY = zombieArray[withinRangeArray[i]].y;
-             frontIndex = withinRangeArray[i];
+				 if (Math.abs(zombieArray[withinRangeArray[i]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
+					frontIndex = withinRangeArray[i];
+				 }
+				 }
+				 // first x-value changing lane
+				 else if (zombieArray[withinRangeArray[i]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 160) { // 160 IS NOT FIXED!!!
+				 
+				 // further from the zombie factory in x value
+				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[i].y-485)) { // 485 NOT FIXED!!
+					frontIndex = withinRangeArray[i];
+				 }
              }
-             }
-             // first x-value changing lane
-             else if (zombieArray[withinRangeArray[i]].y == frontY && frontY == 160) { // 160 IS NOT FIXED!!!
-             
-             // further from the zombie factory in x value
-             if (Math.abs(frontY-485) < Math.abs(zombieArray[i].y-485)) { // 485 NOT FIXED!!
-             frontX = zombieArray[withinRangeArray[i]].x;
-             frontY = zombieArray[withinRangeArray[i]].y;
-             frontIndex = withinRangeArray[i];
-             }
-             }*/
         }
         
         
@@ -487,5 +502,5 @@ function update() {
         index++;  
         
     } // end of for-loop for towerArray
-*/
+
 }
