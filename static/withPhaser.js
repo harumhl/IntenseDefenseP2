@@ -26,16 +26,13 @@ Zombie = function(type, lane, health, speed, spriteName) {
      */
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
-Zombie.prototype.move = function() {
+Zombie.prototype.move = function(pos_x, pos_y) {
     
-    if (this.type == "standard") {
-        this.y += 1;
-        this.image.y += 1;
-    }
-    else if (this.type == "strong") {
-        this.y += 0.3;
-        this.image.y += 0.3;
-    }
+        this.y = pos_y;
+        this.image.y = pos_y;
+		this.x = pos_x;
+		this.image.x = pos_x;
+
 };
 Zombie.prototype.damage = function(damage, bullet) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
@@ -212,20 +209,10 @@ window.onload = function() {
 	}
 	else
 	{
-		/*zombieStatArray = JSON.parse(message);
-		var i = 0;
-			zombieGroup.forEach(function(zombie) {
-			zombie.position.y = zombieStatArray[i].pos_y;
-			zombie.position.x = zombieStatArray[i].pos_x;
-            i++;            
-			}, this);*/
 			zombieStatArray = JSON.parse(message);
-		var i = 0;
-			zombieGroup.forEach(function(zombie) {
-			zombie.position.y = zombieStatArray[i].pos_y;
-			zombie.position.x = zombieStatArray[i].pos_x;
-            i++;            
-			}, this);
+			for(var i = 0; i<zombieArray.length; i++) {
+			zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y);        
+			}
 	}
 	 }
 }
@@ -296,24 +283,17 @@ function create() {
 function buyZombie(type) {
     
     if (type == "standard"){
-		//var zombieTemp = game.add.sprite(470,160,'standardZombie');
-		//zombieTemp.scale.setTo(.5);
-        //zombieGroup.add( zombieTemp );
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 		zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
 	}
     else if (type == "strong"){
 		var zombieTemp = game.add.sprite(470,160,'strongZombie')
 		zombieTemp.scale.setTo(.5);
-        //zombieGroup.add( zombieTemp );
-		//zombieStatArray.push(new zombieStat(lane, 470, 160, 200, 1));
 		zombieArray.push(new Zombie(type, lane, 200, 2, 'strongZombie'));
 	}
 	else if (type == "healing"){
 		var zombieTemp = game.add.sprite(470,160,'healingZombie')
 		zombieTemp.scale.setTo(.5);
-        //zombieGroup.add( zombieTemp );
-		//zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
 		zombieArray.push(new Zombie(type, lane, 200, 2, 'healingZombie'));
 	}
     else if (type == "generations"){
@@ -323,14 +303,6 @@ function buyZombie(type) {
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
 		zombieArray.push(new Zombie(type, lane, 200, 2, 'generationsZombie'));
 	}
-    /*
-    if (type == "standard")
-        zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
-    else if (type == "strong")
-        zombieArray.push(new Zombie(type, lane, 200, 2, 'strongZombie'));
-    
-    game.debug.text( "zombie pushed", 200,300);
-     */
 }
 function buyTower(type) {
     /* this turns on the flag only.
@@ -408,7 +380,7 @@ function update() {
     
     
     // Change settings for every zombie elements
-    for (var i=0; i< zombieArray.length; i++) {
+    /*for (var i=0; i< zombieArray.length; i++) {
         
         if (zombieArray[i].alive == false) {
             zombieArray.splice(i, 1);
@@ -419,7 +391,7 @@ function update() {
         zombieArray[i].move();
         
         game.debug.text( "zombie number "+i+zombieArray[i].type, 20*i, 20*i);
-    }
+    }*/
     
     
         game.debug.text( "update does work"+towerArray.length, 150, 150);
