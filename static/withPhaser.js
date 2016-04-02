@@ -126,6 +126,7 @@ function preload() {
     
     game.load.image('title','images/Title.png');
     game.load.image('map','images/map.png');
+	game.load.image('base','images/base.png');
 //images for buttons
     //zombies
     game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
@@ -243,6 +244,7 @@ function create() {
     game.add.sprite(0,0,'title');
     
     var map = game.add.sprite(144,129,'map');
+	var base = game.add.sprite(425,780,'base');
     map.inputEnabled = true;
     map.events.onInputDown.add(mouseClick, this);
 
@@ -409,7 +411,7 @@ function update() {
     
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
-        console.log(withinRangeArray[i]);
+
         var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
         //game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
@@ -461,19 +463,19 @@ function update() {
             
              // last x-value changing lane
 			 
-             else if (zombieArray[withinRangeArray[i]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 700) { // 700 IS NOT FIXED!!!
+             else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 700) { // 700 IS NOT FIXED!!!
              
              // closer to the base in x value
-				 if (Math.abs(zombieArray[withinRangeArray[i]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
-					frontIndex = withinRangeArray[i];
+				 if (Math.abs(zombieArray[withinRangeArray[j]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
+					frontIndex = withinRangeArray[j];
 				 }
 				 }
 				 // first x-value changing lane
-				 else if (zombieArray[withinRangeArray[i]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 160) { // 160 IS NOT FIXED!!!
+				 else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 160) { // 160 IS NOT FIXED!!!
 				 
 				 // further from the zombie factory in x value
 				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[i].y-485)) { // 485 NOT FIXED!!
-					frontIndex = withinRangeArray[i];
+					frontIndex = withinRangeArray[j];
 				 }
              }
         }
