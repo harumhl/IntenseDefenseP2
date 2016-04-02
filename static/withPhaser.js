@@ -19,7 +19,7 @@ Zombie = function(type, lane, health, speed, spriteName) {
     
     //this.created = this.game.time.now;
     
-    this.image = game.add.sprite(this.x-36, this.y-36, spriteName);
+    this.image = game.add.sprite(this.x, this.y, spriteName);
 	this.image.scale.setTo(0.5);
     /*
      if      (this.type == "standard") this.y += bulletTravelTime*1 +10; //created*__
@@ -66,7 +66,7 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, 
     this.alive = true;
     this.fireRate = 1000;
     this.nextFire = 0;
-    
+    console.log(spriteName);
     this.image = game.add.sprite(this.x, this.y, spriteName);
     this.image.scale.setTo(0.5);
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
@@ -99,12 +99,12 @@ Tower.prototype.update = function() {};
 var player;
 var cursors;
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons
-var zombieGroup; // array of zombies
+//var zombieGroup; // array of zombies
 var towerGroup;  // array of towers
 var zombieStatArray = [];
 var zombieArray = []; // array of zombies
 var towerArray = []; // array of towers
-
+var purchaseLock = false;
 var state;
 var gTowerType = ""; // flag && global variable for tower placement - g for global
 
@@ -158,7 +158,7 @@ function preload() {
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11997', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11999', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) 
 	 {
@@ -198,7 +198,6 @@ window.onload = function() {
 			}			
 			else if(commaCounter == 1)
 			{
-				console.log(message[i]);
 				if(message[i] != ',')
 					towerType += message[i];
 				else
@@ -217,14 +216,14 @@ window.onload = function() {
 		}
 		//console.log(towerType+' '+pos_x+' '+pos_y);
 		//towerGroup.add( game.add.sprite(pos_x, pos_y,towerType+'Tower') );
-		towerArray.push(new Tower(towerType, 100, 34, 5, 0, pos_x, pos_y, 'minigunTower', towerBullets, game));
+		towerArray.push(new Tower(towerType, 100, 34, 5, 0, pos_x, pos_y, towerType+'Tower', towerBullets, game));
 		
 	}
 	else
 	{
 			zombieStatArray = JSON.parse(message);
-			for(var i = 0; i<zombieArray.length; i++) {
-			zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y);        
+			for(var i = 0; i<zombieStatArray.length; i++) {
+				zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y);        
 			}
 	}
 	 }
@@ -249,7 +248,7 @@ function create() {
 
     // Creating group objects
     buttonGroup = game.add.group();
-    zombieGroup = game.add.group();
+  //  zombieGroup = game.add.group();
     towerGroup  = game.add.group();
     
  // Creating each button
@@ -314,21 +313,16 @@ function buyZombie(type) {
 		zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
 	}
     else if (type == "strong"){
-		var zombieTemp = game.add.sprite(470,160,'strongZombie')
-		zombieTemp.scale.setTo(.5);
-		zombieArray.push(new Zombie(type, lane, 200, 2, 'strongZombie'));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
+		zombieArray.push(new Zombie(type, lane, 100, 5, 'strongZombie'));
 	}
 	else if (type == "healing"){
-		var zombieTemp = game.add.sprite(470,160,'healingZombie')
-		zombieTemp.scale.setTo(.5);
-		zombieArray.push(new Zombie(type, lane, 200, 2, 'healingZombie'));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
+		zombieArray.push(new Zombie(type, lane, 100, 5, 'healingZombie'));
 	}
     else if (type == "generations"){
-		var zombieTemp = game.add.sprite(470,160,'generationsZombie')
-		zombieTemp.scale.setTo(.5);
-        zombieGroup.add( zombieTemp );
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
-		zombieArray.push(new Zombie(type, lane, 200, 2, 'generationsZombie'));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
+		zombieArray.push(new Zombie(type, lane, 100, 5, 'generationsZombie'));
 	}
 }
 function buyTower(type) {
@@ -336,7 +330,6 @@ function buyTower(type) {
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
     
     gTowerType = type;
-    
 }
 function mouseClick(item) {
     
@@ -392,12 +385,18 @@ function changePath(){
 }
 
 function update() {
-
+	//zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
+	//zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
     // Change settings for every zombie elements
     if(state == 'attacker' && zombieStatArray.length > 0){
-	var message = JSON.stringify(zombieStatArray);
-	//console.log(message);
-	socket.send(message);
+		if(zombieStatArray.length == (zombieArray.length-1))
+		{
+			//var createdLane = zombieArray[zombieStatArray.length].lane;
+			zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1))
+		}
+		var message = JSON.stringify(zombieStatArray);
+		//console.log(message);
+		socket.send(message);
 	}  
     
         //game.debug.text( "update does work"+towerArray.length, 150, 150);
@@ -410,7 +409,7 @@ function update() {
     
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
-        
+        console.log(withinRangeArray[i]);
         var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
         //game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
@@ -461,6 +460,7 @@ function update() {
             }
             
              // last x-value changing lane
+			 
              else if (zombieArray[withinRangeArray[i]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 700) { // 700 IS NOT FIXED!!!
              
              // closer to the base in x value
