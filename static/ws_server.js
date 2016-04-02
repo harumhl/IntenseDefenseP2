@@ -5,6 +5,8 @@ var connections = [];
 var numConnected = 0;
 var binaryModifier = 0;
 var zombieGroup;
+var attackerAvailable = true;
+var defenderAvailable = true;
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
@@ -38,13 +40,23 @@ wsServer.on('request', function(request) {
 
     var connection = request.accept('echo-protocol', request.origin);
     connections.push(connection);
-	if(numConnected == 0)
+	if(attackerAvailable)
+	{
 		connection.sendUTF('Attacker');
-	else if(numConnected == 1)
+		attackerAvailable = false;
+		connection.role = 0;
+	}
+	else if(defenderAvailable)
+	{
 		connection.sendUTF('Defender');
+		defenderAvailable = false;
+		connection.role = 1;
+	}
 	else
+	{
 		connection.sendUTF('Observer');
-	numConnected++;
+		connection.role = 2;
+	}
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -122,7 +134,10 @@ wsServer.on('request', function(request) {
     });
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-		numConnected--;
+		if(connection.role == 0)
+			attackerAvailable = true;
+		else if(connection.role == 1)
+			defenderAvailable = true;
     });
 });
 

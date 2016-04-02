@@ -212,7 +212,14 @@ window.onload = function() {
 	}
 	else
 	{
-		zombieStatArray = JSON.parse(message);
+		/*zombieStatArray = JSON.parse(message);
+		var i = 0;
+			zombieGroup.forEach(function(zombie) {
+			zombie.position.y = zombieStatArray[i].pos_y;
+			zombie.position.x = zombieStatArray[i].pos_x;
+            i++;            
+			}, this);*/
+			zombieStatArray = JSON.parse(message);
 		var i = 0;
 			zombieGroup.forEach(function(zombie) {
 			zombie.position.y = zombieStatArray[i].pos_y;
@@ -289,24 +296,24 @@ function create() {
 function buyZombie(type) {
     
     if (type == "standard"){
-		var zombieTemp = game.add.sprite(470,160,'standardZombie')
-		zombieTemp.scale.setTo(.5);
-        zombieGroup.add( zombieTemp );
+		//var zombieTemp = game.add.sprite(470,160,'standardZombie');
+		//zombieTemp.scale.setTo(.5);
+        //zombieGroup.add( zombieTemp );
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 		zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
 	}
     else if (type == "strong"){
 		var zombieTemp = game.add.sprite(470,160,'strongZombie')
 		zombieTemp.scale.setTo(.5);
-        zombieGroup.add( zombieTemp );
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 200, 1));
+        //zombieGroup.add( zombieTemp );
+		//zombieStatArray.push(new zombieStat(lane, 470, 160, 200, 1));
 		zombieArray.push(new Zombie(type, lane, 200, 2, 'strongZombie'));
 	}
 	else if (type == "healing"){
 		var zombieTemp = game.add.sprite(470,160,'healingZombie')
 		zombieTemp.scale.setTo(.5);
-        zombieGroup.add( zombieTemp );
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
+        //zombieGroup.add( zombieTemp );
+		//zombieStatArray.push(new zombieStat(lane, 470, 160, 10000, 1));
 		zombieArray.push(new Zombie(type, lane, 200, 2, 'healingZombie'));
 	}
     else if (type == "generations"){
@@ -325,7 +332,6 @@ function buyZombie(type) {
     game.debug.text( "zombie pushed", 200,300);
      */
 }
-
 function buyTower(type) {
     /* this turns on the flag only.
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
@@ -394,7 +400,11 @@ function update() {
 	//console.log(message);
 	socket.send(message);
 	}
-
+	/*if(state == 'attacker' && zombieArray.length > 0){
+	var message = JSON.stringify(zombieArray);
+	//console.log(message);
+	socket.send(message);
+	}*/
     
     
     // Change settings for every zombie elements

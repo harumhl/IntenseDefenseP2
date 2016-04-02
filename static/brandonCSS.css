@@ -1,10 +1,8 @@
 
 /*
     the widths for the left/right/mid panel is a little confusing 
-
     # are for id's - take precendense over class
     . are for class's
-
 */
 
 
@@ -69,8 +67,6 @@
 {
   background: url(button.png) no-repeat top;
 }
-
-
 #button: active
 {
     background: url(button.png) no-repeat bottom;
