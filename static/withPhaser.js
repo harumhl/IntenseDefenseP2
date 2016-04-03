@@ -284,17 +284,25 @@ window.onload = function() {
 		if(message == 'Attacker'){
 			state = 'attacker';
 			console.log(state);
-			document.getElementById("state").innerHTML = "Attacker";
+			//document.getElementById("state").innerHTML = "Attacker";
+            player = new Player(playerName, state, 2000);
+            console.log(player.username + ' ' + player.state);
+            document.getElementById("attacker-name").innerHTML = "Attacker: " + player.username;
 		}
 		else if(message == 'Defender'){
 			state = 'defender';
 			console.log(state);
-			document.getElementById("state").innerHTML = "Defender";
+			//document.getElementById("state").innerHTML = "Defender";
+             player = new Player(playerName, state, 2000);
+            console.log(player.username + ' ' + player.state);
+            document.getElementById("defender-name").innerHTML = "Defender: " + player.username;
 		}
 		else if(message == 'Observer'){
 			state = 'observer';
 			console.log(state);
-			document.getElementById("state").innerHTML = "Observer";
+			//document.getElementById("state").innerHTML = "Observer";
+            player = new Player(playerName, state, 2000);
+            console.log(player.username + ' ' + player.state);
 		}
 		else if(message.length > 9 && message.substring(0,9) == 'addZombie')
 			buyZombie(message.substring(9, message.length));
