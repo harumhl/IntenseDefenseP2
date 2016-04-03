@@ -2,6 +2,7 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var connections = [];
+var killIndexes = [];
 var numConnected = 0;
 var binaryModifier = 0;
 var zombieGroup;
@@ -12,7 +13,7 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
-server.listen(11999, function() {
+server.listen(11998, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port 11997');
 });
 
@@ -57,12 +58,18 @@ wsServer.on('request', function(request) {
 		connection.sendUTF('Observer');
 		connection.role = 2;
 	}
+	if(!attackerAvailable && !defenderAvailable)
+	{
+		for(var i = 0; i<connections.length; i++){
+					connections[i].sendUTF('startRound');
+				}
+	}
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
 			if(message.utf8Data.substring(0,1)!= '[' && (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower'))
 			{
-				console.log('Received Message: ' + message.utf8Data);
+				//console.log('Received Message: ' + message.utf8Data);
 				for(var i = 0; i<connections.length; i++){
 					connections[i].sendUTF(message.utf8Data);
 				}
@@ -72,15 +79,19 @@ wsServer.on('request', function(request) {
 				//var zombieGroup = JSON.parse(message.utf8Data);
 				var obj = message.utf8Data;
 				var zombieStatArray = JSON.parse(obj);
+				killIndexes = [];
 		        /*for(var x = 0; x<zombieStatArray.length; x++)
 				{
 					zombieStatArray[x].pos_y +=1;
 				}*/
 				for (var i=0; i<zombieStatArray.length; i++) {
-					console.log(zombieStatArray[i].pos_x+' '+zombieStatArray[i].pos_y+' '+zombieStatArray[i].speed)
-					if (zombieStatArray[i].lane == "center" && zombieStatArray[i].pos_y < 775)
+					//console.log(zombieStatArray[i].pos_x+' '+zombieStatArray[i].pos_y+' '+zombieStatArray[i].speed)
+					if (zombieStatArray[i].lane == "center")
 					{
-						zombieStatArray[i].pos_y += zombieStatArray[i].speed;
+						if(zombieStatArray[i].pos_y < 775)
+							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
+						else
+							killIndexes.push(i);
 					}
 					else if (zombieStatArray[i].lane == "right")
 					{
@@ -122,7 +133,14 @@ wsServer.on('request', function(request) {
 				for(var y = 0; y<connections.length; y++){
 				connections[y].sendUTF(JSON.stringify(zombieStatArray));
 				}
-				console.log(JSON.stringify(zombieStatArray));
+				if(killIndexes.length >0)
+				{
+					for(var y = 0; y<connections.length; y++){
+					connections[y].sendUTF(JSON.stringify(killIndexes));
+					}
+				}
+					
+				//console.log(JSON.stringify(zombieStatArray));
 			}
         }
         else if (message.type === 'binary') {
