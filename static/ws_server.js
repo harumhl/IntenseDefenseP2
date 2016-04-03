@@ -61,8 +61,8 @@ wsServer.on('request', function(request) {
 	if(!attackerAvailable && !defenderAvailable)
 	{
 		for(var i = 0; i<connections.length; i++){
-					connections[i].sendUTF('startRound');
-					//connections[i].sendUTF('defenderPlaceTowers');
+					//connections[i].sendUTF('startRound');
+					connections[i].sendUTF('defenderPlaceTowers');
 				}
 	}
     console.log((new Date()) + ' Connection accepted.');
