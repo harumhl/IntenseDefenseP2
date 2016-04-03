@@ -1,5 +1,8 @@
 /* game.js */
 
+
+// changes
+
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
 
@@ -12,7 +15,7 @@ var lane = 'center';
 var bulletTravelTime = 450;
 var towerBullets;
 
-var baseHealth = 500;
+var baseHealth = 2000;
 
 // Price for Zombies
 var standardZombiePrice = 100;
@@ -20,7 +23,7 @@ var strongZombiePrice = 200;
 var healingZombiePrice = 300;
 var generationsZombiePrice = 400;
 // Price for Towers
-var minigunTowerPrice = 100;
+var standardTowerPrice = 100;
 var shotgunTowerPrice = 200;
 var gumTowerPrice = 300;
 var bombTowerPrice = 400;
@@ -63,7 +66,7 @@ Zombie = function(type, lane, inX, inY) {
     this.y = inY; // "
     this.alive = true;
    	this.time = game.time.now;
-
+	
     //this.created = this.game.time.now;
     if(type == 'standard')
 	{
@@ -90,6 +93,9 @@ Zombie = function(type, lane, inX, inY) {
 		this.speed = 0.4
 	}
     this.image = game.add.sprite(this.x, this.y, type+'Zombie');
+	this.image.animations.add('moveRight',[0,1,2,3],true);
+	this.image.animations.add('moveLeft',[4,5,6,7],true);
+	this.image.animations.add('moveDown',[8,9,10,11],true);
 	this.image.scale.setTo(0.5);
 	
     /*
@@ -100,6 +106,17 @@ Zombie = function(type, lane, inX, inY) {
 };
 Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
     
+	
+		/*if(newDirection == 'down')
+		{
+			if(((newPos_y - this.pos_y)/3) >= 1)
+				
+		}
+		else
+		{
+			if((abs(newPos_x - this.pos_x)/3) >= 1)
+				
+		}*/
         this.pos_y = newPos_y;
 		this.y = newPos_y;
         this.image.y = newPos_y;
@@ -107,10 +124,27 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 		this.pos_x = newPos_x;
 		this.x = newPos_x;
 		this.image.x = newPos_x;
-		
+		//if(this.direction != newDirection)
+		//{
+			if(newDirection == 'down')
+			{
+				this.image.animations.play('moveDown',this.speed*10);
+				
+			}
+			else if(newDirection == 'right')
+			{
+				this.image.animations.play('moveRight',this.speed*10);
+			}
+			else //newDirection == 'left'
+			{
+				this.image.animations.play('moveLeft',this.speed*10);
+			}
+		//}
 		this.direction = newDirection;
+		
 		console.log("direction: "+newDirection);
-
+		console.log(this.direction);
+		
 		
 		if (this.direction == "down") 
 		{
@@ -162,6 +196,7 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.y = y-18;
     this.game = game;
 	this.bullets = towerBullets;
+	
 	if(type == 'minigun'){
 		this.fireRate = 750;
 		this.damage = 30;
@@ -170,7 +205,8 @@ Tower = function(type, x, y, spriteName, bullets) {
 		this.fireRate = 950;
 		this.damage = 80;
 	}
-	else if(type == 'ice'){
+	else if(type == 'gum')
+	{
 		this.fireRate = 1000;
 		this.damage = 0;
 	}
@@ -232,26 +268,28 @@ function preload() {
     
 //images for buttons
     //zombies
-    game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
-    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrongButton.png');
-    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealingButton.png');
-    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerationsButton.png');
+    //game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
+	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
+    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
+    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
+    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
+	
 	
 	//zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
 	
     //tower buttons
-   game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
+   game.load.spritesheet('standardTowerButton', 'images/Towers/towerStandardButton.png');
     game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
-    game.load.spritesheet('iceTowerButton', 'images/Towers/towerGumButton.png');
+    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
     game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
 	
 	
 // images for the actual objects on the map
 	//towers
-	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+	game.load.spritesheet('standardTower', 'images/Towers/towerStandard.png');
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
-    game.load.spritesheet('iceTower', 'images/Towers/towerGum.png');
+    game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
     game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
@@ -265,7 +303,7 @@ function preload() {
 function endRound(winner)
 {
 	if(winner == "attacker")
-		window.alert("Zombies Win!");
+		window.alert("Attacker Wins!");
 	else
 		window.alert("Defender Wins!");
     startRound = false;
@@ -284,7 +322,7 @@ function newRound()
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11555', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11996', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -478,6 +516,7 @@ function damageBase(index)
 	console.log(baseHealth+'->');
 	baseHealth -= zombieArray[index].damage;
 	console.log(baseHealth);
+    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	zombieArray[index].alive = false;    
 	zombieArray[index].image.kill();
 	zombieArray.splice(index, 1);
@@ -515,9 +554,9 @@ function create() {
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombie', function(){sendAddZombie("healing");}, this, 0, 0, 0);
     var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombie', function(){sendAddZombie("generations");}, this, 0, 0, 0);
     // Tower Buttons
-    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
+    var standardTowerButton  =  game.make.button(870, 160, 'standardTowerButton', function(){buyTower("standard");}, this, 0, 0, 0);
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
-    var iceTowerButton  =  game.make.button(870, 480, 'iceTowerButton', function(){buyTower("ice");}, this, 0, 0, 0);
+    var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
     var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
     //zombie path button (the red arrow on top of map)
     var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
@@ -529,9 +568,9 @@ function create() {
     buttonGroup.add(healingZombieButton);
     buttonGroup.add(generationsZombieButton);
     //tower buttons
-    buttonGroup.add(minigunTowerButton);
+    buttonGroup.add(standardTowerButton);
     buttonGroup.add(shotgunTowerButton);
-    buttonGroup.add(iceTowerButton);
+    buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
     //zombie path direction button
     buttonGroup.add(zombiePathButton);
@@ -553,7 +592,9 @@ function buyZombie(type) {
     
     if (type == "standard"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 470, 160));
+		var newZombie = new Zombie(type, lane, 470, 160);
+		
+		zombieArray.push(newZombie);
 		//attackerMoney -= 100;
         player.money -= standardZombiePrice;
 	}
@@ -604,7 +645,7 @@ function mouseClick(item) {
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
         }
     }
-	else if (gTowerType == "ice") {
+	else if (gTowerType == "gum") {
         offset = 36; // Mouse click is top left corner, changing that to middle
         if(player.money < gumTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
@@ -729,7 +770,7 @@ function countdown(minutes) {
                 endRound('attacker');         
                 //end of match attacker wins
             }
-        }
+		}
         if( seconds > 0 ) {
             setTimeout(tick, 1000);
         } else {
@@ -752,7 +793,7 @@ function update() {
     //gradually add money to both players
     console.log('startRound up:' + startRound);
     if(startRound){
-        console.log('yay');
+        //console.log('start money accumulation');
         moneyTimer++;
         if(moneyTimer >= regenTime)
         {
@@ -766,7 +807,7 @@ function update() {
             moneyTimer = 0;
         }
     }
-    else console.log("brokedid");
+    //else console.log("brokedid");
     
     // Change settings for every zombie elements
     if(state == 'attacker' && zombieStatArray.length > 0){
