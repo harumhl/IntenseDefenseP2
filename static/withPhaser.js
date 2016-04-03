@@ -672,40 +672,41 @@ function mouseClick(item) {
     }
 	else
 		return;
-	var pos_x = game.input.mousePointer.x-offset;
-	var pos_y = game.input.mousePointer.y-offset;
-	if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
-    {
-       //console.log('top rectangle chosen')
-        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
-    }
-    else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
-    {
-       //console.log('left rectangle chosen')
-        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-    }
-    else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
-    {
-       //console.log('right rectangle chosen')
-        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-    }
-    else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
-    {
-       //console.log('bottom rectangle chosen')
-        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-    }
-    else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
-    {
-       //console.log('middle rectangle chosen')
-        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-    }
-    else
-    {
-        document.getElementById("Tower-Placement-Error").innerHTML = "";
-        socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
-        gTowerType = "";
-    }
-
+	if(validPurchase){
+		var pos_x = game.input.mousePointer.x-offset;
+		var pos_y = game.input.mousePointer.y-offset;
+		if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
+		{
+		   //console.log('top rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+		}
+		else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
+		{
+		   //console.log('left rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
+		{
+		   //console.log('right rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
+		{
+		   //console.log('bottom rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
+		{
+		   //console.log('middle rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else
+		{
+			document.getElementById("Tower-Placement-Error").innerHTML = "";
+			socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
+			gTowerType = "";
+		}
+	}
 }
 function changePath(){
     /*
