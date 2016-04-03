@@ -563,9 +563,12 @@ function create() {
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
     var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
     var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
-    //zombie path button (the red arrow on top of map)
-    var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
-    currentPathFrame = 0;
+    
+	if(player.state = 'attacker'){
+		//zombie path button (the red arrow on top of map)
+		var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
+		currentPathFrame = 0;
+	}
 // Attaching buttons to the screen
     //zombie buttons
     buttonGroup.add(standardZombieButton);
@@ -577,9 +580,12 @@ function create() {
     buttonGroup.add(shotgunTowerButton);
     buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
-    //zombie path direction button
-    buttonGroup.add(zombiePathButton);
-
+    
+	if(player.state = 'attacker'){
+		//zombie path direction button
+		buttonGroup.add(zombiePathButton);
+	}
+	
     // Enabling cursor tracker
     cursors = game.input.keyboard.createCursorKeys();
     
