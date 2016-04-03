@@ -624,50 +624,50 @@ function buyTower(type) {
     gTowerType = type;
 }
 function mouseClick(item) {
-    
+    var validPurchase = false;
     var offset = 0;
     if (gTowerType == "minigun") {
         offset = 36; // Mouse click is top left corner, changing that to middle
         if(player.money < minigunTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			return;
         }
         else{
             player.money -= minigunTowerPrice;
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+			validPurchase = true;
         }
     }
 	else if (gTowerType == "shotgun") {
         offset = 36; // Mouse click is top left corner, changing that to middle  
         if(player.money < shotgunTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			return;
         }
         else{
             player.money -= shotgunTowerPrice;
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+			validPurchase = true;
         }
     }
 	else if (gTowerType == "gum") {
         offset = 36; // Mouse click is top left corner, changing that to middle
         if(player.money < gumTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			return;
         }
         else{
             player.money -= gumTowerPrice;
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+			validPurchase = true;
         }
     }
 	else if (gTowerType == "bomb") {
         offset = 36; // Mouse click is top left corner, changing that to middle  
         if(player.money < bombTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			return;
         }
         else{
             player.money -= bombTowerPrice;
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+			validPurchase = true;
         }
     }
 	else
