@@ -564,7 +564,7 @@ function create() {
     var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
     var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
     
-	if(player.state = 'attacker'){
+	if(player.state == 'attacker'){
 		//zombie path button (the red arrow on top of map)
 		var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
 		currentPathFrame = 0;
@@ -581,7 +581,7 @@ function create() {
     buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
     
-	if(player.state = 'attacker'){
+	if(player.state == 'attacker'){
 		//zombie path direction button
 		buttonGroup.add(zombiePathButton);
 	}
