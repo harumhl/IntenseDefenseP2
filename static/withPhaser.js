@@ -1,5 +1,8 @@
 /* game.js */
 
+
+// changes
+
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
 
@@ -20,7 +23,7 @@ var strongZombiePrice = 200;
 var healingZombiePrice = 300;
 var generationsZombiePrice = 400;
 // Price for Towers
-var minigunTowerPrice = 100;
+var standardTowerPrice = 100;
 var shotgunTowerPrice = 200;
 var gumTowerPrice = 300;
 var bombTowerPrice = 400;
@@ -147,7 +150,7 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.y = y-18;
     this.game = game;
 	this.bullets = towerBullets;
-	if(type == 'minigun')
+	if(type == 'standard')
 	{
 		this.fireRate = 750;
 		this.damage = 30;
@@ -158,7 +161,7 @@ Tower = function(type, x, y, spriteName, bullets) {
 		this.fireRate = 950;
 		this.damage = 80;
 	}
-	else if(type == 'ice')
+	else if(type == 'gum')
 	{
 		this.fireRate = 1000;
 		this.damage = 0;
@@ -239,17 +242,17 @@ function preload() {
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
 	
     //tower buttons
-   game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
+   game.load.spritesheet('standardTowerButton', 'images/Towers/towerStandardButton.png');
     game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
-    game.load.spritesheet('iceTowerButton', 'images/Towers/towerGumButton.png');
+    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
     game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
 	
 	
 // images for the actual objects on the map
 	//towers
-	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+	game.load.spritesheet('standardTower', 'images/Towers/towerStandard.png');
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
-    game.load.spritesheet('iceTower', 'images/Towers/towerGum.png');
+    game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
     game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
@@ -278,7 +281,7 @@ function newRound()
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11555', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -475,9 +478,9 @@ function create() {
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombie', function(){sendAddZombie("healing");}, this, 0, 0, 0);
     var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombie', function(){sendAddZombie("generations");}, this, 0, 0, 0);
     // Tower Buttons
-    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
+    var standardTowerButton  =  game.make.button(870, 160, 'standardTowerButton', function(){buyTower("standard");}, this, 0, 0, 0);
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
-    var iceTowerButton  =  game.make.button(870, 480, 'iceTowerButton', function(){buyTower("ice");}, this, 0, 0, 0);
+    var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
     var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
     //zombie path button (the red arrow on top of map)
     var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
@@ -489,9 +492,9 @@ function create() {
     buttonGroup.add(healingZombieButton);
     buttonGroup.add(generationsZombieButton);
     //tower buttons
-    buttonGroup.add(minigunTowerButton);
+    buttonGroup.add(standardTowerButton);
     buttonGroup.add(shotgunTowerButton);
-    buttonGroup.add(iceTowerButton);
+    buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
     //zombie path direction button
     buttonGroup.add(zombiePathButton);
@@ -544,13 +547,13 @@ function buyTower(type) {
 function mouseClick(item) {
     
     var offset = 0;
-    if (gTowerType == "minigun") {
+    if (gTowerType == "standard") {
         offset = 36; // Mouse click is top left corner, changing that to middle      
     }
 	else if (gTowerType == "shotgun") {
         offset = 36; // Mouse click is top left corner, changing that to middle      
     }
-	else if (gTowerType == "ice") {
+	else if (gTowerType == "gum") {
         offset = 36; // Mouse click is top left corner, changing that to middle      
     }
 	else if (gTowerType == "bomb") {
