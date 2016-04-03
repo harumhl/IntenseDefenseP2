@@ -29,6 +29,8 @@ var bombTowerPrice = 400;
 var moneyTimer = 0;
 var regenTime = 100;
 
+var startRound = false; // controls the timer and money generator functions
+
 // Classes
 // Player Class
 Player = function(username, state, money) {
@@ -276,7 +278,7 @@ function newRound()
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11994', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11555', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -347,6 +349,7 @@ window.onload = function() {
             socket.send(player.state + 'Name ' + player.username);
             console.log('HERE: '+player.name);
             console.log("StartRound");
+            startRound == true;
             countdown(5);
         }
         else if(message.substring(0,12) == 'attackerName')
@@ -558,30 +561,36 @@ function mouseClick(item) {
 	var pos_x = game.input.mousePointer.x-offset;
 	var pos_y = game.input.mousePointer.y-offset;
 	if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
-    	{
-	   console.log('top rectangle chosen')
-    	}
-    	else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
-    	{
-	   console.log('left rectangle chosen')
-    	}
-    	else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
-    	{
-	   console.log('right rectangle chosen')
-    	}
-    	else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
-    	{
-	   console.log('bottom rectangle chosen')
-    	}
-    	else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
-    	{
-	   console.log('middle rectangle chosen')
-    	}
-    	else
-    	{
-    	   socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
-    	   gTowerType = "";
-    	}
+    {
+       //console.log('top rectangle chosen')
+        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+    }
+    else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
+    {
+       //console.log('left rectangle chosen')
+        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+    }
+    else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
+    {
+       //console.log('right rectangle chosen')
+        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+    }
+    else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
+    {
+       //console.log('bottom rectangle chosen')
+        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+    }
+    else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
+    {
+       //console.log('middle rectangle chosen')
+        document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+    }
+    else
+    {
+        document.getElementById("Tower-Placement-Error").innerHTML = "";
+       socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
+       gTowerType = "";
+    }
 
 }
 function changePath(){
@@ -642,17 +651,19 @@ function update() {
 	//zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
     
     //gradually add money to both players
-    moneyTimer++;
-    if(moneyTimer >= regenTime)
-    {
-        player.money += 50;
-        if(player.state == 'attacker'){
-            document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-            console.log("money = " + player.money);
+    if(startRound){
+        moneyTimer++;
+        if(moneyTimer >= regenTime)
+        {
+            player.money += 50;
+            if(player.state == 'attacker'){
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                console.log("money = " + player.money);
+            }
+            else
+                document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+            moneyTimer = 0;
         }
-        else
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-        moneyTimer = 0;
     }
     
     // Change settings for every zombie elements
