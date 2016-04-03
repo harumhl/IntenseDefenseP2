@@ -9,6 +9,7 @@ var towerBullets; // temp temp temp
 var baseHealth = 500;
 var moneyTimer = 0;
 var regenTime = 200;
+
 // Zombie Class
 Zombie = function(type, lane, health, speed, spriteName) {
     this.type = type;
@@ -18,9 +19,10 @@ Zombie = function(type, lane, health, speed, spriteName) {
     this.pos_x = 470; // real positions
 	this.pos_y = 160; // "
     this.x = 470; // positions calculated for bullet targeting
-    this.y = 160;
+    this.y = 160; // "
     this.alive = true;
-    
+   	this.time = game.time.now;
+
     //this.created = this.game.time.now;
     if(type == 'standard')
 		this.damage = 100;
@@ -43,12 +45,16 @@ Zombie.prototype.move = function(newPos_x, newPos_y) {
         this.pos_y = newPos_y;
 		this.y = newPos_y;
         this.image.y = newPos_y;
+		
 		this.pos_x = newPos_x;
 		this.x = newPos_x;
 		this.image.x = newPos_x;
+		
+		if (this.lane == "center")
+			this.y = this.image.y+Math.sqrt((game.time.now-this.time)/1000)*22;
 
 };
-Zombie.prototype.hurt = function(damage, bullet, index) { // I SHOULD NOT NEED THE 2ND ARG
+Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
     //game.debug.text( "damage!"+this.health,100,450);
     
@@ -57,7 +63,6 @@ Zombie.prototype.hurt = function(damage, bullet, index) { // I SHOULD NOT NEED T
         this.alive = false;
         
         this.image.kill();
-        bullet.kill();
         
 		zombieArray.splice(index, 1);
 		zombieStatArray.splice(index,1);
@@ -88,7 +93,7 @@ Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, 
     this.image.scale.setTo(0.5);
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
-Tower.prototype.attack = function(underAttack, frontIndex) {
+Tower.prototype.attack = function(underAttack) {
    // game.debug.text( "attack..."+this.bullets.countDead(),100,400);
     
     
@@ -106,7 +111,7 @@ Tower.prototype.attack = function(underAttack, frontIndex) {
         bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 500, 500);
 
         // applying damage to zombie
-        underAttack.hurt(34, bullet, frontIndex);
+        //underAttack.hurt(34, bullet, frontIndex);
     }
 };
 Tower.prototype.update = function() {};
@@ -194,7 +199,7 @@ function newRound()
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11998', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11994', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -516,9 +521,8 @@ function update() {
            // game.debug.text(" first attack: "+withinRangeArray[0].type, 200, 320+i*20);
         
         // 2. Choosing the specific one to attack
-        
         if (withinRangeArray.length == 0) continue;
-        
+
         var frontIndex = withinRangeArray[0];
         
         var int = 0;
@@ -547,7 +551,7 @@ function update() {
 				 else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 160) { // 160 IS NOT FIXED!!!
 				 
 				 // further from the zombie factory in x value
-				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[i].y-485)) { // 485 NOT FIXED!!
+				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[j].y-485)) { // 485 NOT FIXED!!
 					frontIndex = withinRangeArray[j];
 				 }
              }
@@ -558,12 +562,21 @@ function update() {
         //game.debug.text( "under attack zombie index (inside withinRangeArray) : "+frontIndex+"_"+withinRangeArray[frontIndex] +"_"+zombieArray[withinRangeArray[frontIndex]].type+"_"+withinRangeArray.length+"_"+int, 150,150);
         
         // 3. attack!
-        var istrue = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
-                                                 function(zombie,bullet){bullet.kill();}, null, this);
+		console.log("Attack: "+frontIndex);
         
-        towerArray[i].attack(zombieArray[frontIndex], frontIndex);
+		var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
+                                                function(zombie,bullet){bullet.kill();}, null, this);
+        
+		if (overlapped) {
+			console.log(towerArray[i].attPower+"health: "+zombieArray[frontIndex].health);
+			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
+			//towerBullets.getFirstDead().kill();
+		}
+		
+		towerArray[i].attack(zombieArray[frontIndex]);
+		
         index++;  
-        
+
     } // end of for-loop for towerArray
 
 }
