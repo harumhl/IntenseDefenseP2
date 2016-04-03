@@ -1,15 +1,41 @@
 /* game.js */
-var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
-var text;//temp
+
+// 733 = map height, 129 = title height
+var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
+
+// Global Variables
 var attackerMoney = 1000;
 var defenderMoney = 1000;
-var bulletTravelTime = 450;
-var lane = 'center';
-var towerBullets; // temp temp temp
-var baseHealth = 500;
-var moneyTimer = 0;
-var regenTime = 200;
 
+var lane = 'center';
+
+var bulletTravelTime = 450;
+var towerBullets;
+
+var baseHealth = 500;
+
+// Price for Zombies
+var standardZombiePrice = 100;
+var strongZombiePrice = 200;
+var healingZombiePrice = 300;
+var generationsZombiePrice = 400;
+// Price for Towers
+var minigunTowerPrice = 100;
+var shotgunTowerPrice = 200;
+var gumTowerPrice = 300;
+var bombTowerPrice = 400;
+
+// Used to generate money for both players over time
+var moneyTimer = 0;
+var regenTime = 100;
+
+// Classes
+// Player Class
+Player = function(username, state, money) {
+    this.username = username;
+    this.state = state;
+    this.money = money;
+}
 // Zombie Class
 Zombie = function(type, lane, inX, inY) {
     this.type = type;
@@ -192,17 +218,14 @@ function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
 	this.speed = _speed;
 	this.direction = "";//'down';
 }
-/* most of the time you need these next 3 functions to run games */
+
+// Preload stuff for the game like images
 function preload() {
-    //var playerName = prompt("Please enter your name", "name");
-    //localStorage.setItem("playerName", playerName);
-    
-//     var playerName = prompt("Please enter your name", "name");
-//    localStorage.setItem("playerName", playerName);
     
     game.load.image('title','images/Title.png');
     game.load.image('map','images/map.png');
 	game.load.image('base','images/base.png');
+    
 //images for buttons
     //zombies
     game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
@@ -220,16 +243,15 @@ function preload() {
     game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
 	
 	
+// images for the actual objects on the map
 	//towers
 	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
     game.load.spritesheet('iceTower', 'images/Towers/towerGum.png');
     game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
-	
-	
-    
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
+    // bullet used for now to shoot from the towers, image will be changed later
     game.load.image('bullet', 'images/bullet.png');
 
 }
@@ -252,6 +274,7 @@ function newRound()
 	towerArray = [];
 }
 window.onload = function() {
+    var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11994', "echo-protocol");
   // Handle messages sent by the server.
@@ -311,6 +334,23 @@ window.onload = function() {
 			towerArray.push(new Tower(towerType, pos_x, pos_y));
 			
 		}
+        else if(message == "startRound")
+        {
+            socket.send(player.state + 'Name ' + player.username);
+            console.log('HERE: '+player.name);
+            console.log("StartRound");
+            countdown(5);
+        }
+        else if(message.substring(0,12) == 'attackerName')
+        {
+            attackerName = message.substring(13, message.length);
+            document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
+        }
+        else if(message.substring(0,12) == 'defenderName')
+        {
+            defenderName = message.substring(13, message.length);
+            document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
+        }
 		else
 		{
 			var receivedArray = JSON.parse(message);
@@ -351,8 +391,38 @@ window.onload = function() {
 */
 function sendAddZombie(zombieType){
       //buyZombie(zombieType, "center");
-	if(state == 'attacker')
-		socket.send("addZombie"+zombieType);
+    // double check the player has money for the zombie
+    var cantBuyFlag = false;
+    if(player.state == 'attacker'){
+        if(zombieType == "standard"){
+            if( player.money < standardZombiePrice ){
+                cantBuyFlag = true;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+        }
+        if(zombieType == "strong"){
+            if( player.money < strongZombiePrice ){
+                cantBuyFlag = true;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+        }
+        if(zombieType == "healing"){
+            if( player.money < healingZombiePrice ){
+                cantBuyFlag = true;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+        }
+        if(zombieType == "generations"){
+            if( player.money < generationsZombiePrice ){
+                cantBuyFlag = true;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+        }
+    }
+    if(!cantBuyFlag){
+        socket.send("addZombie"+zombieType);
+        console.log("buying zombie");
+    }
 }
 function damageBase(index)
 {
@@ -433,22 +503,25 @@ function buyZombie(type) {
     if (type == "standard"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
-		attackerMoney -= 100;
+		//attackerMoney -= 100;
+        player.money -= standardZombiePrice;
 	}
     else if (type == "strong"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.6));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
-		attackerMoney -= 200;
+		//attackerMoney -= 200;
 	}
 	else if (type == "healing"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
-		attackerMoney -= 300;
+		//attackerMoney -= 300;
+         player.money -= strongZombiePrice;
 	}
     else if (type == "generations"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.3));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
-		attackerMoney -= 400;
+		//attackerMoney -= 400;
+        player.money -= healingZombiePrice;
 	}
 }
 function buyTower(type) {
@@ -509,10 +582,48 @@ function changePath(){
     currentPathFrame = buttonGroup.getAt(8).frame;
 
 }
+// function for the timer for each round
+function countdown(minutes) {
+    var seconds = 60;
+    var mins = minutes
+    function tick() {
+        var counter = document.getElementById("timer");
+        var current_minutes = mins-1
+        seconds--;
+        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+ 
+            if(mins > 1){
+ 
+               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+               setTimeout(function () { countdown(mins - 1); }, 1000);
+ 
+            }
+        }
+    }
+    tick();
+}
 
 function update() {
 	//zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 	//zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
+    
+    //gradually add money to both players
+    moneyTimer++;
+    if(moneyTimer >= regenTime)
+    {
+        player.money += 50;
+        if(player.state == 'attacker'){
+            document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+            console.log("money = " + player.money);
+        }
+        else
+            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+        moneyTimer = 0;
+    }
+    
     // Change settings for every zombie elements
     if(state == 'attacker' && zombieStatArray.length > 0){
 		if(zombieStatArray.length == (zombieArray.length-1))
@@ -526,13 +637,6 @@ function update() {
 	}  
     
         //game.debug.text( "update does work"+towerArray.length, 150, 150);
-	moneyTimer++
-	if(moneyTimer >= regenTime)
-	{
-		attackerMoney += 100;
-		moneyTimer = 0;
-		console.log(attackerMoney);
-	}
     // Applying tower attacks
     var withinRangeArray = []; // empty array now
     var index = 0;
