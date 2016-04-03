@@ -268,11 +268,10 @@ function preload() {
     
 //images for buttons
     //zombies
-    //game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
-	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
-    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
-    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
-    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
+	game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButton.png');
+    game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButton.png');
+    game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButton.png');
+    game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButton.png');
 	
 	
 	//zombie path button
@@ -291,6 +290,11 @@ function preload() {
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
     game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
     game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
+	
+	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
+    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
+    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
+    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
     
     //game.load.atlas('zombies', 'zombies.png', 'zombies.json');
     // bullet used for now to shoot from the towers, image will be changed later
@@ -549,10 +553,10 @@ function create() {
 	
 	
 	
-    var standardZombieButton = game.make.button(40, 160, 'standardZombie', function(){sendAddZombie("standard");}, this, 0, 0, 0);
-    var strongZombieButton  =  game.make.button(40, 320, 'strongZombie', function(){sendAddZombie("strong");}, this, 0, 0, 0);
-    var healingZombieButton  =  game.make.button(40, 480, 'healingZombie', function(){sendAddZombie("healing");}, this, 0, 0, 0);
-    var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombie', function(){sendAddZombie("generations");}, this, 0, 0, 0);
+    var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 0, 0);
+    var strongZombieButton  =  game.make.button(40, 320, 'strongZombieButton', function(){sendAddZombie("strong");}, this, 0, 0, 0);
+    var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 0, 0);
+    var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombieButton', function(){sendAddZombie("generations");}, this, 0, 0, 0);
     // Tower Buttons
     var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
