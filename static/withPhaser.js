@@ -23,7 +23,7 @@ var strongZombiePrice = 200;
 var healingZombiePrice = 300;
 var generationsZombiePrice = 400;
 // Price for Towers
-var standardTowerPrice = 100;
+var minigunTowerPrice = 100;
 var shotgunTowerPrice = 200;
 var gumTowerPrice = 300;
 var bombTowerPrice = 400;
@@ -279,7 +279,7 @@ function preload() {
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
 	
     //tower buttons
-   game.load.spritesheet('standardTowerButton', 'images/Towers/towerStandardButton.png');
+   game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
     game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
     game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
     game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
@@ -287,7 +287,7 @@ function preload() {
 	
 // images for the actual objects on the map
 	//towers
-	game.load.spritesheet('standardTower', 'images/Towers/towerStandard.png');
+	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
     game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
     game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
@@ -554,7 +554,7 @@ function create() {
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombie', function(){sendAddZombie("healing");}, this, 0, 0, 0);
     var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombie', function(){sendAddZombie("generations");}, this, 0, 0, 0);
     // Tower Buttons
-    var standardTowerButton  =  game.make.button(870, 160, 'standardTowerButton', function(){buyTower("standard");}, this, 0, 0, 0);
+    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("standard");}, this, 0, 0, 0);
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
     var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
     var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
@@ -568,7 +568,7 @@ function create() {
     buttonGroup.add(healingZombieButton);
     buttonGroup.add(generationsZombieButton);
     //tower buttons
-    buttonGroup.add(standardTowerButton);
+    buttonGroup.add(minigunTowerButton);
     buttonGroup.add(shotgunTowerButton);
     buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
