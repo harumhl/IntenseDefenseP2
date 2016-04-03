@@ -509,11 +509,12 @@ function sendAddZombie(zombieType){
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
-    }
-    if(!cantBuyFlag){
+		if(!cantBuyFlag){
         socket.send("addZombie"+zombieType);
         console.log("buying zombie");
+		}
     }
+    
 }
 function damageBase(index)
 {
@@ -630,85 +631,87 @@ function buyTower(type) {
 function mouseClick(item) {
     var validPurchase = false;
     var offset = 0;
-    if (gTowerType == "minigun") {
-        offset = 36; // Mouse click is top left corner, changing that to middle
-        if(player.money < minigunTowerPrice){
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-        }
-        else{
-            player.money -= minigunTowerPrice;
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			validPurchase = true;
-        }
-    }
-	else if (gTowerType == "shotgun") {
-        offset = 36; // Mouse click is top left corner, changing that to middle  
-        if(player.money < shotgunTowerPrice){
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-        }
-        else{
-            player.money -= shotgunTowerPrice;
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			validPurchase = true;
-        }
-    }
-	else if (gTowerType == "gum") {
-        offset = 36; // Mouse click is top left corner, changing that to middle
-        if(player.money < gumTowerPrice){
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-        }
-        else{
-            player.money -= gumTowerPrice;
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			validPurchase = true;
-        }
-    }
-	else if (gTowerType == "bomb") {
-        offset = 36; // Mouse click is top left corner, changing that to middle  
-        if(player.money < bombTowerPrice){
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-        }
-        else{
-            player.money -= bombTowerPrice;
-            document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			validPurchase = true;
-        }
-    }
-	else
-		return;
-	if(validPurchase){
-		var pos_x = game.input.mousePointer.x-offset;
-		var pos_y = game.input.mousePointer.y-offset;
-		if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
-		{
-		   //console.log('top rectangle chosen')
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+	if(player.state == 'defender'){
+		if (gTowerType == "minigun") {
+			offset = 36; // Mouse click is top left corner, changing that to middle
+			if(player.money < minigunTowerPrice){
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			}
+			else{
+				player.money -= minigunTowerPrice;
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				validPurchase = true;
+			}
 		}
-		else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
-		{
-		   //console.log('left rectangle chosen')
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		else if (gTowerType == "shotgun") {
+			offset = 36; // Mouse click is top left corner, changing that to middle  
+			if(player.money < shotgunTowerPrice){
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			}
+			else{
+				player.money -= shotgunTowerPrice;
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				validPurchase = true;
+			}
 		}
-		else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
-		{
-		   //console.log('right rectangle chosen')
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		else if (gTowerType == "gum") {
+			offset = 36; // Mouse click is top left corner, changing that to middle
+			if(player.money < gumTowerPrice){
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			}
+			else{
+				player.money -= gumTowerPrice;
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				validPurchase = true;
+			}
 		}
-		else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
-		{
-		   //console.log('bottom rectangle chosen')
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-		}
-		else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
-		{
-		   //console.log('middle rectangle chosen')
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		else if (gTowerType == "bomb") {
+			offset = 36; // Mouse click is top left corner, changing that to middle  
+			if(player.money < bombTowerPrice){
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			}
+			else{
+				player.money -= bombTowerPrice;
+				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				validPurchase = true;
+			}
 		}
 		else
-		{
-			document.getElementById("Tower-Placement-Error").innerHTML = "";
-			socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
-			gTowerType = "";
+			return;
+		if(validPurchase){
+			var pos_x = game.input.mousePointer.x-offset;
+			var pos_y = game.input.mousePointer.y-offset;
+			if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
+			{
+			   //console.log('top rectangle chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+			}
+			else if(pos_x >= 170 && pos_x <= 241 && pos_y >= 162 && pos_y <= 752)
+			{
+			   //console.log('left rectangle chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			}
+			else if(pos_x >= 690 && pos_x <= 740 && pos_y >= 162 && pos_y <= 752)
+			{
+			   //console.log('right rectangle chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			}
+			else if(pos_x >= 201 && pos_x <= 771 && pos_y >= 650 && pos_y <= 700)
+			{
+			   //console.log('bottom rectangle chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			}
+			else if(pos_x >= 415 && pos_x <= 475 && pos_y >= 162 && pos_y <= 752)
+			{
+			   //console.log('middle rectangle chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			}
+			else
+			{
+				document.getElementById("Tower-Placement-Error").innerHTML = "";
+				socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
+				gTowerType = "";
+			}
 		}
 	}
 }
