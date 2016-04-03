@@ -15,7 +15,7 @@ var lane = 'center';
 var bulletTravelTime = 450;
 var towerBullets;
 
-var baseHealth = 500;
+var baseHealth = 2000;
 
 // Price for Zombies
 var standardZombiePrice = 100;
@@ -263,7 +263,7 @@ function preload() {
 function endRound(winner)
 {
 	if(winner == "attacker")
-		window.alert("Zombies Win!");
+		window.alert("Attacker Wins!");
 	else
 		window.alert("Defender Wins!");
 	newRound();
@@ -443,6 +443,7 @@ function damageBase(index)
 	console.log(baseHealth+'->');
 	baseHealth -= zombieArray[index].damage;
 	console.log(baseHealth);
+    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	zombieArray[index].alive = false;    
 	zombieArray[index].image.kill();
 	zombieArray.splice(index, 1);
@@ -634,6 +635,9 @@ function countdown(minutes) {
         var current_minutes = mins-1
         seconds--;
         counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if(seconds == 0 && current_minutes == 0){
+            endRound('attacker');
+        }
         if( seconds > 0 ) {
             setTimeout(tick, 1000);
         } else {
