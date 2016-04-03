@@ -51,7 +51,7 @@ Zombie = function(type, lane, inX, inY) {
     this.y = inY; // "
     this.alive = true;
    	this.time = game.time.now;
-
+	
     //this.created = this.game.time.now;
     if(type == 'standard')
 	{
@@ -78,6 +78,9 @@ Zombie = function(type, lane, inX, inY) {
 		this.speed = 0.4
 	}
     this.image = game.add.sprite(this.x, this.y, type+'Zombie');
+	this.image.animations.add('moveRight',[0,1,2,3],true);
+	this.image.animations.add('moveLeft',[4,5,6,7],true);
+	this.image.animations.add('moveDown',[8,9,10,11],true);
 	this.image.scale.setTo(0.5);
 	
     /*
@@ -88,6 +91,17 @@ Zombie = function(type, lane, inX, inY) {
 };
 Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
     
+	
+		/*if(newDirection == 'down')
+		{
+			if(((newPos_y - this.pos_y)/3) >= 1)
+				
+		}
+		else
+		{
+			if((abs(newPos_x - this.pos_x)/3) >= 1)
+				
+		}*/
         this.pos_y = newPos_y;
 		this.y = newPos_y;
         this.image.y = newPos_y;
@@ -95,10 +109,27 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 		this.pos_x = newPos_x;
 		this.x = newPos_x;
 		this.image.x = newPos_x;
-		
+		//if(this.direction != newDirection)
+		//{
+			if(newDirection == 'down')
+			{
+				this.image.animations.play('moveDown',this.speed*10);
+				
+			}
+			else if(newDirection == 'right')
+			{
+				this.image.animations.play('moveRight',this.speed*10);
+			}
+			else //newDirection == 'left'
+			{
+				this.image.animations.play('moveLeft',this.speed*10);
+			}
+		//}
 		this.direction = newDirection;
+		
 		console.log("direction: "+newDirection);
-
+		console.log(this.direction);
+		
 		
 		if (this.direction == "down") 
 		{
@@ -233,10 +264,12 @@ function preload() {
     
 //images for buttons
     //zombies
-    game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
-    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrongButton.png');
-    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealingButton.png');
-    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerationsButton.png');
+    //game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandardButton.png');
+	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
+    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
+    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
+    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
+	
 	
 	//zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
@@ -281,7 +314,7 @@ function newRound()
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11996', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -517,7 +550,9 @@ function buyZombie(type) {
     
     if (type == "standard"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 470, 160));
+		var newZombie = new Zombie(type, lane, 470, 160);
+		
+		zombieArray.push(newZombie);
 		//attackerMoney -= 100;
         player.money -= standardZombiePrice;
 	}

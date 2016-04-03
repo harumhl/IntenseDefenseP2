@@ -13,7 +13,7 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
-server.listen(11777, function() {
+server.listen(11996, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port 11777');
 });
 
@@ -141,6 +141,8 @@ wsServer.on('request', function(request) {
 				for(var y = 0; y<connections.length; y++){
 				connections[y].sendUTF(JSON.stringify(zombieStatArray));
 				}
+				//if(killIndexes.length >0)
+					//console.log(killIndexes.length);
 				if(killIndexes.length >0)
 				{
 					for(var y = 0; y<connections.length; y++){
