@@ -350,7 +350,9 @@ window.onload = function() {
             console.log('HERE: '+player.name);
             console.log("StartRound");
             startRound == true;
-            countdown(5);
+            //countdown(5);
+            // make the defender place towers 
+            countdown(.30)
         }
         else if(message.substring(0,12) == 'attackerName')
         {
@@ -626,9 +628,27 @@ function changePath(){
 function countdown(minutes) {
     var seconds = 60;
     var mins = minutes
+    var counter;
+    if(mins < 1){
+        seconds = mins*100;
+        mins = 0;
+        console.log(mins+":"+seconds);
+        counter = document.getElementById("gameStartTimer");
+    }
+    else{
+        counter = document.getElementById("timer");
+    }
     function tick() {
-        var counter = document.getElementById("timer");
-        var current_minutes = mins-1
+        
+        //var counter = document.getElementById("timer");
+        //counter = document.getElementById("gameStartTimer");
+        var current_minutes;
+        if(mins<1){
+            current_minutes = 0;
+        }
+        else{
+            current_minutes = mins-1
+        }
         seconds--;
         counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
         if( seconds > 0 ) {

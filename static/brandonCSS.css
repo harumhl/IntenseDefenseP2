@@ -56,6 +56,7 @@
 #footer{
     clear: both; /*clears both right and left nav so it scales across the width of webpage*/
     background-color: #e5e1db;
+    width: 1000px;
 }
 
 /* want to try to give the buttons an effect when user clicks on them*/
