@@ -11,28 +11,42 @@ var moneyTimer = 0;
 var regenTime = 200;
 
 // Zombie Class
-Zombie = function(type, lane, health, speed, spriteName) {
+Zombie = function(type, lane, inX, inY) {
     this.type = type;
     this.lane = lane;
-    this.health = health;
-    this.speed = speed;
-    this.pos_x = 470; // real positions
-	this.pos_y = 160; // "
-    this.x = 470; // positions calculated for bullet targeting
-    this.y = 160; // "
+    this.pos_x = inX; // real positions
+	this.pos_y = inY; // "
+    this.x = inX; // positions calculated for bullet targeting
+    this.y = inY; // "
     this.alive = true;
    	this.time = game.time.now;
 
     //this.created = this.game.time.now;
     if(type == 'standard')
+	{
 		this.damage = 100;
+		this.health = 100;
+		this.speed = 1;
+	}
 	else if(type == 'strong')
+	{
 		this.damage = 200;
+		this.health = 150;
+		this.speed = 0.6;
+	}
 	else if(type == 'healing')
+	{
 		this.damage = 50;
+		this.health = 500;
+		this.speed = 1;
+	}
 	else
+	{
 		this.damage = 300;
-    this.image = game.add.sprite(this.x, this.y, spriteName);
+		this.health = 300;
+		this.speed = 0.4
+	}
+    this.image = game.add.sprite(this.x, this.y, type+'Zombie');
 	this.image.scale.setTo(0.5);
     /*
      if      (this.type == "standard") this.y += bulletTravelTime*1 +10; //created*__
@@ -63,7 +77,13 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
         this.alive = false;
         
         this.image.kill();
-        
+		if(zombieArray[index].type == 'generations'){
+			for(var i = 0; i<2; i++)
+			{
+				zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 100, 1));
+				zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
+			}
+		}
 		zombieArray.splice(index, 1);
 		zombieStatArray.splice(index,1);
 		if(attackerMoney == 0 && zombieArray.length == 0)
@@ -75,21 +95,37 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 Zombie.prototype.update = function() {};
 
 // Tower Class
-Tower = function(type, health, damage, speed, range, x, y, spriteName, bullets, game) {
+Tower = function(type, x, y, spriteName, bullets) {
     this.type = type;
-    this.health = health;
-    this.damage = damage;
-    this.speed = speed;
     // this.range = range; // make int if we use distanceBetween - from center
     this.x = x-18;
     this.y = y-18;
-    this.bullets = bullets;
     this.game = game;
-    this.alive = true;
-    this.fireRate = 1000;
+	this.bullets = towerBullets;
+	if(type == 'minigun')
+	{
+		this.fireRate = 200;
+		this.damage = 30;
+		
+	}
+	else if(type == 'shotgun')
+	{
+		this.fireRate = 500;
+		this.damage = 80;
+	}
+	else if(type == 'ice')
+	{
+		this.fireRate = 1000;
+		this.damage = 0;
+	}
+	else
+	{
+		this.fireRate = 1000;
+		this.damage = 150;
+	}
     this.nextFire = 0;
-    console.log(spriteName);
-    this.image = game.add.sprite(this.x, this.y, spriteName);
+    //console.log(spriteName);
+    this.image = game.add.sprite(this.x, this.y, type+'Tower');
     this.image.scale.setTo(0.5);
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
@@ -199,7 +235,7 @@ function newRound()
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11994', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11998', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -254,9 +290,7 @@ window.onload = function() {
 					pos_y+=message[i];
 				
 			}
-			//console.log(towerType+' '+pos_x+' '+pos_y);
-			//towerGroup.add( game.add.sprite(pos_x, pos_y,towerType+'Tower') );
-			towerArray.push(new Tower(towerType, 100, 34, 5, 0, pos_x, pos_y, towerType+'Tower', towerBullets, game));
+			towerArray.push(new Tower(towerType, pos_x, pos_y));
 			
 		}
 		else
@@ -380,22 +414,22 @@ function buyZombie(type) {
     
     if (type == "standard"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
+		zombieArray.push(new Zombie(type, lane, 470, 160));
 		attackerMoney -= 100;
 	}
     else if (type == "strong"){
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 100, 5, 'strongZombie'));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.6));
+		zombieArray.push(new Zombie(type, lane, 470, 160));
 		attackerMoney -= 200;
 	}
 	else if (type == "healing"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 100, 5, 'healingZombie'));
+		zombieArray.push(new Zombie(type, lane, 470, 160));
 		attackerMoney -= 300;
 	}
     else if (type == "generations"){
-		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-		zombieArray.push(new Zombie(type, lane, 100, 5, 'generationsZombie'));
+		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.3));
+		zombieArray.push(new Zombie(type, lane, 470, 160));
 		attackerMoney -= 400;
 	}
 }
@@ -502,10 +536,10 @@ function update() {
         // I CAn USE DISTANCEBETWEEN FUNCTION TO GET CIRCULAR ATTACK RANGE
         for (var j=0; j< zombieArray.length; j++) {
 			//game.debug.text("for loop ya",200,200);
-            var leftRange   = towerCenterX - towerSize *5/2;
-            var rightRange  = towerCenterX + towerSize *5/2;
-            var topRange    = towerCenterY - towerSize *5/2;
-            var bottomRange = towerCenterY + towerSize *5/2;
+            var leftRange   = towerCenterX - towerSize *2;
+            var rightRange  = towerCenterX + towerSize *2;
+            var topRange    = towerCenterY - towerSize *2;
+            var bottomRange = towerCenterY + towerSize *2;
            // game.debug.text( "for loop "+towerCenterX+"_"+towerCenterY+"_"+leftRange+"_"+rightRange+"_"+topRange+"_"+bottomRange+"___"+zombieArray[j].x+"_"+zombieArray[j].y, 250,450+i*10);
 
             if (leftRange < zombieArray[j].x && zombieArray[j].x < rightRange &&
@@ -562,13 +596,13 @@ function update() {
         //game.debug.text( "under attack zombie index (inside withinRangeArray) : "+frontIndex+"_"+withinRangeArray[frontIndex] +"_"+zombieArray[withinRangeArray[frontIndex]].type+"_"+withinRangeArray.length+"_"+int, 150,150);
         
         // 3. attack!
-		console.log("Attack: "+frontIndex);
+		//console.log("Attack: "+frontIndex);
         
 		var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
                                                 function(zombie,bullet){bullet.kill();}, null, this);
         
 		if (overlapped) {
-			console.log(towerArray[i].attPower+"health: "+zombieArray[frontIndex].health);
+			console.log(towerArray[i].damage+"health: "+zombieArray[frontIndex].health);
 			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
 			//towerBullets.getFirstDead().kill();
 		}
