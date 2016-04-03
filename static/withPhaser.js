@@ -596,7 +596,8 @@ function buyZombie(type) {
 		
 		zombieArray.push(newZombie);
 		//attackerMoney -= 100;
-        player.money -= standardZombiePrice;
+		//if(player.money < standardZombiePrice)
+        //player.money -= standardZombiePrice;
 	}
     else if (type == "strong"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.6));
@@ -607,13 +608,13 @@ function buyZombie(type) {
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
 		//attackerMoney -= 300;
-         player.money -= strongZombiePrice;
+        // player.money -= strongZombiePrice;
 	}
     else if (type == "generations"){
 		zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 0.3));
 		zombieArray.push(new Zombie(type, lane, 470, 160));
 		//attackerMoney -= 400;
-        player.money -= healingZombiePrice;
+        //player.money -= healingZombiePrice;
 	}
 }
 function buyTower(type) {
@@ -629,6 +630,7 @@ function mouseClick(item) {
         offset = 36; // Mouse click is top left corner, changing that to middle
         if(player.money < minigunTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			return;
         }
         else{
             player.money -= minigunTowerPrice;
@@ -639,6 +641,7 @@ function mouseClick(item) {
         offset = 36; // Mouse click is top left corner, changing that to middle  
         if(player.money < shotgunTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			return;
         }
         else{
             player.money -= shotgunTowerPrice;
@@ -649,6 +652,7 @@ function mouseClick(item) {
         offset = 36; // Mouse click is top left corner, changing that to middle
         if(player.money < gumTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			return;
         }
         else{
             player.money -= gumTowerPrice;
@@ -659,6 +663,7 @@ function mouseClick(item) {
         offset = 36; // Mouse click is top left corner, changing that to middle  
         if(player.money < bombTowerPrice){
             document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+			return;
         }
         else{
             player.money -= bombTowerPrice;
