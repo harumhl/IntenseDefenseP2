@@ -34,6 +34,18 @@ var startRound = false; // controls the timer and money generator functions
 //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 var attackerCurtain;
 
+var player;
+var cursors;
+var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
+//var zombieGroup; // array of zombies
+var towerGroup;  // array of towers
+var zombieStatArray = [];
+var zombieArray = []; // array of zombies
+var towerArray = []; // array of towers
+var purchaseLock = false;
+var state;
+var gTowerType = ""; // flag && global variable for tower placement - g for global
+
 // Classes
 // Player Class
 Player = function(username, state, money) {
@@ -150,24 +162,19 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.y = y-18;
     this.game = game;
 	this.bullets = towerBullets;
-	if(type == 'minigun')
-	{
+	if(type == 'minigun'){
 		this.fireRate = 750;
 		this.damage = 30;
-		
 	}
-	else if(type == 'shotgun')
-	{
+	else if(type == 'shotgun'){
 		this.fireRate = 950;
 		this.damage = 80;
 	}
-	else if(type == 'ice')
-	{
+	else if(type == 'ice'){
 		this.fireRate = 1000;
 		this.damage = 0;
 	}
-	else // bomb
-	{
+	else{ // bomb
 		this.fireRate = 1000;
 		this.damage = 150;
 	}
@@ -205,20 +212,6 @@ Tower.prototype.attack = function(underAttack) {
     }
 };
 Tower.prototype.update = function() {};
-
-
-
-var player;
-var cursors;
-var buttonGroup; // array of 4 zombie buttons and 4 tower buttons
-//var zombieGroup; // array of zombies
-var towerGroup;  // array of towers
-var zombieStatArray = [];
-var zombieArray = []; // array of zombies
-var towerArray = []; // array of towers
-var purchaseLock = false;
-var state;
-var gTowerType = ""; // flag && global variable for tower placement - g for global
 
 function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
 {
