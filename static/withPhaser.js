@@ -3,7 +3,7 @@ var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'phaser-example', { prelo
 var text;//temp
 var attackerMoney = 1000;
 var defenderMoney = 1000;
-var bulletTravelTime = 300;
+var bulletTravelTime = 450;
 var lane = 'center';
 var towerBullets; // temp temp temp
 var baseHealth = 500;
@@ -48,13 +48,14 @@ Zombie = function(type, lane, inX, inY) {
 	}
     this.image = game.add.sprite(this.x, this.y, type+'Zombie');
 	this.image.scale.setTo(0.5);
+	
     /*
      if      (this.type == "standard") this.y += bulletTravelTime*1 +10; //created*__
      else if (this.type == "strong")   this.y += bulletTravelTime*0.3;
      */
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
-Zombie.prototype.move = function(newPos_x, newPos_y) {
+Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
     
         this.pos_y = newPos_y;
 		this.y = newPos_y;
@@ -64,8 +65,24 @@ Zombie.prototype.move = function(newPos_x, newPos_y) {
 		this.x = newPos_x;
 		this.image.x = newPos_x;
 		
-		if (this.lane == "center")
-			this.y = this.image.y+Math.sqrt((game.time.now-this.time)/1000)*22;
+		this.direction = newDirection;
+		console.log("direction: "+newDirection);
+
+		
+		if (this.direction == "down") 
+		{
+			this.y = this.image.y + 60*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+		}
+		else if (this.direction == "left") 
+		{
+			this.x = this.image.x - 40*(bulletTravelTime/1000)*this.speed - 4/Math.sqrt((game.time.now-this.time)/1000);
+			console.log("left: "+this.x+"_"+this.image.x);
+		}
+		else if (this.direction == "right") 
+		{
+			this.x = this.image.x + 40*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+			console.log("right: "+this.x+"_"+this.image.x);
+		}
 
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
@@ -104,13 +121,13 @@ Tower = function(type, x, y, spriteName, bullets) {
 	this.bullets = towerBullets;
 	if(type == 'minigun')
 	{
-		this.fireRate = 200;
+		this.fireRate = 750;
 		this.damage = 30;
 		
 	}
 	else if(type == 'shotgun')
 	{
-		this.fireRate = 500;
+		this.fireRate = 950;
 		this.damage = 80;
 	}
 	else if(type == 'ice')
@@ -118,7 +135,7 @@ Tower = function(type, x, y, spriteName, bullets) {
 		this.fireRate = 1000;
 		this.damage = 0;
 	}
-	else
+	else // bomb
 	{
 		this.fireRate = 1000;
 		this.damage = 150;
@@ -144,8 +161,8 @@ Tower.prototype.attack = function(underAttack) {
         var offset =36; // should be 36
         bullet.reset(parseInt(this.x)+parseInt(offset), parseInt(this.y)+parseInt(offset));
         
-        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 500, 500);
-
+        bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 2, bulletTravelTime);
+		
         // applying damage to zombie
         //underAttack.hurt(34, bullet, frontIndex);
     }
@@ -173,6 +190,7 @@ function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
 	this.pos_y = _pos_y;
 	this.health = _health;
 	this.speed = _speed;
+	this.direction = "";//'down';
 }
 /* most of the time you need these next 3 functions to run games */
 function preload() {
@@ -235,7 +253,7 @@ function newRound()
 }
 window.onload = function() {
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11998', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11994', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -304,7 +322,7 @@ window.onload = function() {
 				if(receivedArray.length == zombieStatArray.length){
 						zombieStatArray = receivedArray;
 					for(var i = 0; i<zombieStatArray.length; i++) {
-						zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y);        
+						zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y, zombieStatArray[i].direction);        
 					}
 				}
 			}
@@ -540,10 +558,11 @@ function update() {
             var rightRange  = towerCenterX + towerSize *2;
             var topRange    = towerCenterY - towerSize *2;
             var bottomRange = towerCenterY + towerSize *2;
-           // game.debug.text( "for loop "+towerCenterX+"_"+towerCenterY+"_"+leftRange+"_"+rightRange+"_"+topRange+"_"+bottomRange+"___"+zombieArray[j].x+"_"+zombieArray[j].y, 250,450+i*10);
+           //console.log("position: "+zombieArray[j].image.x+","+zombieArray[j].image.y);
+		   //console.log(leftRange+","+rightRange+","+topRange+","+bottomRange);
 
-            if (leftRange < zombieArray[j].x && zombieArray[j].x < rightRange &&
-                topRange  < zombieArray[j].y && zombieArray[j].y < bottomRange) {
+            if (leftRange < zombieArray[j].image.x && zombieArray[j].image.x < rightRange &&
+                topRange  < zombieArray[j].image.y && zombieArray[j].image.y < bottomRange) {
                 
                 withinRangeArray.push(j);
             }
@@ -574,15 +593,16 @@ function update() {
             
              // last x-value changing lane
 			 
-             else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 700) { // 700 IS NOT FIXED!!!
+             else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y >= 700) { // 700 IS NOT FIXED!!!
              
              // closer to the base in x value
 				 if (Math.abs(zombieArray[withinRangeArray[j]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
 					frontIndex = withinRangeArray[j];
 				 }
-				 }
-				 // first x-value changing lane
-				 else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y == 160) { // 160 IS NOT FIXED!!!
+			}
+			
+			// first x-value changing lane
+			 else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y <= 160) { // 160 IS NOT FIXED!!!
 				 
 				 // further from the zombie factory in x value
 				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[j].y-485)) { // 485 NOT FIXED!!
@@ -602,7 +622,6 @@ function update() {
                                                 function(zombie,bullet){bullet.kill();}, null, this);
         
 		if (overlapped) {
-			console.log(towerArray[i].damage+"health: "+zombieArray[frontIndex].health);
 			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
 			//towerBullets.getFirstDead().kill();
 		}

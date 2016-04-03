@@ -13,7 +13,7 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
-server.listen(11998, function() {
+server.listen(11994, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port 11998');
 });
 
@@ -88,6 +88,7 @@ wsServer.on('request', function(request) {
 					//console.log(zombieStatArray[i].pos_x+' '+zombieStatArray[i].pos_y+' '+zombieStatArray[i].speed)
 					if (zombieStatArray[i].lane == "center")
 					{
+						zombieStatArray[i].direction = "down";
 						if(zombieStatArray[i].pos_y < 775)
 							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
 						else
@@ -97,37 +98,44 @@ wsServer.on('request', function(request) {
 					{
 						if (zombieStatArray[i].pos_x < 724 && zombieStatArray[i].pos_y < 704)
 						{
+							zombieStatArray[i].direction = "right";
 							zombieStatArray[i].pos_x += zombieStatArray[i].speed;
 						}
 						else if (zombieStatArray[i].pos_x >= 724 && zombieStatArray[i].pos_y < 704)
 						{
+							zombieStatArray[i].direction = "down";
 							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
 						}
 						else if (zombieStatArray[i].pos_x > 469 && zombieStatArray[i].pos_y >= 704)
 						{		
+					
+							zombieStatArray[i].direction = "left";
 							zombieStatArray[i].pos_x -= zombieStatArray[i].speed;
 							
 						}
-					else
-						zombieStatArray[i].lane = "center";
-					}
+						else
+							zombieStatArray[i].lane = "center";
+						}
 					else
 					{
 						if(zombieStatArray[i].pos_x > 200 && zombieStatArray[i].pos_y < 704)
 						{
+							zombieStatArray[i].direction = "left";
 							zombieStatArray[i].pos_x-=zombieStatArray[i].speed
 						}
 						else if(zombieStatArray[i].pos_x <= 724 && zombieStatArray[i].pos_y < 704)
 						{
+							zombieStatArray[i].direction = "down";
 							zombieStatArray[i].pos_y+=zombieStatArray[i].speed
 						}
 						else if(zombieStatArray[i].pos_x < 469 && zombieStatArray[i].pos_y >= 704)
-						{		
+						{	
+							zombieStatArray[i].direction = "right";
 							zombieStatArray[i].pos_x+=zombieStatArray[i].speed
 						}
-					else
-						zombieStatArray[i].lane = "center";
-					}
+						else
+							zombieStatArray[i].lane = "center";
+						}
 				}
 		
 				for(var y = 0; y<connections.length; y++){
