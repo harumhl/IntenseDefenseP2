@@ -786,7 +786,7 @@ function countdown(minutes) {
         }
         else{
             if(seconds == 0 && current_minutes == 0){
-                endRound('attacker');         
+                endRound('defender');         
                 //end of match attacker wins
             }
 		}
