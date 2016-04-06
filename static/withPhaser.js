@@ -544,8 +544,6 @@ function create() {
     game.stage.backgroundColor = "#e5e1db"; // background color for button panel
     game.add.sprite(0,0,'title');
     
-    
-    
     var map = game.add.sprite(144,129,'map');
 	var base = game.add.sprite(425,780,'base');
     map.inputEnabled = true;
@@ -558,9 +556,6 @@ function create() {
     
  // Creating each button
     // Zombie Buttons
-	
-	
-	
     var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 0, 0);
     var strongZombieButton  =  game.make.button(40, 320, 'strongZombieButton', function(){sendAddZombie("strong");}, this, 0, 0, 0);
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 0, 0);
@@ -604,6 +599,20 @@ function create() {
     
     towerBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
     towerBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+	
+	//Price labels for the zombie/tower buttons
+	// Style for each text
+	var style = {font: "20px Arial", fill: "#29a329", align: "center" };
+	//zombie price tags
+	var standardZombieText = game.add.text(50, 240, "$100", style);
+	var strongZombieText = game.add.text(50, 400, "$200", style);
+	var healingZombieText = game.add.text(50, 560, "$300", style);
+	var generationsZombieText = game.add.text(50, 720, "$400", style);
+	//tower price tags
+	var minigunTowerText = game.add.text(885, 240, "$100", style);
+	var shotgunTowerText = game.add.text(885, 400, "$200", style);
+	var gumTowerText = game.add.text(885, 560, "$300", style);
+	var bombTowerText = game.add.text(885, 720, "$400", style);
 
 }
 function buyZombie(type) {
@@ -646,7 +655,7 @@ function mouseClick(item) {
     var offset = 0;
 	if(player.state == 'defender'){
 		
-		if(validPurchase){
+		//if(validPurchase){
 			var pos_x = game.input.mousePointer.x-offset;
 			var pos_y = game.input.mousePointer.y-offset;
 			if(pos_x >= 201 && pos_x <= 771 && pos_y <= 212)
@@ -682,7 +691,9 @@ function mouseClick(item) {
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 					}
 					else{
+						console.log("money:" + player.money);
 						player.money -= minigunTowerPrice;
+						console.log("money:" + player.money);
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 						validPurchase = true;
 					}
@@ -726,7 +737,7 @@ function mouseClick(item) {
 				socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
 				gTowerType = "";
 			}
-		}
+		//}
 	}
 }
 function changePath(){
