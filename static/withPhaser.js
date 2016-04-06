@@ -669,7 +669,7 @@ function mouseClick(item) {
 			   //console.log('top rectangle chosen')
 				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 			}
-			else if(mouse_x >= 170 && mouse_x <= 241 && mouse_y >= 162 && mouse_y <= 752)
+			else if(mouse_x >= (201 - x_offset) && mouse_x <= (251 + x_offset) && mouse_y >= 162 && mouse_y <= 752)
 			{
 			   //console.log('left rectangle chosen')
 				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
@@ -679,15 +679,20 @@ function mouseClick(item) {
 			   //console.log('right rectangle chosen')
 				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 			}
-			else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 650 && mouse_y <= 700)
+			else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 746)
 			{
 			   //console.log('bottom rectangle chosen')
 				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 			}
-			else if(mouse_x >= (465-x_offset) && mouse_x <= (515+x_offset) && mouse_y >= (225) && mouse_y <= 752)
+			else if(mouse_x >= (465-x_offset) && mouse_x <= (515+x_offset) && mouse_y >= (225) && mouse_y <= (752+y_offset))
 			{
 			   //console.log('middle rectangle chosen')
 				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			}
+			else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= (810 - y_offset) && mouse_y <= 858)
+			{
+			   //console.log('bottom of map chosen')
+				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 			}
 			else
 			{
