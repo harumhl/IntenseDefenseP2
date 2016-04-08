@@ -330,6 +330,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
+
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -700,6 +701,7 @@ function mouseClick(item) {
 				if (gTowerType == "minigun") {
 					if(player.money < minigunTowerPrice){
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+						return;
 					}
 					else{
 						//console.log("money:" + player.money);
@@ -712,6 +714,7 @@ function mouseClick(item) {
 				else if (gTowerType == "shotgun") {
 					if(player.money < shotgunTowerPrice){
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+						return;
 					}
 					else{
 						player.money -= shotgunTowerPrice;
@@ -722,6 +725,7 @@ function mouseClick(item) {
 				else if (gTowerType == "gum") {
 					if(player.money < gumTowerPrice){
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+						return;
 					}
 					else{
 						player.money -= gumTowerPrice;
@@ -732,6 +736,7 @@ function mouseClick(item) {
 				else if (gTowerType == "bomb") {
 					if(player.money < bombTowerPrice){
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+						return;
 					}
 					else{
 						player.money -= bombTowerPrice;
