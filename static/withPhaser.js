@@ -329,7 +329,7 @@ function newRound()
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11996', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -702,9 +702,9 @@ function mouseClick(item) {
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 					}
 					else{
-						console.log("money:" + player.money);
+						//console.log("money:" + player.money);
 						player.money -= minigunTowerPrice;
-						console.log("money:" + player.money);
+						//console.log("money:" + player.money);
 						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 						validPurchase = true;
 					}
@@ -742,10 +742,12 @@ function mouseClick(item) {
 				else
 					return;
 				
-				
-				document.getElementById("Tower-Placement-Error").innerHTML = "";
-				socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
-				gTowerType = "";
+				if(validPurchase)
+				{
+					document.getElementById("Tower-Placement-Error").innerHTML = "";
+					socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
+					gTowerType = "";
+				}
 			}
 		//}
 	}
