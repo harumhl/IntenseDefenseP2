@@ -99,56 +99,38 @@ Zombie = function(type, lane, inX, inY) {
 };
 Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
     
+	// real zombie position
+	this.pos_x = newPos_x;
+    this.pos_y = newPos_y;
+
+	// zombie image position
+	this.image.x = newPos_x;
+    this.image.y = newPos_y;
 	
-		/*if(newDirection == 'down')
-		{
-			if(((newPos_y - this.pos_y)/3) >= 1)
-				
-		}
-		else
-		{
-			if((abs(newPos_x - this.pos_x)/3) >= 1)
-				
-		}*/
-        this.pos_y = newPos_y;
-		this.y = newPos_y;
-        this.image.y = newPos_y;
-		
-		this.pos_x = newPos_x;
-		this.x = newPos_x;
-		this.image.x = newPos_x;
+	this.direction = newDirection;
 
-		if(newDirection == 'down') {
-				this.image.animations.play('moveDown',this.speed*10); // WHY???
-			}
-			else if(newDirection == 'right') {
-				this.image.animations.play('moveRight',this.speed*10); // WHY???
-			}
-			else { //newDirection == 'left' 
-				this.image.animations.play('moveLeft',this.speed*10); // WHY???
-			}
+	// Change animation accordingly
+	if(this.direction == 'down') {
+		this.image.animations.play('moveDown',this.speed*10);
+	}
+	else if (this.direction == "right") {
+		this.image.animations.play('moveRight',this.speed*10);
+	}
+	else if (this.direction == "left") {
+		this.image.animations.play('moveLeft',this.speed*10);
+	}
 
-		this.direction = newDirection;
-		
-		console.log("direction: "+newDirection);
-		console.log(this.direction);
-		
-		
-		if (this.direction == "down") 
-		{
-			this.y = this.image.y + 60*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
-		}
-		else if (this.direction == "left") 
-		{
-			this.x = this.image.x - 40*(bulletTravelTime/1000)*this.speed - 4/Math.sqrt((game.time.now-this.time)/1000);
-			console.log("left: "+this.x+"_"+this.image.x);
-		}
-		else if (this.direction == "right") 
-		{
-			this.x = this.image.x + 40*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
-			console.log("right: "+this.x+"_"+this.image.x);
-		}
-
+	// (x,y) coordinates for bullet-zombie overlap 
+	// - where zombie would be by the time the bullet is supposed to hit the zombie
+	if (this.direction == "down") {
+		this.y = this.image.y + 60*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+	}
+	else if (this.direction == "left") {
+		this.x = this.image.x - 40*(bulletTravelTime/1000)*this.speed - 4/Math.sqrt((game.time.now-this.time)/1000);
+	}
+	else if (this.direction == "right") {
+		this.x = this.image.x + 40*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+	}
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
@@ -240,8 +222,7 @@ Tower.prototype.attack = function(underAttack) {
 };
 Tower.prototype.update = function() {};
 
-function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
-{
+function zombieStat(_lane, _pos_x, _pos_y, _health, _speed) {
 	this.lane   = _lane;
 	this.pos_x  = _pos_x;
 	this.pos_y  = _pos_y;
@@ -294,8 +275,7 @@ function preload() {
     game.load.image('zombieSpawn', 'images/zombieSpawn.png');
 
 }
-function endRound(winner)
-{
+function endRound(winner) {
 	if(winner == "attacker")
 		window.alert("Attacker Wins!");
 	else
@@ -304,8 +284,7 @@ function endRound(winner)
     startRound = false;
 	newRound();
 }
-function newRound()
-{
+function newRound() {
 	for(var i = 0; i<zombieArray.length; i++)
 		zombieArray[i].image.kill();
 	for(var j = 0; j<towerArray.length; j++)
@@ -519,8 +498,7 @@ function sendAddZombie(zombieType){
     }
     
 }
-function damageBase(index)
-{
+function damageBase(index) {
 	baseHealth -= zombieArray[index].damage;
     document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	zombieArray[index].alive = false;    
@@ -757,6 +735,7 @@ function changePath(){
             6           left
     */
 
+	// buttonGroup.getAt(8) == arrow button for attacker
     if(currentPathFrame == 0) {
         buttonGroup.getAt(8).setFrames(3,4,5);
 		lane = 'right';
@@ -770,7 +749,6 @@ function changePath(){
 		lane = 'center';
     }
     currentPathFrame = buttonGroup.getAt(8).frame;
-
 }
 // function for the timer for each round
 function countdown(minutes) { // adjusted this function to allow a 30 second timer as well
