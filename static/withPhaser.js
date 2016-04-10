@@ -4,6 +4,7 @@
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
 
 // Global Variables
+var map;
 var player;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
@@ -258,7 +259,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11222', "echo-protocol");
 
     
   // Handle messages sent by the server.
@@ -390,8 +391,9 @@ window.onload = function() {
 function preload() { // Preload stuff for the game like images
     
     game.load.image('title','images/Title.png');
-    game.load.image('map','images/map2.png');
+	game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
 	game.load.image('base','images/base.png');
+	
     
 	/* images for buttons */
 	//zombie path button
@@ -436,11 +438,14 @@ function create() {
     game.stage.backgroundColor = "#e5e1db"; // gray background color
     game.add.sprite(0,0,'title');
     
-    var map = game.add.sprite(144,129,'map');
-	var base = game.add.sprite(432,780,'base');
+    map = game.add.sprite(144,129,'map');
+	map.animations.add('plainMap', [0], true);
+	map.animations.add('towerPlacement', [1], true);
+	map.play('plainMap');
     map.inputEnabled = true;
     map.events.onInputDown.add(mouseClick, this);
-    
+    var base = game.add.sprite(432,780,'base');
+	
 	/* Creating each button */
     // Zombie Buttons
     var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 0, 0);
@@ -729,6 +734,10 @@ function buyTower(type) {
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
     
     gTowerType = type;
+	if(player.state == 'defender')
+	{
+		map.play('towerPlacement');
+	}
 }
 function mouseClick(item) {
 	var notOnLane = false;
@@ -740,26 +749,34 @@ function mouseClick(item) {
 		var mouse_x = game.input.mousePointer.x;
 		var mouse_y = game.input.mousePointer.y;
 		
+		console.log(mouse_x + "_" + mouse_y);
 		// Check if the defender is trying to place the tower on zombie lanes
 		if(mouse_x >= 185 && mouse_x <= 800 && mouse_y <= 215) {
+			// top
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 185 && mouse_x <= 278 && mouse_y >= 162 && mouse_y <= 752) {
+			// left
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 708 && mouse_x <= 800 && mouse_y >= 162 && mouse_y <= 752) {
+			// right
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 750) {
+			// bottom 
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 810) {
+		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 820) {
+			// middle
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 810 && mouse_y <= 858) {
+		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 820 && mouse_y <= 858) {
+			// bottom of map
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 410 && mouse_x <= 560 && mouse_y >= 750) {
+			// base
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else {
@@ -809,6 +826,7 @@ function mouseClick(item) {
 		}
 		
 		if(notOnLane && canBuy) {
+			map.play('plainMap');
 			document.getElementById("Tower-Placement-Error").innerHTML = "";
 			socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
 			gTowerType = "";
