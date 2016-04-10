@@ -231,7 +231,7 @@ Tower = function(type, x, y, spriteName, bullets) {
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 Tower.prototype.attack = function(underAttack) {
-    
+    console.log("att");
     if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
 		
         this.nextFire = this.game.time.now + this.fireRate;
@@ -854,8 +854,17 @@ function update() {
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
 
+		// For every zombie and every tower, "overlap" of bullet+zombie will cause the damage
+        for (var j=0; j< zombieArray.length; j++) {
+			game.physics.arcade.overlap(towerBullets, zombieArray[j].image,
+                function(zombie,bullet){ console.log("pre overlap");
+					bullet.kill();
+					zombieArray[j].hurt(towerArray[i].damage, j);
+			}, null, this);
+		}
+		
 		// If it's not ready for the tower to shoot, then skip the whole process for it
-
+		if (game.time.now+30 < towerArray[i].nextFire) continue;
 
         var towerCenterX = parseInt(towerArray[i].pos_x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].pos_y) + parseInt(offset);
@@ -911,16 +920,6 @@ function update() {
         }
 
         // 3. attack!
-        var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
-                                        function(zombie,bullet){
-											console.log("overlap");
-											bullet.kill();}, null, this);
-
-		if (overlapped) {
-			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
-			console.log("damage?");
-		}
-		
 		towerArray[i].attack(zombieArray[frontIndex]);
 		
     } // end of for-loop for towerArray
