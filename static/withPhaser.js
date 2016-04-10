@@ -653,108 +653,113 @@ function buyTower(type) {
 }
 function mouseClick(item) {
     var validPurchase = false;
-    var x_offset = 20;
-	var y_offset = 35;
+
 	if(player.state == 'defender'){
 		
-		//if(validPurchase){
-			// game.input.mousePointer.x|y: mouse cursor position.
-			// pos_x|y: since tower placement requires topleft corner position, we are adjusting it accordingly to make it centered
-			var mouse_x = game.input.mousePointer.x;
-			var mouse_y = game.input.mousePointer.y;
-			var pos_x = mouse_x - x_offset;
-			var pos_y = mouse_y - y_offset;
-			console.log("click: "+game.input.mousePointer.x+"_"+game.input.mousePointer.y);
-			if(mouse_x >= 201 && mouse_x <= 771 && mouse_y <= 212)
-			{
-			   //console.log('top rectangle chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+		// game.input.mousePointer.x|y: mouse cursor position.
+		var mouse_x = game.input.mousePointer.x;
+		var mouse_y = game.input.mousePointer.y;
+		
+		console.log("mouse_x: " + mouse_x + ", mouse_y: " + mouse_y);
+		if(mouse_x >= 185 && mouse_x <= 800 && mouse_y <= 215)
+		{
+            // FIXED
+		   //console.log('top rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+		}
+		else if(mouse_x >= 185 && mouse_x <= 278 && mouse_y >= 162 && mouse_y <= 752)
+		{
+            // FIXED
+		   //console.log('left rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(mouse_x >= 708 && mouse_x <= 800 && mouse_y >= 162 && mouse_y <= 752)
+		{
+            //FIXED
+		  // console.log('right rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 750)
+		{
+            // FIXED
+		   //console.log('bottom rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 810)
+		{
+			//FIXED
+		   //console.log('middle rectangle chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+		}
+		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 810 && mouse_y <= 858)
+		{
+		   //console.log('bottom of map chosen')
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+		}
+		else if(mouse_x >= 410 && mouse_x <= 560 && mouse_y >= 750)
+		{
+			//console.log('clicking on base');
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+		}
+		else
+		{
+			// set of if-else stmts validates players moneys with purchase
+			if (gTowerType == "minigun") {
+				if(player.money < minigunTowerPrice){
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+					return;
+				}
+				else{
+					//console.log("money:" + player.money);
+					player.money -= minigunTowerPrice;
+					//console.log("money:" + player.money);
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+					validPurchase = true;
+				}
 			}
-			else if(mouse_x >= (201 - x_offset) && mouse_x <= (251 + x_offset) && mouse_y >= 162 && mouse_y <= 752)
-			{
-			   //console.log('left rectangle chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			else if (gTowerType == "shotgun") {
+				if(player.money < shotgunTowerPrice){
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+					return;
+				}
+				else{
+					player.money -= shotgunTowerPrice;
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+					validPurchase = true;
+				}
 			}
-			else if(mouse_x >= (723 - x_offset) && mouse_x <= (774+x_offset) && mouse_y >= 162 && mouse_y <= 752)
-			{
-			   //console.log('right rectangle chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			else if (gTowerType == "gum") {
+				if(player.money < gumTowerPrice){
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+					return;
+				}
+				else{
+					player.money -= gumTowerPrice;
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+					validPurchase = true;
+				}
 			}
-			else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 746)
-			{
-			   //console.log('bottom rectangle chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-			}
-			else if(mouse_x >= (465-x_offset) && mouse_x <= (515+x_offset) && mouse_y >= (225) && mouse_y <= (752+y_offset))
-			{
-			   //console.log('middle rectangle chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
-			}
-			else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= (810 - y_offset) && mouse_y <= 858)
-			{
-			   //console.log('bottom of map chosen')
-				document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+			else if (gTowerType == "bomb") {
+				if(player.money < bombTowerPrice){
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+					return;
+				}
+				else{
+					player.money -= bombTowerPrice;
+					document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+					validPurchase = true;
+				}
 			}
 			else
+				return;
+			
+			if(validPurchase)
 			{
-				// set of if-else stmts validates players moneys with purchase
-				if (gTowerType == "minigun") {
-					if(player.money < minigunTowerPrice){
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-						return;
-					}
-					else{
-						//console.log("money:" + player.money);
-						player.money -= minigunTowerPrice;
-						//console.log("money:" + player.money);
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-						validPurchase = true;
-					}
-				}
-				else if (gTowerType == "shotgun") {
-					if(player.money < shotgunTowerPrice){
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-						return;
-					}
-					else{
-						player.money -= shotgunTowerPrice;
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-						validPurchase = true;
-					}
-				}
-				else if (gTowerType == "gum") {
-					if(player.money < gumTowerPrice){
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-						return;
-					}
-					else{
-						player.money -= gumTowerPrice;
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-						validPurchase = true;
-					}
-				}
-				else if (gTowerType == "bomb") {
-					if(player.money < bombTowerPrice){
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-						return;
-					}
-					else{
-						player.money -= bombTowerPrice;
-						document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-						validPurchase = true;
-					}
-				}
-				else
-					return;
-				
-				if(validPurchase)
-				{
-					document.getElementById("Tower-Placement-Error").innerHTML = "";
-					socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
-					gTowerType = "";
-				}
+				document.getElementById("Tower-Placement-Error").innerHTML = "";
+				socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
+				gTowerType = "";
 			}
-		//}
+		}
 	}
 }
 function changePath(){
