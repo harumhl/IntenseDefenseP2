@@ -12,6 +12,9 @@ var zombieArray = [];     // array of zombies (for client side)
 var towerArray = [];      // array of towers
 
 var towerBullets;
+var minigunBullets;
+var shotgunBullets;
+var bombBullets;
 
 // Price for Zombies
 var standardZombiePrice = 100;
@@ -58,8 +61,10 @@ Player = function(username, state, money) {
 Zombie = function(type, lane, inX, inY) {
     this.type = type;
     this.lane = lane;
-    this.pos_x = inX; // real positions
-	this.pos_y = inY; // real positions
+    this.pos_x = inX; // real positions topleft
+	this.pos_y = inY; // real positions topleft
+	//this.center_x;
+	//this.center_y;
     this.x = inX;     // positions calculated for bullet targeting
     this.y = inY;     // positions calculated for bullet targeting
     this.alive = true;
@@ -170,8 +175,8 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 Tower = function(type, x, y, spriteName, bullets) {
     this.type = type;
     // this.range = range; // make int if we use distanceBetween - from center
-    this.x = x-20;
-    this.y = y-20;
+    this.x = x-20; //tower's topleft position (displayed tower image size: 55x55)
+    this.y = y-25; //tower's topleft position (displayed tower image size: 55x55)
     this.game = game;
 	this.bullets = towerBullets;
     this.nextFire = 0;
@@ -189,13 +194,13 @@ Tower = function(type, x, y, spriteName, bullets) {
 		this.fireRate = 1000;
 		this.damage = 0;
 	}
-	else{ // bomb
+	else { // bomb
 		this.fireRate = 3000;
 		this.damage = 150;
 	}
 
     this.image = game.add.sprite(this.x, this.y, type+'Tower');
-    this.image.scale.setTo(0.5);
+    this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     
     // this is so the attacker will not see the tower placements 
     if(player.state == 'attacker' && !startRound){
@@ -206,10 +211,8 @@ Tower = function(type, x, y, spriteName, bullets) {
 };
 Tower.prototype.attack = function(underAttack) {
     
-    if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0)
-    {
-        //game.debug.text( "fire!"+this.bullets.countDead(),100,420);
-        
+    if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
+		
         this.nextFire = this.game.time.now + this.fireRate;
         
         var bullet = this.bullets.getFirstDead();
@@ -270,9 +273,9 @@ function preload() {
     game.load.image('bullet', 'images/bullet.png');
     
     //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-    game.load.image('attckerCurtain', 'images/attackerCurtain.png');
+    game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
     //curtain for both players, When first loggin in will be presented this image hiding the map 
-    game.load.image('matchmakingCurtain', 'images/matchmaking.png');
+    game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
     
     game.load.image('zombieSpawn', 'images/zombieSpawn.png');
 
@@ -403,7 +406,7 @@ window.onload = function() {
             //}
             if(player.state == 'attacker'){
                 matchmakingCurtain.destroy();
-                attackerCurtain = game.add.image(0,129,'attckerCurtain');
+                attackerCurtain = game.add.sprite(0,129,'attckerCurtain');
             }
             
             socket.send(player.state + 'Name ' + player.username);
@@ -428,74 +431,56 @@ window.onload = function() {
 		}
 	}
 }
-/*
-	function generationDeath(deathPos_x, deathPos_y, deathLane)
-	{
-    for(var i = 0; i< generationsBalancer; i++)
-    {
-	myGameArea.addZombie("standard", deathPos_x, deathPos_y);
-        zombies.push({
-                     type: "standard",
-                     health: 100,
-                     speed: 5,
-                     position_x: deathPos_x,
-                     position_y: deathPos_y,
-                     lane: deathLane
-                     });
-    }	
-    document.getElementById("demo").innerHTML = "Num Zombies: " + zombies.length +
-    "\n" + "Money left: " + money;  
-	}
 
-*/
 function sendAddZombie(zombieType){
-      //buyZombie(zombieType, "center");
     // double check the player has money for the zombie
-    var cantBuyFlag = false;
+    var canBuy = false;
+	
     if(player.state == 'attacker'){
+		
         if(zombieType == "standard"){
             if( player.money < standardZombiePrice ){
-                cantBuyFlag = true;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
+                canBuy = true;
                 player.money -= 100;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
-        if(zombieType == "strong"){
+        else if(zombieType == "strong"){
             if( player.money < strongZombiePrice ){
-                cantBuyFlag = true;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
+                canBuy = true;
                 player.money -= 200;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
-        if(zombieType == "healing"){
+        else if(zombieType == "healing"){
             if( player.money < healingZombiePrice ){
-                cantBuyFlag = true;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
+                canBuy = true;
                 player.money -= 300;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
-        if(zombieType == "generations"){
+        else if(zombieType == "generations"){
             if( player.money < generationsZombiePrice ){
-                cantBuyFlag = true;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
+                canBuy = true;
                 player.money -= 400;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
-		if(!cantBuyFlag){
+		
+		if(canBuy){
 			socket.send("addZombie"+zombieType);
-			console.log("buying zombie");
 		}
     }
     
@@ -567,7 +552,7 @@ function create() {
         zombieSpawn.scale.setTo(0.1); 
     }
     
-    //  The tower bullet group
+    //  The tower bullet groups
     towerBullets = game.add.group();
     towerBullets.enableBody = true;
     towerBullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -577,6 +562,32 @@ function create() {
     towerBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
 	towerBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
 	towerBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
+	
+	/* WILL CHANGE ONCE BRANDON'S MAKES ALL BULLET IMAGES
+	minigunBullets = game.add.group();
+    minigunBullets.enableBody = true;
+	minigunBullets.physicsBodyType = Phaser.Physics.ARCADE;
+    minigunBullets.createMultiple(30, '_____'); // creating 30 bullet sprites
+
+    minigunBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
+    minigunBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+
+	shotgunBullets = game.add.group();
+    shotgunBullets.enableBody = true;
+	shotgunBullets.physicsBodyType = Phaser.Physics.ARCADE;
+    shotgunBullets.createMultiple(30, '_____'); // creating 30 bullet sprites
+
+    shotgunBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
+    shotgunBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+
+	bombBullets    = game.add.group();
+    bombBullets.enableBody = true;
+	bombBullets.physicsBodyType = Phaser.Physics.ARCADE;
+    bombBullets.createMultiple(30, '_____'); // creating 30 bullet sprites
+
+    bombBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
+    bombBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+	*/
 	
 	/* Price labels for the zombie/tower buttons */
 	// Same style for each text
@@ -593,8 +604,7 @@ function create() {
 	var bombTowerText = game.add.text(885, 720, "$400", style);
     
     if(player.state == 'attacker')
-        matchmakingCurtain = game.add.image(0,129,'matchmakingCurtain');
-    
+        matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 }
 function buyZombie(type) {
 	/* Attacker's money amount is checked and deducted accordingly 
@@ -625,6 +635,7 @@ function buyTower(type) {
 }
 function mouseClick(item) {
     var validPurchase = false;
+	console.log("x,y: "+game.input.mousePointer.x+","+game.input.mousePointer.y);
 
 	if(player.state == 'defender'){
 		
