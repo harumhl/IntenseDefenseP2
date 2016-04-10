@@ -134,17 +134,22 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
-    //game.debug.text( "damage!"+this.health,100,450);
     
-    if (this.health <= 0) {
+    if (this.health <= 0) { // killing the zombie
         
         this.alive = false;
-        
         this.image.kill();
+
+		// deleting the zombie object from the arrays
+		zombieArray.splice(index, 1);
+		zombieStatArray.splice(index,1);
+		
+		// Generate more money for defender
 		if(zombieArray[index].type == 'generations'){
 			socket.send('defenderMoney 60');
-			for(var i = 0; i<2; i++)
-			{
+			
+			// create two more standard zombies
+			for(var i = 0; i<2; i++) { 
 				zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 100, 1));
 				zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
 			}
@@ -153,15 +158,13 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 			socket.send('defenderMoney 20');
 		else if(zombieArray[index].type == 'strong')
 			socket.send('defenderMoney 40');
-		else
+		else // healer zombie
 			socket.send('defenderMoney 40');
-		zombieArray.splice(index, 1);
-		zombieStatArray.splice(index,1);
+		
         return true;
     }
     return false;
 };
-Zombie.prototype.update = function() {};
 
 // Tower Class
 Tower = function(type, x, y, spriteName, bullets) {
