@@ -117,22 +117,17 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 		this.pos_x = newPos_x;
 		this.x = newPos_x;
 		this.image.x = newPos_x;
-		//if(this.direction != newDirection)
-		//{
-			if(newDirection == 'down')
-			{
+
+		if(newDirection == 'down') {
 				this.image.animations.play('moveDown',this.speed*10); // WHY???
-				
 			}
-			else if(newDirection == 'right')
-			{
+			else if(newDirection == 'right') {
 				this.image.animations.play('moveRight',this.speed*10); // WHY???
 			}
-			else //newDirection == 'left'
-			{
+			else { //newDirection == 'left' 
 				this.image.animations.play('moveLeft',this.speed*10); // WHY???
 			}
-		//}
+
 		this.direction = newDirection;
 		
 		console.log("direction: "+newDirection);
@@ -262,24 +257,21 @@ function preload() {
     game.load.image('map','images/map2.png');
 	game.load.image('base','images/base.png');
     
-//images for buttons
+	/* images for buttons */
+	//zombie path button
+    game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
     //zombies
 	game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButton.png');
     game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButton.png');
     game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButton.png');
     game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButton.png');
-		
-	//zombie path button
-    game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
-	
-    //tower buttons
+	//tower buttons
     game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
     game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
     game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
     game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
 	
-	
-// images for the actual objects on the map
+	/* images for the actual objects on the map */
 	//towers
 	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
     game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
@@ -766,31 +758,26 @@ function changePath(){
     */
 
     if(currentPathFrame == 0) {
-		console.log('right');
         buttonGroup.getAt(8).setFrames(3,4,5);
 		lane = 'right';
-		console.log('lane: ' + lane);
     }
     else if(currentPathFrame == 3) {
-		console.log('left');
         buttonGroup.getAt(8).setFrames(6,7,8);
 		lane = 'left';
-		console.log('lane: ' + lane);
     }
     else if(currentPathFrame == 6){
-		console.log('center');
         buttonGroup.getAt(8).setFrames(0,1,2);
 		lane = 'center';
-		console.log('lane: ' + lane);
     }
     currentPathFrame = buttonGroup.getAt(8).frame;
 
 }
 // function for the timer for each round
-function countdown(minutes) {
+function countdown(minutes) { // adjusted this function to allow a 30 second timer as well
     var seconds = 60;
-    var mins = minutes
+    var mins = minutes;
     var counter;
+	
     if(mins < 1){
         seconds = mins*100;
         mins = 0;
