@@ -63,8 +63,6 @@ Zombie = function(type, lane, inX, inY) {
     this.lane = lane;
     this.pos_x = inX; // real positions topleft
 	this.pos_y = inY; // real positions topleft
-    this.x = inX+28;  // positions calculated for bullet targeting
-    this.y = inY+37;  // positions calculated for bullet targeting
     this.alive = true;
    	this.time = game.time.now;
 	
@@ -92,6 +90,21 @@ Zombie = function(type, lane, inX, inY) {
 		this.health = 600;
 		this.speed = 0.4
 	}
+	
+	// positions calculated for bullet targeting
+	if (lane == "center") {
+		this.x = inX+57/2;  
+		this.y = inY+75/2 + 30*(bulletTravelTime/1000)*this.speed;;
+    }
+	else if (lane == "left") {
+		this.x = inX+57/2 - 50*(bulletTravelTime/1000)*this.speed;;
+		this.y = inY+75/2;
+    }
+	else if (lane == "right") {
+		this.x = inX+57/2 + 50*(bulletTravelTime/1000)*this.speed;;
+		this.y = inY+75/2;
+    }
+	
 	// individual zombie size: 57x75
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Zombie');
 	this.image.animations.add('moveRight',[0,1,2,3],true);
@@ -182,8 +195,8 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 Tower = function(type, x, y, spriteName, bullets) {
     this.type = type;
     // this.range = range; // make int if we use distanceBetween - from center
-    this.x = x-20; //tower's topleft position (displayed tower image size: 55x55)
-    this.y = y-25; //tower's topleft position (displayed tower image size: 55x55)
+    this.pos_x = x-20; //tower's topleft position (displayed tower image size: 55x55)
+    this.pos_y = y-25; //tower's topleft position (displayed tower image size: 55x55)
     this.game = game;
 	this.bullets = towerBullets;
     this.nextFire = 0;
@@ -206,7 +219,7 @@ Tower = function(type, x, y, spriteName, bullets) {
 		this.damage = 150;
 	}
 
-    this.image = game.add.sprite(this.x, this.y, type+'Tower');
+    this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     
     // this is so the attacker will not see the tower placements 
@@ -242,69 +255,6 @@ function zombieStat(_lane, _pos_x, _pos_y, _speed) {
 	this.direction = "";
 }
 
-// Preload stuff for the game like images
-function preload() {
-    
-    game.load.image('title','images/Title.png');
-    game.load.image('map','images/map2.png');
-	game.load.image('base','images/base.png');
-    
-	/* images for buttons */
-	//zombie path button
-    game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
-    //zombies
-	game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButton.png');
-    game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButton.png');
-    game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButton.png');
-    game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButton.png');
-	//tower buttons
-    game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
-    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
-    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
-    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
-	
-	/* images for the actual objects on the map */
-	//towers
-	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
-    game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
-    game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
-    game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
-	
-	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
-    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
-    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
-    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
-    
-    // bullet used for now to shoot from the towers, image will be changed later
-    game.load.image('bullet', 'images/bullet.png');
-    
-    //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-    game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
-    //curtain for both players, When first loggin in will be presented this image hiding the map 
-    game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
-    
-    game.load.image('zombieSpawn', 'images/zombieSpawn.png');
-
-}
-function endRound(winner) {
-	if(winner == "attacker")
-		window.alert("Attacker Wins!");
-	else
-		window.alert("Defender Wins!");
-	
-    startRound = false;
-	newRound();
-}
-function newRound() {
-	for(var i = 0; i<zombieArray.length; i++)
-		zombieArray[i].image.kill();
-	for(var j = 0; j<towerArray.length; j++)
-		towerArray[j].image.kill();
-	
-	zombieArray = [];
-	zombieStatArray = [];
-	towerArray = [];
-}
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
@@ -438,74 +388,48 @@ window.onload = function() {
 	}
 }
 
-function sendAddZombie(zombieType){ 
-    // check if the player has enough money for the zombie
-    var canBuy = false;
+function preload() { // Preload stuff for the game like images
+    
+    game.load.image('title','images/Title.png');
+    game.load.image('map','images/map2.png');
+	game.load.image('base','images/base.png');
+    
+	/* images for buttons */
+	//zombie path button
+    game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
+    //zombies
+	game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButton.png');
+    game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButton.png');
+    game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButton.png');
+    game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButton.png');
+	//tower buttons
+    game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
+    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
+    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
+    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
 	
-    if(player.state == 'attacker'){
-		
-        if(zombieType == "standard"){
-            if( player.money < standardZombiePrice ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-            }
-            else{
-                canBuy = true;
-                player.money -= 100;
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-            }
-        }
-        else if(zombieType == "strong"){
-            if( player.money < strongZombiePrice ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-            }
-            else{
-                canBuy = true;
-                player.money -= 200;
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-            }
-        }
-        else if(zombieType == "healing"){
-            if( player.money < healingZombiePrice ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-            }
-            else{
-                canBuy = true;
-                player.money -= 300;
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-            }
-        }
-        else if(zombieType == "generations"){
-            if( player.money < generationsZombiePrice ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-            }
-            else{
-                canBuy = true;
-                player.money -= 400;
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-            }
-        }
-		
-		if(canBuy){
-			socket.send("addZombie"+zombieType); // this will call buyZombie()
-		}
-    }
-}
-function damageBase(index) {
-	baseHealth -= zombieArray[index].damage;
-    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
+	/* images for the actual objects on the map */
+	//towers
+	game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+    game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
+    game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
+    game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
 	
-	// Killing the zombie and removing it from the arrays
-	zombieArray[index].alive = false;    
-	zombieArray[index].image.kill();
-	zombieArray.splice(index, 1);
-	zombieStatArray.splice(index,1);
-	
-	if(baseHealth <= 0)
-		endRound('attacker');
-	
-	// inside the countdown(), endRound('defender') will be called accordingly
-	
-	return true;
+	game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
+    game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
+    game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
+    game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
+    
+    // bullet used for now to shoot from the towers, image will be changed later
+    game.load.image('bullet', 'images/bullet.png');
+    
+    //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
+    game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
+    //curtain for both players, When first loggin in will be presented this image hiding the map 
+    game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
+    
+    game.load.image('zombieSpawn', 'images/zombieSpawn.png');
+
 }
 function create() {
     
@@ -610,6 +534,175 @@ function create() {
     
     if(player.state == 'attacker')
         matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
+}
+
+function countdown(minutes) { // function for the timer for each round
+
+	// adjusted this function to allow a 30 second timer as well
+    var seconds = 60;
+    var mins = minutes;
+    var counter;
+	
+    if(mins < 1){
+        seconds = mins*100;
+        mins = 0;
+        console.log(mins+":"+seconds);
+        counter = document.getElementById("gameStartTimer");
+    }
+    else{
+        counter = document.getElementById("timer");
+    }
+    function tick() {
+        
+        //var counter = document.getElementById("timer");
+        //counter = document.getElementById("gameStartTimer");
+        var current_minutes;
+        if(mins<1){
+            current_minutes = 0;
+        }
+        else{
+            current_minutes = mins-1
+        }
+        seconds--;
+        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if(mins<1){
+           if(seconds == 0 && current_minutes == 0){
+                socket.send("startRound");
+               console.log("start Round");
+                // tower placement done start game allow both players to start playing now
+           }   
+        }
+        else{
+            if(seconds == 0 && current_minutes == 0){
+                endRound('defender');         
+                //end of match attacker wins
+            }
+		}
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+ 
+            if(mins > 1){
+ 
+               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+               setTimeout(function () { countdown(mins - 1); }, 1000);
+ 
+            }
+        }
+    }
+    tick();
+}
+function newRound() {
+	for(var i = 0; i<zombieArray.length; i++)
+		zombieArray[i].image.kill();
+	for(var j = 0; j<towerArray.length; j++)
+		towerArray[j].image.kill();
+	
+	zombieArray = [];
+	zombieStatArray = [];
+	towerArray = [];
+}
+function endRound(winner) {
+	if(winner == "attacker")
+		window.alert("Attacker Wins!");
+	else
+		window.alert("Defender Wins!");
+	
+    startRound = false;
+	newRound();
+}
+function damageBase(index) {
+	baseHealth -= zombieArray[index].damage;
+    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
+	
+	// Killing the zombie and removing it from the arrays
+	zombieArray[index].alive = false;    
+	zombieArray[index].image.kill();
+	zombieArray.splice(index, 1);
+	zombieStatArray.splice(index,1);
+	
+	if(baseHealth <= 0)
+		endRound('attacker');
+	
+	// inside the countdown(), endRound('defender') will be called accordingly
+	
+	return true;
+}
+function changePath(){
+    /*
+        frame #     Zombie path
+            0           center
+            3           right
+            6           left
+    */
+
+	// buttonGroup.getAt(8) == arrow button for attacker
+    if(currentPathFrame == 0) {
+        buttonGroup.getAt(8).setFrames(3,4,5);
+		lane = 'right';
+    }
+    else if(currentPathFrame == 3) {
+        buttonGroup.getAt(8).setFrames(6,7,8);
+		lane = 'left';
+    }
+    else if(currentPathFrame == 6){
+        buttonGroup.getAt(8).setFrames(0,1,2);
+		lane = 'center';
+    }
+    currentPathFrame = buttonGroup.getAt(8).frame;
+}
+
+function sendAddZombie(zombieType){ 
+    // check if the player has enough money for the zombie
+    var canBuy = false;
+	
+    if(player.state == 'attacker'){
+		
+        if(zombieType == "standard"){
+            if( player.money < standardZombiePrice ){
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+            else{
+                canBuy = true;
+                player.money -= 100;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+            }
+        }
+        else if(zombieType == "strong"){
+            if( player.money < strongZombiePrice ){
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+            else{
+                canBuy = true;
+                player.money -= 200;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+            }
+        }
+        else if(zombieType == "healing"){
+            if( player.money < healingZombiePrice ){
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+            else{
+                canBuy = true;
+                player.money -= 300;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+            }
+        }
+        else if(zombieType == "generations"){
+            if( player.money < generationsZombiePrice ){
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+            }
+            else{
+                canBuy = true;
+                player.money -= 400;
+                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+            }
+        }
+		
+		if(canBuy){
+			socket.send("addZombie"+zombieType); // this will call buyZombie()
+		}
+    }
 }
 function buyZombie(type) {
 	/* Attacker's money amount is checked and deducted accordingly 
@@ -722,84 +815,6 @@ function mouseClick(item) {
 			gTowerType = "";
 		}
 	}
-}
-function changePath(){
-    /*
-        frame #     Zombie path
-            0           center
-            3           right
-            6           left
-    */
-
-	// buttonGroup.getAt(8) == arrow button for attacker
-    if(currentPathFrame == 0) {
-        buttonGroup.getAt(8).setFrames(3,4,5);
-		lane = 'right';
-    }
-    else if(currentPathFrame == 3) {
-        buttonGroup.getAt(8).setFrames(6,7,8);
-		lane = 'left';
-    }
-    else if(currentPathFrame == 6){
-        buttonGroup.getAt(8).setFrames(0,1,2);
-		lane = 'center';
-    }
-    currentPathFrame = buttonGroup.getAt(8).frame;
-}
-// function for the timer for each round
-function countdown(minutes) { // adjusted this function to allow a 30 second timer as well
-    var seconds = 60;
-    var mins = minutes;
-    var counter;
-	
-    if(mins < 1){
-        seconds = mins*100;
-        mins = 0;
-        console.log(mins+":"+seconds);
-        counter = document.getElementById("gameStartTimer");
-    }
-    else{
-        counter = document.getElementById("timer");
-    }
-    function tick() {
-        
-        //var counter = document.getElementById("timer");
-        //counter = document.getElementById("gameStartTimer");
-        var current_minutes;
-        if(mins<1){
-            current_minutes = 0;
-        }
-        else{
-            current_minutes = mins-1
-        }
-        seconds--;
-        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
-        if(mins<1){
-           if(seconds == 0 && current_minutes == 0){
-                socket.send("startRound");
-               console.log("start Round");
-                // tower placement done start game allow both players to start playing now
-           }   
-        }
-        else{
-            if(seconds == 0 && current_minutes == 0){
-                endRound('defender');         
-                //end of match attacker wins
-            }
-		}
-        if( seconds > 0 ) {
-            setTimeout(tick, 1000);
-        } else {
- 
-            if(mins > 1){
- 
-               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
-               setTimeout(function () { countdown(mins - 1); }, 1000);
- 
-            }
-        }
-    }
-    tick();
 }
 
 function update() {
