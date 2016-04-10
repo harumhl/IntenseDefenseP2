@@ -306,7 +306,10 @@ function preload() {
     
     //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
     game.load.image('attckerCurtain', 'images/attackerCurtain.png');
+    //curtain for both players, When first loggin in will be presented this image hiding the map 
     game.load.image('matchmakingCurtain', 'images/matchmaking.png');
+    
+    game.load.image('zombieSpawn', 'images/zombieSpawn.png');
 
 }
 function endRound(winner)
@@ -558,7 +561,7 @@ function create() {
     game.add.sprite(0,0,'title');
     
     var map = game.add.sprite(144,129,'map');
-	var base = game.add.sprite(425,780,'base');
+	var base = game.add.sprite(432,780,'base');
     map.inputEnabled = true;
     map.events.onInputDown.add(mouseClick, this);
 
@@ -581,9 +584,16 @@ function create() {
     
 	if(player.state == 'attacker'){
 		//zombie path button (the red arrow on top of map)
-		var zombiePathButton = game.make.button(465,160, 'zombiePathButton', changePath, this, 0, 1, 2);
+		var zombiePathButton = game.make.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
 		currentPathFrame = 0;
 	}
+    
+    if(player.state == 'defender')
+    {
+        var zombieSpawn = game.add.image(470,160, 'zombieSpawn');
+        zombieSpawn.scale.setTo(0.1); 
+        
+    }
 // Attaching buttons to the screen
     //zombie buttons
     buttonGroup.add(standardZombieButton);
