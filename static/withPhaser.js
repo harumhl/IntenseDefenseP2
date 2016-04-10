@@ -5,6 +5,7 @@ var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { prelo
 
 // Global Variables
 var player;
+var map;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
 var zombieStatArray = []; // array of zombies (for server side)
@@ -391,7 +392,7 @@ window.onload = function() {
 function preload() { // Preload stuff for the game like images
     
     game.load.image('title','images/Title.png');
-    game.load.image('map','images/map2.png');
+    game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
 	game.load.image('base','images/base.png');
     
 	/* images for buttons */
@@ -437,10 +438,13 @@ function create() {
     game.stage.backgroundColor = "#e5e1db"; // gray background color
     game.add.sprite(0,0,'title');
     
-    var map = game.add.sprite(144,129,'map');
-	var base = game.add.sprite(432,780,'base');
+    map = game.add.sprite(144,129,'map');
+    map.animations.add('plainMap', [0], true);
+    map.animations.add('towerPlacement', [1], true);
+    map.play('plainMap');
     map.inputEnabled = true;
     map.events.onInputDown.add(mouseClick, this);
+    var base = game.add.sprite(432,780,'base');
     
 	/* Creating each button */
     // Zombie Buttons
@@ -730,6 +734,8 @@ function buyTower(type) {
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
     
     gTowerType = type;
+    if(player.state == 'defender')
+	map.play('towerPlacement');
 }
 function mouseClick(item) {
 	var notOnLane = false;
@@ -754,10 +760,10 @@ function mouseClick(item) {
 		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 750) {
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 810) {
+		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 820) {
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 810 && mouse_y <= 858) {
+		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 820 && mouse_y <= 858) {
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 410 && mouse_x <= 560 && mouse_y >= 750) {
