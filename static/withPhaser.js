@@ -27,11 +27,11 @@ var bombTowerPrice = 400;
 // Used to generate money for both players over time
 var moneyTimer = 0;
 var regenTime = 100;
-var spawn_x = 482, spawn_y = 160;
 
 // Some other constants
 var bulletTravelTime = 450;
 var baseHealth = 2000;
+var spawn_x = 482, spawn_y = 160;
 
 //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 var attackerCurtain;
@@ -435,7 +435,7 @@ window.onload = function() {
             
             socket.send(player.state + 'Name ' + player.username);
             console.log("Defender start placing towers!");
-            countdown(.31); // extra second for login time
+            countdown(.01); // extra second for login time
         }
 		else
 		{
@@ -588,7 +588,7 @@ function create() {
     
     if(player.state == 'defender') {
 		// zombie tombstone image where zombies spawn
-        var zombieSpawn = game.add.image(spawn_x, spawn_y, 'zombieSpawn');
+        var zombieSpawn = game.add.image(470, spawn_y, 'zombieSpawn');
         zombieSpawn.scale.setTo(0.1); 
     }
     

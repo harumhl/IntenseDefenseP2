@@ -96,31 +96,29 @@ wsServer.on('request', function(request) {
 						else
 							killIndexes.push(i);
 					}
-					else if (zombieStatArray[i].lane == "right")
+					else if (zombieStatArray[i].lane == "right") // right lane
 					{
-						if (zombieStatArray[i].pos_x < 724 && zombieStatArray[i].pos_y < 704)
+						if (zombieStatArray[i].pos_x < 742 && zombieStatArray[i].pos_y < 704)
 						{
 							zombieStatArray[i].direction = "right";
 							zombieStatArray[i].pos_x += zombieStatArray[i].speed;
 						}
-						else if (zombieStatArray[i].pos_x >= 724 && zombieStatArray[i].pos_y < 704)
+						else if (zombieStatArray[i].pos_x >= 742 && zombieStatArray[i].pos_y < 704)
 						{
 							zombieStatArray[i].direction = "down";
 							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
 						}
-						else if (zombieStatArray[i].pos_x > 469 && zombieStatArray[i].pos_y >= 704)
+						else if (zombieStatArray[i].pos_x > 482 && zombieStatArray[i].pos_y >= 704)
 						{		
-					
 							zombieStatArray[i].direction = "left";
 							zombieStatArray[i].pos_x -= zombieStatArray[i].speed;
-							
 						}
 						else
 							zombieStatArray[i].lane = "center";
 						}
-					else
+					else // left lane
 					{
-						if(zombieStatArray[i].pos_x > 200 && zombieStatArray[i].pos_y < 704)
+						if(zombieStatArray[i].pos_x > 218 && zombieStatArray[i].pos_y < 704)
 						{
 							zombieStatArray[i].direction = "left";
 							zombieStatArray[i].pos_x-=zombieStatArray[i].speed
@@ -130,7 +128,7 @@ wsServer.on('request', function(request) {
 							zombieStatArray[i].direction = "down";
 							zombieStatArray[i].pos_y+=zombieStatArray[i].speed
 						}
-						else if(zombieStatArray[i].pos_x < 469 && zombieStatArray[i].pos_y >= 704)
+						else if(zombieStatArray[i].pos_x < 482 && zombieStatArray[i].pos_y >= 704)
 						{	
 							zombieStatArray[i].direction = "right";
 							zombieStatArray[i].pos_x+=zombieStatArray[i].speed
