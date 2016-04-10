@@ -5,7 +5,6 @@ var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { prelo
 
 // Global Variables
 var player;
-var cursors;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
 var zombieStatArray = []; // array of zombies (for server side)
@@ -28,6 +27,7 @@ var bombTowerPrice = 400;
 // Used to generate money for both players over time
 var moneyTimer = 0;
 var regenTime = 100;
+var spawn_x = 482, spawn_y = 160;
 
 // Some other constants
 var bulletTravelTime = 450;
@@ -427,7 +427,6 @@ window.onload = function() {
             console.log("defenderplacetowers");
            // if(player.state == 'defender'){
                 
-               // console.log('FFFUUUUUUCCCKKKKK');
             //}
             if(player.state == 'attacker'){
                 matchmakingCurtain.destroy();
@@ -436,7 +435,7 @@ window.onload = function() {
             
             socket.send(player.state + 'Name ' + player.username);
             console.log("Defender start placing towers!");
-            countdown(.30);
+            countdown(.31); // extra second for login time
         }
 		else
 		{
@@ -530,14 +529,13 @@ function sendAddZombie(zombieType){
 }
 function damageBase(index)
 {
-	console.log(baseHealth+'->');
 	baseHealth -= zombieArray[index].damage;
-	console.log(baseHealth);
     document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	zombieArray[index].alive = false;    
 	zombieArray[index].image.kill();
 	zombieArray.splice(index, 1);
 	zombieStatArray.splice(index,1);
+	
 	if(baseHealth <= 0)
 		endRound('attacker');
 	if(attackerMoney == 0 && zombieArray.length == 0)
@@ -590,12 +588,9 @@ function create() {
     
     if(player.state == 'defender') {
 		// zombie tombstone image where zombies spawn
-        var zombieSpawn = game.add.image(470,160, 'zombieSpawn');
+        var zombieSpawn = game.add.image(spawn_x, spawn_y, 'zombieSpawn');
         zombieSpawn.scale.setTo(0.1); 
     }
-    
-    // Enabling cursor tracker
-    cursors = game.input.keyboard.createCursorKeys();
     
     //  The tower bullet group
     towerBullets = game.add.group();
@@ -627,8 +622,6 @@ function create() {
 function buyZombie(type) {
 	/* Attacker's money amount is checked and deducted accordingly 
 	   by the caller of this function, "sendAddZombie" */
-    var spawn_x = 470;
-	var spawn_y = 160;
 	
     if (type == "standard"){
 		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1));
@@ -877,7 +870,7 @@ function update() {
 		if(zombieStatArray.length == (zombieArray.length-1))
 		{
 			//var createdLane = zombieArray[zombieStatArray.length].lane;
-			zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1))
+			zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1))
 		}
 		var message = JSON.stringify(zombieStatArray);
 		//console.log(message);
