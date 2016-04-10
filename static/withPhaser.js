@@ -158,6 +158,7 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
+	console.log("bam");
     
     if (this.health <= 0) { // killing the zombie
         
@@ -911,14 +912,16 @@ function update() {
 
         // 3. attack!
         var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
-                                        function(zombie,bullet){bullet.kill();}, null, this);
+                                        function(zombie,bullet){
+											console.log("overlap");
+											bullet.kill();}, null, this);
 
-	if (overlapped) {
-		zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
-		//towerBullets.getFirstDead().kill();
-	}
-	
-	towerArray[i].attack(zombieArray[frontIndex]);
+		if (overlapped) {
+			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
+			console.log("damage?");
+		}
+		
+		towerArray[i].attack(zombieArray[frontIndex]);
 		
     } // end of for-loop for towerArray
 }
