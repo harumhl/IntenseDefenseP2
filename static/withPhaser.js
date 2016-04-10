@@ -819,50 +819,45 @@ function mouseClick(item) {
 function update() {
     
     //gradually add money to both players
-    console.log('startRound up:' + startRound);
     if(startRound){
         moneyTimer++;
+		
         if(moneyTimer >= regenTime)
         {
-            
             if(player.state == 'attacker'){
 				player.money += 50;
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-                console.log("money = " + player.money);
             }
-            else
+            else // defender
                 document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
             moneyTimer = 0;
         }
     }
     
-    // Change settings for every zombie elements
+   // Change settings for every zombie elements
     if(state == 'attacker' && zombieStatArray.length > 0){
-		if(zombieStatArray.length == (zombieArray.length-1))
-		{
-			//var createdLane = zombieArray[zombieStatArray.length].lane;
+		if(zombieStatArray.length == (zombieArray.length-1)){
 			zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1))
 		}
 		var message = JSON.stringify(zombieStatArray);
-		//console.log(message);
+
 		socket.send(message);
-	}  
+    }
     
     // Applying tower attacks
     var withinRangeArray = []; // empty array now
-    var index = 0;
-    offset = 36;
-    towerSize = 72; // width and height of towers. towersize / 2 = offset.
+    towerSize = 55; // width and height of towers. towersize / 2 = offset.
+    offset = towerSize/2;
     
+    // Going through every tower (one by one)
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
 
+	// If it's not ready for the tower to shoot, then skip the whole process for it
+
+
         var towerCenterX = parseInt(towerArray[i].pos_x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].pos_y) + parseInt(offset);
-        
-        index = 0;
-        
-        // withinRangeArray = Group.filter(function() {return child.health < 10? true: false;}, true);
         
         // 1. Picking the zombies within range
         // I CAn USE DISTANCEBETWEEN FUNCTION TO GET CIRCULAR ATTACK RANGE
@@ -872,74 +867,57 @@ function update() {
             var rightRange  = towerCenterX + towerSize *2;
             var topRange    = towerCenterY - towerSize *2;
             var bottomRange = towerCenterY + towerSize *2;
-           //console.log("position: "+zombieArray[j].image.x+","+zombieArray[j].image.y);
-		   //console.log(leftRange+","+rightRange+","+topRange+","+bottomRange);
 
-            if (leftRange < zombieArray[j].image.x && zombieArray[j].image.x < rightRange &&
-                topRange  < zombieArray[j].image.y && zombieArray[j].image.y < bottomRange) {
+	    var zombieCenterX = zombieArray[j].image.x + 55;
+  	    var zombieCenterY = zombieArray[j].image.y + 55;
+
+            if (leftRange < zombieCenterX && zombieCenterX < rightRange &&
+                topRange  < zombieCenterY && zombieCenterY < bottomRange) {
                 
                 withinRangeArray.push(j);
             }
         }
         
-        
-        //if (withinRangeArray.length > 0)
-           // game.debug.text(" first attack: "+withinRangeArray[0].type, 200, 320+i*20);
-        
-        // 2. Choosing the specific one to attack
         if (withinRangeArray.length == 0) continue;
 
+        // 2. Choosing the specific one to attack
         var frontIndex = withinRangeArray[0];
-        
-        var int = 0;
-        for (var j=0; j< withinRangeArray.length; j++) {
-           // game.debug.text( "frontIndex change: "+frontIndex+"_"+withinRangeArray[j]+"_"+zombieArray[withinRangeArray[j]].type+"_"+zombieArray[withinRangeArray[j]].y +"_"+zombieArray[frontIndex].type, 250,350+i*20);
-            
-            
+
             // placed ahead in terms of y-coordinate
             // Instead of having a zombie > frontZombie (then it crashes when they are on top of each other)
             if (zombieArray[withinRangeArray[j]].y - zombieArray[frontIndex].y > 1) {
-                //game.debug.text( "new frontIndex: "+withinRangeArray[j], 250,280+i*20);
                 frontIndex = withinRangeArray[j];
-                int++;
             }
             
-             // last x-value changing lane
-			 
-             else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y >= 700) { // 700 IS NOT FIXED!!!
+            // last x-value changing lane - as heading towards the base
+            else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y >= 700) { // 700 IS NOT FIXED!!!
              
-             // closer to the base in x value
-				 if (Math.abs(zombieArray[withinRangeArray[j]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
+				// closer to the base in x value
+				if (Math.abs(zombieArray[withinRangeArray[j]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
 					frontIndex = withinRangeArray[j];
-				 }
+				}
 			}
 			
-			// first x-value changing lane
-			 else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y <= 160) { // 160 IS NOT FIXED!!!
-				 
-				 // further from the zombie factory in x value
-				 if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[j].y-485)) { // 485 NOT FIXED!!
-					frontIndex = withinRangeArray[j];
-				 }
-             }
-        }
-        
-        
-        // the debug text below often creates an error
-        
-        // 3. attack!
-        
-		var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
-                                                function(zombie,bullet){bullet.kill();}, null, this);
-        
-		if (overlapped) {
-			zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
-			//towerBullets.getFirstDead().kill();
-		}
-		
-		towerArray[i].attack(zombieArray[frontIndex]);
-		
-        index++;  
+			// first x-value changing lane - as walking away from the zombie tombstone
+			else if (zombieArray[withinRangeArray[j]].y == zombieArray[frontIndex].y && zombieArray[frontIndex].y <= 160) { // 160 IS NOT FIXED!!!
 
+				// further from the zombie factory in x value
+				if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[j].y-485)) { // 485 NOT FIXED!!
+					frontIndex = withinRangeArray[j];
+				}
+			}
+        }
+
+        // 3. attack!
+        var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
+                                        function(zombie,bullet){bullet.kill();}, null, this);
+
+	if (overlapped) {
+		zombieArray[frontIndex].hurt(towerArray[i].damage, frontIndex);
+		//towerBullets.getFirstDead().kill();
+	}
+	
+	towerArray[i].attack(zombieArray[frontIndex]);
+		
     } // end of for-loop for towerArray
 }
