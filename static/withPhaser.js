@@ -63,10 +63,8 @@ Zombie = function(type, lane, inX, inY) {
     this.lane = lane;
     this.pos_x = inX; // real positions topleft
 	this.pos_y = inY; // real positions topleft
-	this.center_x = inX + 28;
-	this.center_y = inY + 37;
-    this.x = inX;     // positions calculated for bullet targeting
-    this.y = inY;     // positions calculated for bullet targeting
+    this.x = inX+28;  // positions calculated for bullet targeting
+    this.y = inY+37;  // positions calculated for bullet targeting
     this.alive = true;
    	this.time = game.time.now;
 	
@@ -126,16 +124,23 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 		this.image.animations.play('moveLeft',this.speed*10);
 	}
 
+	var x_offset = 57/2, y_offset = 75/2; // zombie size ÷ 2
+	
+	// this.pos_x|y is the zombies' topleft position. 
+	// this.x|y is adjusted with the x|y_offset, so we have their center positions
+	this.x = this.pos_x + x_offset;
+	this.y = this.pos_y + y_offset;
+	
 	// (x,y) coordinates for bullet-zombie overlap 
 	// - where zombie would be by the time the bullet is supposed to hit the zombie
 	if (this.direction == "down") {
-		this.y = this.image.y + 60*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+		this.y = this.y + 30*(bulletTravelTime/1000)*this.speed;
 	}
 	else if (this.direction == "left") {
-		this.x = this.image.x - 40*(bulletTravelTime/1000)*this.speed - 4/Math.sqrt((game.time.now-this.time)/1000);
+		this.x = this.x - 50*(bulletTravelTime/1000)*this.speed;
 	}
 	else if (this.direction == "right") {
-		this.x = this.image.x + 40*(bulletTravelTime/1000)*this.speed + 4/Math.sqrt((game.time.now-this.time)/1000);
+		this.x = this.x + 50*(bulletTravelTime/1000)*this.speed;
 	}
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
@@ -497,8 +502,8 @@ function damageBase(index) {
 	
 	if(baseHealth <= 0)
 		endRound('attacker');
-	if(attackerMoney == 0 && zombieArray.length == 0)
-		endRound('defender');
+	
+	// inside the countdown(), endRound('defender') will be called accordingly
 	
 	return true;
 }
