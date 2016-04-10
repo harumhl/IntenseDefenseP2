@@ -1,19 +1,18 @@
 /* game.js */
 
-
-// changes
-
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
 
 // Global Variables
+var player;
+var cursors;
 
-var lane = 'center';
+var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
+var zombieStatArray = []; // array of zombies (for server side)
+var zombieArray = [];     // array of zombies (for client side)
+var towerArray = [];      // array of towers
 
-var bulletTravelTime = 450;
 var towerBullets;
-
-var baseHealth = 2000;
 
 // Price for Zombies
 var standardZombiePrice = 100;
@@ -30,25 +29,25 @@ var bombTowerPrice = 400;
 var moneyTimer = 0;
 var regenTime = 100;
 
-var startRound = false; // controls the timer and money generator functions
+// Some other constants
+var bulletTravelTime = 450;
+var baseHealth = 2000;
 
 //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 var attackerCurtain;
 var matchmakingCurtain;
+var startRound = false; // controls the timer and money generator functions
 
-var player;
-var cursors;
-var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
-//var zombieGroup; // array of zombies
-var towerGroup;  // array of towers
-var zombieStatArray = [];
-var zombieArray = []; // array of zombies
-var towerArray = []; // array of towers
-var purchaseLock = false;
-var state;
+var state; // either attacker or defender
+
+// Attacker's choice
+var lane = 'center';
+
+// Defender's choice
 var gTowerType = ""; // flag && global variable for tower placement - g for global
 
-// Classes
+
+/* Classes */
 // Player Class
 Player = function(username, state, money) {
     this.username = username;
@@ -567,8 +566,6 @@ function create() {
 
     // Creating group objects
     buttonGroup = game.add.group();
-  //  zombieGroup = game.add.group();
-    towerGroup  = game.add.group();
     
  // Creating each button
     // Zombie Buttons
@@ -921,7 +918,6 @@ function update() {
 
         var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
         var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
-        //game.debug.text( "within towerGroup "+towerArray[i].x+"_"+towerArray[i].y+"__"+offset+"_"+towerCenterX+"_"+towerCenterY, 400,400+i*10);
         
         index = 0;
         
