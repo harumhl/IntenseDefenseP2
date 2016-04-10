@@ -34,6 +34,7 @@ var startRound = false; // controls the timer and money generator functions
 
 //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 var attackerCurtain;
+var matchmakingCurtain;
 
 var player;
 var cursors;
@@ -266,7 +267,7 @@ function zombieStat(_lane, _pos_x, _pos_y, _health, _speed)
 function preload() {
     
     game.load.image('title','images/Title.png');
-    game.load.image('map','images/map.png');
+    game.load.image('map','images/map2.png');
 	game.load.image('base','images/base.png');
     
 //images for buttons
@@ -304,7 +305,8 @@ function preload() {
     game.load.image('bullet', 'images/bullet.png');
     
     //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-    game.load.image('attckerCurtain', 'images/rectangle.png');
+    game.load.image('attckerCurtain', 'images/attackerCurtain.png');
+    game.load.image('matchmakingCurtain', 'images/matchmaking.png');
 
 }
 function endRound(winner)
@@ -328,9 +330,13 @@ function newRound()
 }
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
+    
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11777', "echo-protocol");
 
+    
+    
+    
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
@@ -402,20 +408,16 @@ window.onload = function() {
 		}
         else if(message == "startRound")
         {
+            // destroy the curatin and bring the tower sprites to the front so the attacker can see them now
             if(player.state == 'attacker'){
                 attackerCurtain.destroy();
                 for (var i=0; i< towerArray.length; i++)
                     towerArray[i].image.bringToTop();
             }
-            //socket.send(player.state + 'Name ' + player.username);
-            //console.log('HERE: '+player.name);
-            console.log("StartRound");
+            
             console.log("recieved start round");
             startRound = true;
-            console.log('startRound set = to true');
             countdown(5);
-            // make the defender place towers 
-            //countdown(.30);
         }
         else if(message.substring(0,12) == 'attackerName')
         {
@@ -427,9 +429,18 @@ window.onload = function() {
             defenderName = message.substring(13, message.length);
             document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
         }
-        else if(message == "defenderPlaceTowers"){
-            if(player.state == 'attacker')
+        else if(message == "defenderPlaceTowers")
+        {
+            console.log("defenderplacetowers");
+           // if(player.state == 'defender'){
+                
+               // console.log('FFFUUUUUUCCCKKKKK');
+            //}
+            if(player.state == 'attacker'){
+                matchmakingCurtain.destroy();
                 attackerCurtain = game.add.image(0,129,'attckerCurtain');
+            }
+            
             socket.send(player.state + 'Name ' + player.username);
             console.log("Defender start placing towers!");
             countdown(.30);
@@ -541,7 +552,7 @@ function damageBase(index)
 	return true;
 }
 function create() {
-	
+    
     /* load images on the background */
     game.stage.backgroundColor = "#e5e1db"; // background color for button panel
     game.add.sprite(0,0,'title');
@@ -615,7 +626,12 @@ function create() {
 	var shotgunTowerText = game.add.text(885, 400, "$200", style);
 	var gumTowerText = game.add.text(885, 560, "$300", style);
 	var bombTowerText = game.add.text(885, 720, "$400", style);
-
+    
+    
+    //console.log('create() adding image');
+    if(player.state == 'attacker')
+        matchmakingCurtain = game.add.image(0,129,'matchmakingCurtain');
+    
 }
 function buyZombie(type) {
     
@@ -654,53 +670,53 @@ function buyTower(type) {
 }
 function mouseClick(item) {
     var validPurchase = false;
-    var x_offset = 0;
-	var y_offset = 0;
+
 	if(player.state == 'defender'){
 		
 		// game.input.mousePointer.x|y: mouse cursor position.
-		// pos_x|y: since tower placement requires topleft corner position, we are adjusting it accordingly to make it centered
 		var mouse_x = game.input.mousePointer.x;
 		var mouse_y = game.input.mousePointer.y;
 		
-		var pos_x = mouse_x - x_offset;
-		var pos_y = mouse_y + y_offset;
-		console.log("click: "+game.input.mousePointer.x+"_"+game.input.mousePointer.y);
-		console.log("pos_x: " + pos_x + ", pos_y: " + pos_y);
-		if(mouse_x >= 201 && mouse_x <= 771 && mouse_y <= 212)
+		console.log("mouse_x: " + mouse_x + ", mouse_y: " + mouse_y);
+		if(mouse_x >= 185 && mouse_x <= 800 && mouse_y <= 215)
 		{
-		   console.log('top rectangle chosen')
+            // FIXED
+		   //console.log('top rectangle chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
-		else if(mouse_x >= 201 && mouse_x <= 251 && mouse_y >= 162 && mouse_y <= 752)
+		else if(mouse_x >= 185 && mouse_x <= 278 && mouse_y >= 162 && mouse_y <= 752)
 		{
-		   console.log('left rectangle chosen')
+            // FIXED
+		   //console.log('left rectangle chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 723 && mouse_x <= 774 && mouse_y >= 162 && mouse_y <= 752)
+		else if(mouse_x >= 708 && mouse_x <= 800 && mouse_y >= 162 && mouse_y <= 752)
 		{
-		   console.log('right rectangle chosen')
+            //FIXED
+		  // console.log('right rectangle chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 746)
+		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 750)
 		{
-		   console.log('bottom rectangle chosen')
+            // FIXED
+		   //console.log('bottom rectangle chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
-		else if(mouse_x >= 440 && mouse_x <= 530 && mouse_y >= 210 && mouse_y <= 810)
+		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 810)
 		{
-			// ************* FIXED X here
-		   console.log('middle rectangle chosen')
+			//FIXED
+		   //console.log('middle rectangle chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 810 && mouse_y <= 858)
 		{
-		   console.log('bottom of map chosen')
+		   //console.log('bottom of map chosen')
 			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 410 && mouse_x <= 560 && mouse_y >= 750)
 		{
-			console.log('clicking on base');
+			//console.log('clicking on base');
+			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else
 		{
@@ -757,7 +773,7 @@ function mouseClick(item) {
 			if(validPurchase)
 			{
 				document.getElementById("Tower-Placement-Error").innerHTML = "";
-				socket.send('addTower,'+gTowerType+','+pos_x+','+pos_y);
+				socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
 				gTowerType = "";
 			}
 		}
