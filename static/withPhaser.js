@@ -63,8 +63,8 @@ Zombie = function(type, lane, inX, inY) {
     this.lane = lane;
     this.pos_x = inX; // real positions topleft
 	this.pos_y = inY; // real positions topleft
-	//this.center_x;
-	//this.center_y;
+	this.center_x = inX + 28;
+	this.center_y = inY + 37;
     this.x = inX;     // positions calculated for bullet targeting
     this.y = inY;     // positions calculated for bullet targeting
     this.alive = true;
@@ -94,6 +94,7 @@ Zombie = function(type, lane, inX, inY) {
 		this.health = 600;
 		this.speed = 0.4
 	}
+	// individual zombie size: 57x75
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Zombie');
 	this.image.animations.add('moveRight',[0,1,2,3],true);
 	this.image.animations.add('moveLeft',[4,5,6,7],true);
@@ -145,26 +146,27 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
         this.alive = false;
         this.image.kill();
 
-		// deleting the zombie object from the arrays
-		zombieArray.splice(index, 1);
-		zombieStatArray.splice(index,1);
-		
-		// Generate more money for defender
+		// create two more standard zombies
 		if(zombieArray[index].type == 'generations'){
-			socket.send('defenderMoney 60');
-			
-			// create two more standard zombies
 			for(var i = 0; i<2; i++) { 
 				zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 100, 1));
 				zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
 			}
 		}
+				
+		// Generate more money for defender
+		if(zombieArray[index].type == 'generations')
+			socket.send('defenderMoney 60');
 		else if(zombieArray[index].type == 'standard')
 			socket.send('defenderMoney 20');
 		else if(zombieArray[index].type == 'strong')
 			socket.send('defenderMoney 40');
 		else // healer zombie
 			socket.send('defenderMoney 40');
+		
+		// deleting the zombie object from the arrays
+		zombieArray.splice(index, 1);
+		zombieStatArray.splice(index,1);
 		
         return true;
     }
@@ -796,13 +798,10 @@ function countdown(minutes) { // adjusted this function to allow a 30 second tim
 }
 
 function update() {
-	//zombieStatArray.push(new zombieStat(lane, 470, 160, 100, 1));
-	//zombieArray.push(new Zombie(type, lane, 100, 5, 'standardZombie'));
     
     //gradually add money to both players
     console.log('startRound up:' + startRound);
     if(startRound){
-        //console.log('start money accumulation');
         moneyTimer++;
         if(moneyTimer >= regenTime)
         {
@@ -830,7 +829,6 @@ function update() {
 		socket.send(message);
 	}  
     
-        //game.debug.text( "update does work"+towerArray.length, 150, 150);
     // Applying tower attacks
     var withinRangeArray = []; // empty array now
     var index = 0;
@@ -865,7 +863,6 @@ function update() {
             }
         }
         
-       // game.debug.text( "withinRangeArray size: "+withinRangeArray.length, 100,250+i*20);
         
         //if (withinRangeArray.length > 0)
            // game.debug.text(" first attack: "+withinRangeArray[0].type, 200, 320+i*20);
@@ -910,10 +907,8 @@ function update() {
         
         
         // the debug text below often creates an error
-        //game.debug.text( "under attack zombie index (inside withinRangeArray) : "+frontIndex+"_"+withinRangeArray[frontIndex] +"_"+zombieArray[withinRangeArray[frontIndex]].type+"_"+withinRangeArray.length+"_"+int, 150,150);
         
         // 3. attack!
-		//console.log("Attack: "+frontIndex);
         
 		var overlapped = game.physics.arcade.overlap(towerBullets, zombieArray[frontIndex].image,
                                                 function(zombie,bullet){bullet.kill();}, null, this);
