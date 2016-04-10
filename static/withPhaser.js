@@ -238,7 +238,7 @@ Tower.prototype.attack = function(underAttack) {
         var bullet = this.bullets.getFirstDead();
         
         var offset =36; // should be 36
-        bullet.reset(parseInt(this.x)+parseInt(offset), parseInt(this.y)+parseInt(offset));
+        bullet.reset(parseInt(this.pos_x)+parseInt(offset), parseInt(this.pos_y)+parseInt(offset));
         
         bullet.rotation = this.game.physics.arcade.moveToObject(bullet, underAttack, 2, bulletTravelTime);
 		
@@ -254,7 +254,6 @@ function zombieStat(_lane, _pos_x, _pos_y, _speed) {
 	this.speed  = _speed;
 	this.direction = "";
 }
-
 window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
@@ -536,6 +535,16 @@ function create() {
         matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 }
 
+function newRound() {
+	for(var i = 0; i<zombieArray.length; i++)
+		zombieArray[i].image.kill();
+	for(var j = 0; j<towerArray.length; j++)
+		towerArray[j].image.kill();
+	
+	zombieArray = [];
+	zombieStatArray = [];
+	towerArray = [];
+}
 function countdown(minutes) { // function for the timer for each round
 
 	// adjusted this function to allow a 30 second timer as well
@@ -592,42 +601,6 @@ function countdown(minutes) { // function for the timer for each round
     }
     tick();
 }
-function newRound() {
-	for(var i = 0; i<zombieArray.length; i++)
-		zombieArray[i].image.kill();
-	for(var j = 0; j<towerArray.length; j++)
-		towerArray[j].image.kill();
-	
-	zombieArray = [];
-	zombieStatArray = [];
-	towerArray = [];
-}
-function endRound(winner) {
-	if(winner == "attacker")
-		window.alert("Attacker Wins!");
-	else
-		window.alert("Defender Wins!");
-	
-    startRound = false;
-	newRound();
-}
-function damageBase(index) {
-	baseHealth -= zombieArray[index].damage;
-    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
-	
-	// Killing the zombie and removing it from the arrays
-	zombieArray[index].alive = false;    
-	zombieArray[index].image.kill();
-	zombieArray.splice(index, 1);
-	zombieStatArray.splice(index,1);
-	
-	if(baseHealth <= 0)
-		endRound('attacker');
-	
-	// inside the countdown(), endRound('defender') will be called accordingly
-	
-	return true;
-}
 function changePath(){
     /*
         frame #     Zombie path
@@ -650,6 +623,32 @@ function changePath(){
 		lane = 'center';
     }
     currentPathFrame = buttonGroup.getAt(8).frame;
+}
+function damageBase(index) {
+	baseHealth -= zombieArray[index].damage;
+    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
+	
+	// Killing the zombie and removing it from the arrays
+	zombieArray[index].alive = false;    
+	zombieArray[index].image.kill();
+	zombieArray.splice(index, 1);
+	zombieStatArray.splice(index,1);
+	
+	if(baseHealth <= 0)
+		endRound('attacker');
+	
+	// inside the countdown(), endRound('defender') will be called accordingly
+	
+	return true;
+}
+function endRound(winner) {
+	if(winner == "attacker")
+		window.alert("Attacker Wins!");
+	else
+		window.alert("Defender Wins!");
+	
+    startRound = false;
+	newRound();
 }
 
 function sendAddZombie(zombieType){ 
@@ -858,8 +857,8 @@ function update() {
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
 
-        var towerCenterX = parseInt(towerArray[i].x) + parseInt(offset);
-        var towerCenterY = parseInt(towerArray[i].y) + parseInt(offset);
+        var towerCenterX = parseInt(towerArray[i].pos_x) + parseInt(offset);
+        var towerCenterY = parseInt(towerArray[i].pos_y) + parseInt(offset);
         
         index = 0;
         
