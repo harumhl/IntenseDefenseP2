@@ -227,11 +227,10 @@ Tower.prototype.attack = function(underAttack) {
     }
 };
 
-function zombieStat(_lane, _pos_x, _pos_y, _health, _speed) {
+function zombieStat(_lane, _pos_x, _pos_y, _speed) {
 	this.lane   = _lane;
 	this.pos_x  = _pos_x;
 	this.pos_y  = _pos_y;
-	this.health = _health;
 	this.speed  = _speed;
 	this.direction = "";
 }
@@ -480,7 +479,7 @@ function sendAddZombie(zombieType){
         }
 		
 		if(canBuy){
-			socket.send("addZombie"+zombieType);
+			socket.send("addZombie"+zombieType); // this will call buyZombie()
 		}
     }
 }
@@ -552,7 +551,7 @@ function create() {
     }
     
     //  The tower bullet groups
-    towerBullets = game.add.group();
+    towerBullets = game.add.group(); // TEMP
     towerBullets.enableBody = true;
     towerBullets.physicsBodyType = Phaser.Physics.ARCADE;
     towerBullets.createMultiple(40, 'bullet'); // creating 40 bullet sprites
@@ -610,19 +609,19 @@ function buyZombie(type) {
 	   by the caller of this function, "sendAddZombie" */
 	
     if (type == "standard"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
     else if (type == "strong"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 0.6));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.6));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
 	else if (type == "healing"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
     else if (type == "generations"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 0.3));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.3));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
 }
