@@ -93,7 +93,7 @@ Zombie = function(type, lane, inX, inY) {
 	this.image.animations.add('moveRight',[0,1,2,3],true);
 	this.image.animations.add('moveLeft',[4,5,6,7],true);
 	this.image.animations.add('moveDown',[8,9,10,11],true);
-	this.image.scale.setTo(0.5);
+	this.image.scale.setTo(0.5); // half of its original image size
 	
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
@@ -223,7 +223,6 @@ Tower.prototype.attack = function(underAttack) {
         //underAttack.hurt(34, bullet, frontIndex);
     }
 };
-Tower.prototype.update = function() {};
 
 function zombieStat(_lane, _pos_x, _pos_y, _health, _speed) {
 	this.lane   = _lane;
@@ -504,6 +503,8 @@ function sendAddZombie(zombieType){
 function damageBase(index) {
 	baseHealth -= zombieArray[index].damage;
     document.getElementById("health").innerHTML = " Health: " + baseHealth; 
+	
+	// Killing the zombie and removing it from the arrays
 	zombieArray[index].alive = false;    
 	zombieArray[index].image.kill();
 	zombieArray.splice(index, 1);
@@ -512,7 +513,8 @@ function damageBase(index) {
 	if(baseHealth <= 0)
 		endRound('attacker');
 	if(attackerMoney == 0 && zombieArray.length == 0)
-			endRound('defender');
+		endRound('defender');
+	
 	return true;
 }
 function create() {
@@ -573,6 +575,8 @@ function create() {
     
     towerBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
     towerBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+	towerBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
+	towerBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
 	
 	/* Price labels for the zombie/tower buttons */
 	// Same style for each text
@@ -831,7 +835,6 @@ function update() {
             moneyTimer = 0;
         }
     }
-    //else console.log("brokedid");
     
     // Change settings for every zombie elements
     if(state == 'attacker' && zombieStatArray.length > 0){
