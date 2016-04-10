@@ -830,7 +830,7 @@ function update() {
             }
             else // defender
                 document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-            moneyTimer = 0;
+				moneyTimer = 0;
         }
     }
     
@@ -853,7 +853,7 @@ function update() {
     for (var i=0; i< towerArray.length; i++) {
         withinRangeArray = [];
 
-	// If it's not ready for the tower to shoot, then skip the whole process for it
+		// If it's not ready for the tower to shoot, then skip the whole process for it
 
 
         var towerCenterX = parseInt(towerArray[i].pos_x) + parseInt(offset);
@@ -882,6 +882,7 @@ function update() {
 
         // 2. Choosing the specific one to attack
         var frontIndex = withinRangeArray[0];
+        for (var j=0; j< withinRangeArray.length; j++) {
 
             // placed ahead in terms of y-coordinate
             // Instead of having a zombie > frontZombie (then it crashes when they are on top of each other)
