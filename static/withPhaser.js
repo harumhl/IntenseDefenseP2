@@ -1,4 +1,4 @@
-/* game.js */
+/* game.js */ 
 
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
