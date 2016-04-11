@@ -818,14 +818,23 @@ function buyTower(type) {
     /* this turns on the flag only.
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
     
-    gTowerType = type;
-    if(player.state == 'defender')
-		map.play('towerPlacement');
+    // If another tower is already selected, then kill the image
+    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
+    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
+    else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
+    else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
     
+    gTowerType = type;
+
+    // Tower image is called to follow the mouse cursor until it is placed
     if      (gTowerType == 'minigun')   minigunTowerToBePlaced.reset(870,160);
     else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.reset(870,320);
     else if (gTowerType == 'gum')       gumTowerToBePlaced.reset(870,480);
     else if (gTowerType == 'bomb')      bombTowerToBePlaced.reset(870,640);
+    
+    if(player.state == 'defender')
+		map.play('towerPlacement');
+    
     
 }
 function mouseClick(item) {
