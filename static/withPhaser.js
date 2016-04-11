@@ -51,11 +51,17 @@ var lane = 'center';
 // Defender's choice
 var gTowerType = ""; // flag && global variable for tower placement - g for global
 
+// zombie bankrupt images ******************* will change this to array
 var standardZombieBankrupt;
 var strongZombieBankrupt;
 var healingZombieBankrupt;
 var generationsZombieBankrupt;
 
+// Tower bankrupt images
+var minigunTowerBankrupt;
+var shotgunTowerBankrupt;
+var gumTowerBankrupt;
+var bombTowerBankrupt;
 
 /* Classes */
 // Player Class
@@ -266,7 +272,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11222', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11225', "echo-protocol");
 
     
   // Handle messages sent by the server.
@@ -285,7 +291,7 @@ window.onload = function() {
 			state = 'defender';
 			console.log(state);
 			//document.getElementById("state").innerHTML = "Defender";
-             player = new Player(playerName, state, 10000);
+             player = new Player(playerName, state, 1000);
             console.log(player.username + ' ' + player.state);
             document.getElementById("defender-name").innerHTML = "Defender: " + player.username;
 		}
@@ -410,14 +416,22 @@ function preload() { // Preload stuff for the game like images
     game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButtonSpt.png', 70,70);
     game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButtonSpt.png', 70,70);
     game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButtonSpt.png', 70,70);
-    // image displayed instead of the 
-    game.load.spritesheet('zombieBankrupt', 'images/Zombies/zombieBankrupt.png');
+    // image displayed instead of button if player cant afford it
+    game.load.image('zombieBankrupt', 'images/Zombies/zombieBankrupt.png');
     
 	//tower buttons
-    game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
-    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
-    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButton.png');
-    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButton.png');
+    game.load.spritesheet('minigunTowerButton', 'images/Towers/towerMinigunButtonSpt.png', 70, 70);
+    game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButtonSpt.png', 70, 70);
+    game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButtonSpt.png', 70, 70);
+    game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButtonSpt.png', 70, 70);
+	// image displayed instead of button if player cant afford it
+	game.load.image('minigunBankrupt', 'images/Towers/minigunBankrupt.png');
+	game.load.image('shotgunBankrupt', 'images/Towers/shotgunBankrupt.png');
+    game.load.image('gumBankrupt', 'images/Towers/gumBankrupt.png');
+    game.load.image('bombBankrupt', 'images/Towers/bombBankrupt.png');
+	
+    
+	
 	
 	/* images for the actual objects on the map */
 	//towers
@@ -463,10 +477,10 @@ function create() {
     var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 1, 2);
     var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombieButton', function(){sendAddZombie("generations");}, this, 0, 1, 2);
     // Tower Buttons
-    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
-    var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
-    var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 0, 0);
-    var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 0, 0);
+    var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 1, 2);
+    var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 1, 2);
+    var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 1, 2);
+    var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 1, 2);
     
 	/* Attaching buttons to the screen */
     buttonGroup = game.add.group();
@@ -482,7 +496,7 @@ function create() {
     buttonGroup.add(bombTowerButton);
     
     // Zombie bankrupt images - 
-        //I have to ad the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
+        //I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
     standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
     standardZombieBankrupt.kill(); // temporarily kill the image
     strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
@@ -491,6 +505,17 @@ function create() {
     healingZombieBankrupt.kill(); // temporarily kill the image
     generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
     generationsZombieBankrupt.kill(); // temporarily kill the image
+    
+    // Tower bankrupt images -
+        ////I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
+    minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
+    minigunTowerBankrupt.kill();
+    shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
+    shotgunTowerBankrupt.kill();
+    gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
+    gumTowerBankrupt.kill();
+    bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
+    bombTowerBankrupt.kill();
 
 	if(player.state == 'attacker'){
 		//zombie path button (the red arrow on top of map)
@@ -867,8 +892,12 @@ function update() {
     // check if the attacker has enough money for zombie buttons
     if(player.state == 'attacker')
     {
-        var currentMoney = player.money;
+        minigunTowerBankrupt.reset(870, 160);
+        shotgunTowerBankrupt.reset(870, 320);
+        gumTowerBankrupt.reset(870, 480);
+        bombTowerBankrupt.reset(870, 640);
         
+        var currentMoney = player.money;
         // standard zombie button
         if(currentMoney < standardZombiePrice) // kill button and display greyed out button
         {
@@ -908,7 +937,7 @@ function update() {
         // generations zombie button
         if(currentMoney < generationsZombiePrice) // kill button and display greyed out button
         {
-            buttonGroup.getAt(3).kill(); // healing zombie button
+            buttonGroup.getAt(3).kill(); // generations zombie button
             generationsZombieBankrupt.reset(40, 640);
         }
         else // kill the greyed out image and display the button again
@@ -916,6 +945,65 @@ function update() {
             buttonGroup.getAt(3).reset(40, 640);
             if(generationsZombieBankrupt.alive)
                 generationsZombieBankrupt.kill();
+        }
+    }
+    
+    // defender check if user has enough money for tower purchases if not display bankrupt image
+    
+    
+    
+    bombTowerBankrupt;
+    if(player.state == 'defender')
+    {
+        standardZombieBankrupt.reset(40, 160);
+        strongZombieBankrupt.reset(40, 320);
+        healingZombieBankrupt.reset(40, 480);
+        generationsZombieBankrupt.reset(40, 640);
+        
+        var currentMoney = player.money;
+        if(currentMoney < minigunTowerPrice)
+        {
+            buttonGroup.getAt(4).kill(); // minigun tower button
+            minigunTowerBankrupt.reset(870, 160);
+        }
+        else
+        {
+            buttonGroup.getAt(4).reset(870, 160);
+            if(minigunTowerBankrupt.alive)
+                minigunTowerBankrupt.kill();
+        }
+        if(currentMoney < shotgunTowerPrice)
+        {
+            buttonGroup.getAt(5).kill(); // shotgun tower button
+            shotgunTowerBankrupt.reset(870, 320);
+        }
+        else
+        {
+            buttonGroup.getAt(5).reset(870, 320);
+            if(shotgunTowerBankrupt.alive)
+                shotgunTowerBankrupt.kill();
+        }
+        if(currentMoney < gumTowerPrice)
+        {
+            buttonGroup.getAt(6).kill(); // gum tower button
+            gumTowerBankrupt.reset(870, 480);
+        }
+        else
+        {
+            buttonGroup.getAt(6).reset(870, 480);
+            if(gumTowerBankrupt.alive)
+                gumTowerBankrupt.kill();
+        }
+        if(currentMoney < bombTowerPrice)
+        {
+            buttonGroup.getAt(7).kill(); // bomb tower button
+            bombTowerBankrupt.reset(870, 640);
+        }
+        else
+        {
+            buttonGroup.getAt(7).reset(870, 640);
+            if(bombTowerBankrupt.alive)
+                bombTowerBankrupt.kill();
         }
     }
     
