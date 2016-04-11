@@ -42,6 +42,8 @@ wsServer.on('request', function(request) {
 
     var connection = request.accept('echo-protocol', request.origin);
     connections.push(connection);
+    
+    /* Assign player's state: Attacker, Defender, Observer */
 	if(attackerAvailable)
 	{
 		connection.sendUTF('Attacker');
@@ -59,6 +61,9 @@ wsServer.on('request', function(request) {
 		connection.sendUTF('Observer');
 		connection.role = 2;
 	}
+    
+    /* Starts the game once there are two players available for the game
+     by allowing the defender to place towers for the next 30 seconds or so */
 	if(!attackerAvailable && !defenderAvailable)
 	{
 		for(var i = 0; i<connections.length; i++){
@@ -86,9 +91,11 @@ wsServer.on('request', function(request) {
 				{
 					zombieStatArray[x].pos_y +=1;
 				}*/
+                
+                /* Updates each zombie movements */
 				for (var i=0; i<zombieStatArray.length; i++) {
-					//console.log(zombieStatArray[i].pos_x+' '+zombieStatArray[i].pos_y+' '+zombieStatArray[i].speed)
-					if (zombieStatArray[i].lane == "center")
+
+                    if (zombieStatArray[i].lane == "center") // center lane
 					{
 						zombieStatArray[i].direction = "down";
 						if(zombieStatArray[i].pos_y < 775)
@@ -115,8 +122,8 @@ wsServer.on('request', function(request) {
 						}
 						else
 							zombieStatArray[i].lane = "center";
-						}
-					else // left lane
+                    }
+					else if (zombieStatArray[i].lane == "left") // left lane
 					{
 						if(zombieStatArray[i].pos_x > 218 && zombieStatArray[i].pos_y < 704)
 						{
@@ -135,18 +142,18 @@ wsServer.on('request', function(request) {
 						}
 						else
 							zombieStatArray[i].lane = "center";
-						}
+                    }
 				}
 		
 				for(var y = 0; y<connections.length; y++){
-				connections[y].sendUTF(JSON.stringify(zombieStatArray));
+				    connections[y].sendUTF(JSON.stringify(zombieStatArray));
 				}
 				//if(killIndexes.length >0)
 					//console.log(killIndexes.length);
 				if(killIndexes.length >0)
 				{
 					for(var y = 0; y<connections.length; y++){
-					connections[y].sendUTF(JSON.stringify(killIndexes));
+                        connections[y].sendUTF(JSON.stringify(killIndexes));
 					}
 				}
 					
@@ -155,13 +162,17 @@ wsServer.on('request', function(request) {
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-	    for(var i = 0; i<connections.length; i++){
-	    connections[i].sendBytes(message.binaryData);
-	    }
+            
+            for(var i = 0; i<connections.length; i++){
+                connections[i].sendBytes(message.binaryData);
+            }
         }
     });
+    
+    /* Checks if anyone leaves the game. If so, then frees the role so the next person can take the role */ 
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        
 		if(connection.role == 0)
 			attackerAvailable = true;
 		else if(connection.role == 1)
