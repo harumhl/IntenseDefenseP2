@@ -1,4 +1,5 @@
 /* game.js */ 
+// DevLog https://docs.google.com/document/d/19USEq0-lkOCuyqLz8M2PJI1ccd0YC4jkxCCgurSIgUM/edit
 
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense', { preload: preload, create: create, update: update });
@@ -19,7 +20,7 @@ var shotgunBullets;
 var bombBullets;
 
 // Price for Zombies
-var standardZombiePrice = 100;
+var standardZombiePrice = 100; // prices.standardZombie
 var strongZombiePrice = 200;
 var healingZombiePrice = 300;
 var generationsZombiePrice = 400;
@@ -272,7 +273,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11225', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11220', "echo-protocol");
 
     
   // Handle messages sent by the server.
