@@ -43,7 +43,8 @@ wsServer.on('request', function(request) {
     var connection = request.accept('echo-protocol', request.origin);
     connections.push(connection);
     
-    /* Assign player's state: Attacker, Defender, Observer */
+    /* Assign player's state: Attacker, Defender, Observer 
+      by sending the message to the clients to assign so */
 	if(attackerAvailable)
 	{
 		connection.sendUTF('Attacker');

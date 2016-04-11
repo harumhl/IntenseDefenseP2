@@ -280,12 +280,12 @@ window.onload = function() {
     
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11220', "echo-protocol");
-
     
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
-	 // var type = 'string';
+	 
+        /* Assigning each player's role: Attacker, Defender, Observer */
 		if(message == 'Attacker'){
 			state = 'attacker';
 			console.log(state);
@@ -318,12 +318,15 @@ window.onload = function() {
 				player.money+=parseInt(message.substring(14,message.length));
 		}
 		else if(message.length > 8 && message.substring(0,8) == 'addTower')
-		{
+		{ // ('addtower,' +gTowerType +',' +pos_x +',' +pos_y)
+            
 			var commaCounter = 0;
 			var towerType = '';
 			var pos_x = '';
 			var pos_y = '';		
-			for(i = 0; i<message.length; i++)
+            
+            // using commas as delimeter, we assign each variable char by char
+			for(i = 0; i<message.length; i++) 
 			{
 				if(commaCounter<1)
 				{
@@ -344,7 +347,7 @@ window.onload = function() {
 					else
 						commaCounter++;			
 				}
-				else
+				else // commaCounter == 3
 					pos_y+=message[i];
 				
 			}
