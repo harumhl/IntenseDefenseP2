@@ -45,11 +45,16 @@ var startRound = false; // controls the timer and money generator functions
 
 var state; // either attacker or defender
 
-// Attacker's choice
+// Attacker's choice to send zombies down lane default is center
 var lane = 'center';
 
 // Defender's choice
 var gTowerType = ""; // flag && global variable for tower placement - g for global
+
+var standardZombieBankrupt;
+var strongZombieBankrupt;
+var healingZombieBankrupt;
+var generationsZombieBankrupt;
 
 
 /* Classes */
@@ -401,10 +406,13 @@ function preload() { // Preload stuff for the game like images
 	//zombie path button
     game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
     //zombies
-	game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButton.png');
-    game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButton.png');
-    game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButton.png');
-    game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButton.png');
+    game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButtonSpt.png', 70, 70);
+    game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButtonSpt.png', 70,70);
+    game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButtonSpt.png', 70,70);
+    game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButtonSpt.png', 70,70);
+    // image displayed instead of the 
+    game.load.spritesheet('zombieBankrupt', 'images/Zombies/zombieBankrupt.png');
+    
 	//tower buttons
     game.load.spritesheet('minigunTowerButton', 'images/Towers/towerStandardButton.png');
     game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButton.png');
@@ -450,10 +458,10 @@ function create() {
 	
 	/* Creating each button */
     // Zombie Buttons
-    var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 0, 0);
-    var strongZombieButton  =  game.make.button(40, 320, 'strongZombieButton', function(){sendAddZombie("strong");}, this, 0, 0, 0);
-    var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 0, 0);
-    var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombieButton', function(){sendAddZombie("generations");}, this, 0, 0, 0);
+    var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 1, 2);
+    var strongZombieButton  =  game.make.button(40, 320, 'strongZombieButton', function(){sendAddZombie("strong");}, this, 0, 1, 2);
+    var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 1, 2);
+    var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombieButton', function(){sendAddZombie("generations");}, this, 0, 1, 2);
     // Tower Buttons
     var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 0, 0);
     var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 0, 0);
@@ -472,6 +480,17 @@ function create() {
     buttonGroup.add(shotgunTowerButton);
     buttonGroup.add(gumTowerButton);
     buttonGroup.add(bombTowerButton);
+    
+    // Zombie bankrupt images - 
+        //I have to ad the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
+    standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
+    standardZombieBankrupt.kill(); // temporarily kill the image
+    strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
+    strongZombieBankrupt.kill(); // temporarily kill the image
+    healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
+    healingZombieBankrupt.kill(); // temporarily kill the image
+    generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
+    generationsZombieBankrupt.kill(); // temporarily kill the image
 
 	if(player.state == 'attacker'){
 		//zombie path button (the red arrow on top of map)
@@ -842,6 +861,61 @@ function update() {
             else // defender
                 document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 				moneyTimer = 0;
+        }
+    }
+    
+    // check if the attacker has enough money for zombie buttons
+    if(player.state == 'attacker')
+    {
+        var currentMoney = player.money;
+        
+        // standard zombie button
+        if(currentMoney < standardZombiePrice) // kill button and display greyed out button
+        {
+            buttonGroup.getAt(0).kill(); // standard zombie button
+            standardZombieBankrupt.reset(40, 160);
+        }
+        else // kill the greyed out image and display the button again
+        {
+            buttonGroup.getAt(0).reset(40, 160);
+            if(standardZombieBankrupt.alive)
+                standardZombieBankrupt.kill();
+        }
+        // strong zombie button
+        if(currentMoney < strongZombiePrice) // kill button and display greyed out button
+        {
+            buttonGroup.getAt(1).kill(); // strong zombie button
+            strongZombieBankrupt.reset(40, 320);
+        }
+        else // kill the greyed out image and display the button again
+        {
+            buttonGroup.getAt(1).reset(40, 320);
+            if(strongZombieBankrupt.alive)
+                strongZombieBankrupt.kill();
+        }
+        // healing zombie button
+        if(currentMoney < healingZombiePrice) // kill button and display greyed out button
+        {
+            buttonGroup.getAt(2).kill(); // healing zombie button
+            healingZombieBankrupt.reset(40, 480);
+        }
+        else // kill the greyed out image and display the button again
+        {
+            buttonGroup.getAt(2).reset(40, 480);
+            if(healingZombieBankrupt.alive)
+                healingZombieBankrupt.kill();
+        }
+        // generations zombie button
+        if(currentMoney < generationsZombiePrice) // kill button and display greyed out button
+        {
+            buttonGroup.getAt(3).kill(); // healing zombie button
+            generationsZombieBankrupt.reset(40, 640);
+        }
+        else // kill the greyed out image and display the button again
+        {
+            buttonGroup.getAt(3).reset(40, 640);
+            if(generationsZombieBankrupt.alive)
+                generationsZombieBankrupt.kill();
         }
     }
     
