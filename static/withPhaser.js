@@ -19,8 +19,14 @@ var minigunBullets;
 var shotgunBullets;
 var bombBullets;
 
+// Tower image following the mouse cursor once a tower button is clicked
+var minigunTowerToBePlaced;
+var shotgunTowerToBePlaced;
+var gumTowerToBePlaced;
+var bombTowerToBePlaced;
+
 // Price for Zombies
-var standardZombiePrice = 100; // prices.standardZombie
+var standardZombiePrice = 100; // i.e. prices.standardZombie
 var strongZombiePrice = 200;
 var healingZombiePrice = 300;
 var generationsZombiePrice = 400;
@@ -459,6 +465,8 @@ function preload() { // Preload stuff for the game like images
 }
 function create() {
     
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
     /* load images on the background */
     game.stage.backgroundColor = "#e5e1db"; // gray background color
     game.add.sprite(0,0,'title');
@@ -583,8 +591,38 @@ function create() {
 	var gumTowerText = game.add.text(885, 560, "$300", style);
 	var bombTowerText = game.add.text(885, 720, "$400", style);
     
-    if(player.state == 'attacker')
+    if (player.state == 'attacker')
         matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
+    
+    if (player.state = 'defender') {
+        minigunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'minigunTower');
+        shotgunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'shotgunTower');
+        gumTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'gumTower');
+        bombTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'bombTower');
+
+        minigunTowerToBePlaced.anchor.set(0.5);
+        shotgunTowerToBePlaced.anchor.set(0.5);
+        gumTowerToBePlaced.anchor.set(0.5);
+        bombTowerToBePlaced.anchor.set(0.5);
+
+        // Half of the size
+        minigunTowerToBePlaced.scale.setTo(0.5);
+        shotgunTowerToBePlaced.scale.setTo(0.5);
+        gumTowerToBePlaced.scale.setTo(0.5);
+        bombTowerToBePlaced.scale.setTo(0.5);
+        
+        //  And enable the Sprite to have a physics body:
+        game.physics.arcade.enable(minigunTowerToBePlaced);
+        game.physics.arcade.enable(shotgunTowerToBePlaced);
+        game.physics.arcade.enable(gumTowerToBePlaced);
+        game.physics.arcade.enable(bombTowerToBePlaced);
+        
+        minigunTowerToBePlaced.kill();
+        shotgunTowerToBePlaced.kill();
+        gumTowerToBePlaced.kill();
+        bombTowerToBePlaced.kill();
+    }
+    
 }
 
 function newRound() {
@@ -783,7 +821,11 @@ function buyTower(type) {
     gTowerType = type;
     if(player.state == 'defender')
 		map.play('towerPlacement');
-
+    
+    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.reset(870,160);
+    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.reset(870,320);
+    else if (gTowerType == 'gum')       gumTowerToBePlaced.reset(870,480);
+    else if (gTowerType == 'bomb')      bombTowerToBePlaced.reset(870,640);
 }
 function mouseClick(item) {
 	var notOnLane = false;
@@ -867,12 +909,54 @@ function mouseClick(item) {
 			map.play('plainMap');
 			document.getElementById("Tower-Placement-Error").innerHTML = "";
 			socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
+            
+            if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
+            else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
+            else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
+            else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
+            
 			gTowerType = "";
 		}
 	}
 }
 
 function update() {
+
+    // Allow tower image to follow the mouse cursor when a tower button is clicked
+    if (player.state == 'defender') {
+        if (gTowerType == 'minigun') {
+            if (game.physics.arcade.distanceToPointer(minigunTowerToBePlaced, game.input.activePointer) > 1) {
+                game.physics.arcade.moveToPointer(minigunTowerToBePlaced, 300, game.input.activePointer, 10);
+            }
+            if (game.physics.arcade.distanceToPointer(minigunTowerToBePlaced, game.input.activePointer) > 0.1) {
+                game.physics.arcade.moveToPointer(minigunTowerToBePlaced, 300, game.input.activePointer, 50);
+            }
+        }
+        else if (gTowerType == 'shotgun') {
+            if (game.physics.arcade.distanceToPointer(shotgunTowerToBePlaced, game.input.activePointer) > 1) {
+                game.physics.arcade.moveToPointer(shotgunTowerToBePlaced, 300, game.input.activePointer, 10);
+            }
+            if (game.physics.arcade.distanceToPointer(shotgunTowerToBePlaced, game.input.activePointer) > 0.1) {
+                game.physics.arcade.moveToPointer(shotgunTowerToBePlaced, 300, game.input.activePointer, 50);
+            }
+        }
+        else if (gTowerType == 'gum') {
+            if (game.physics.arcade.distanceToPointer(gumTowerToBePlaced, game.input.activePointer) > 1) {
+                game.physics.arcade.moveToPointer(gumTowerToBePlaced, 300, game.input.activePointer, 10);
+            }
+            if (game.physics.arcade.distanceToPointer(gumTowerToBePlaced, game.input.activePointer) > 0.1) {
+                game.physics.arcade.moveToPointer(gumTowerToBePlaced, 300, game.input.activePointer, 50);
+            }
+        }
+        else if (gTowerType == 'bomb') {
+            if (game.physics.arcade.distanceToPointer(bombTowerToBePlaced, game.input.activePointer) > 1) {
+                game.physics.arcade.moveToPointer(bombTowerToBePlaced, 300, game.input.activePointer, 10);
+            }
+            if (game.physics.arcade.distanceToPointer(bombTowerToBePlaced, game.input.activePointer) > 0.1) {
+                game.physics.arcade.moveToPointer(bombTowerToBePlaced, 300, game.input.activePointer, 50);
+            }
+        }
+    }
     
     //gradually add money to both players
     if(startRound){
