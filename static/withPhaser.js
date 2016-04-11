@@ -594,7 +594,7 @@ function create() {
     if (player.state == 'attacker')
         matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
     
-    if (player.state = 'defender') {
+    if (player.state == 'defender') {
         minigunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'minigunTower');
         shotgunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'shotgunTower');
         gumTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'gumTower');
@@ -826,6 +826,7 @@ function buyTower(type) {
     else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.reset(870,320);
     else if (gTowerType == 'gum')       gumTowerToBePlaced.reset(870,480);
     else if (gTowerType == 'bomb')      bombTowerToBePlaced.reset(870,640);
+    
 }
 function mouseClick(item) {
 	var notOnLane = false;
