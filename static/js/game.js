@@ -57,26 +57,9 @@ var bombTowerToBePlaced;
 
 
 //Prices for zombies/towers
-/*var price = {
-	standard:100,
-	strong:200,
-	healing:300,
-	generations:400,
-	minigun:100,
-	shotgun:200,
-	gum:300,
-	bomb:400
-};*/
-// Price for Zombies
-var standardZombiePrice = 100; // i.e. prices.standardZombie
-var strongZombiePrice = 200;
-var healingZombiePrice = 300;
-var generationsZombiePrice = 400;
-// Price for Towers
-var minigunTowerPrice = 100;
-var shotgunTowerPrice = 200;
-var gumTowerPrice = 300;
-var bombTowerPrice = 400;
+var price = {
+    standard:100,   strong:200,     healing:300,    generations:400,
+	minigun:100,    shotgun:200,    gum:300,        bomb:400};
 
 // Used to generate money for both players over time
 var moneyTimer = 0;
@@ -91,6 +74,7 @@ var spawn_x = 482, spawn_y = 160;
 var attackerCurtain;
 var matchmakingCurtain;
 var startRound = false; // controls the timer and money generator functions
+var matchNum = 0;
 
 var state; // either attacker or defender
 
@@ -385,7 +369,7 @@ function countdown(minutes) { // function for the timer for each round
         else{
             if(seconds == 0 && current_minutes == 0){
                 endRound('defender');         
-                //end of match attacker wins
+                //end of match: defender wins
             }
 		}
         if( seconds > 0 ) {
@@ -459,7 +443,7 @@ function sendAddZombie(zombieType){
     if(player.state == 'attacker'){
 		
         if(zombieType == "standard"){
-            if( player.money < standardZombiePrice ){
+            if( player.money < price['standard'] ){
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
@@ -469,7 +453,7 @@ function sendAddZombie(zombieType){
             }
         }
         else if(zombieType == "strong"){
-            if( player.money < strongZombiePrice ){
+            if( player.money < price['strong'] ){
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
@@ -479,7 +463,7 @@ function sendAddZombie(zombieType){
             }
         }
         else if(zombieType == "healing"){
-            if( player.money < healingZombiePrice ){
+            if( player.money < price['healing'] ){
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
@@ -489,7 +473,7 @@ function sendAddZombie(zombieType){
             }
         }
         else if(zombieType == "generations"){
-            if( player.money < generationsZombiePrice ){
+            if( player.money < price['generations'] ){
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
@@ -582,42 +566,42 @@ function mouseClick(item) {
 		
 		// Check if the player has enough money for the zombie
 		if (gTowerType == "minigun") {
-			if(player.money < minigunTowerPrice){
+			if(player.money < price['minigun']){
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
-				player.money -= minigunTowerPrice;
+				player.money -= price['minigun'];
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "shotgun") {
-			if(player.money < shotgunTowerPrice){
+			if(player.money < price['shotgun']){
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
-				player.money -= shotgunTowerPrice;
+				player.money -= price['shotgun'];
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "gum") {
-			if(player.money < gumTowerPrice){
+			if(player.money < price['gum']){
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
-				player.money -= gumTowerPrice;
+				player.money -= price['gum'];
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "bomb") {
-			if(player.money < bombTowerPrice){
+			if(player.money < price['bomb']){
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
-				player.money -= bombTowerPrice;
+				player.money -= price['bomb'];
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}

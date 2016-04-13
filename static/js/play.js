@@ -249,7 +249,7 @@ var playMatchState =
 			
 			var currentMoney = player.money;
 			// standard zombie button
-			if(currentMoney < standardZombiePrice) // kill button and display greyed out button
+			if(currentMoney < price['standard']) // kill button and display greyed out button
 			{
 				buttonGroup.getAt(0).kill(); // standard zombie button
 				bankruptImages.standard.reset(40,160);
@@ -261,7 +261,7 @@ var playMatchState =
 					bankruptImages.standard.kill();
 			}
 			// strong zombie button
-			if(currentMoney < strongZombiePrice) // kill button and display greyed out button
+			if(currentMoney < price['strong']) // kill button and display greyed out button
 			{
 				buttonGroup.getAt(1).kill(); // strong zombie button
 				bankruptImages.strong.reset(40,320);
@@ -273,7 +273,7 @@ var playMatchState =
 					bankruptImages.strong.kill();
 			}
 			// healing zombie button
-			if(currentMoney < healingZombiePrice) // kill button and display greyed out button
+			if(currentMoney < price['healing']) // kill button and display greyed out button
 			{
 				buttonGroup.getAt(2).kill(); // healing zombie button
 				bankruptImages.healing.reset(40,480);
@@ -285,7 +285,7 @@ var playMatchState =
 					bankruptImages.healing.kill();
 			}
 			// generations zombie button
-			if(currentMoney < generationsZombiePrice) // kill button and display greyed out button
+			if(currentMoney < price['generations']) // kill button and display greyed out button
 			{
 				buttonGroup.getAt(3).kill(); // generations zombie button
 				bankruptImages.generations.reset(40,640);
@@ -307,7 +307,7 @@ var playMatchState =
 			bankruptImages.generations.reset(40, 640);
 			
 			var currentMoney = player.money;
-			if(currentMoney < minigunTowerPrice)
+			if(currentMoney < price['minigun'])
 			{
 				buttonGroup.getAt(4).kill(); // minigun tower button
 				bankruptImages.minigun.reset(870, 160);
@@ -318,7 +318,7 @@ var playMatchState =
 				if(bankruptImages.minigun.alive)
 					bankruptImages.minigun.kill();
 			}
-			if(currentMoney < shotgunTowerPrice)
+			if(currentMoney < price['shotgun'])
 			{
 				buttonGroup.getAt(5).kill(); // shotgun tower button
 				bankruptImages.shotgun.reset(870, 320);
@@ -329,7 +329,7 @@ var playMatchState =
 				if(bankruptImages.shotgun.alive)
 					bankruptImages.shotgun.kill();
 			}
-			if(currentMoney < gumTowerPrice)
+			if(currentMoney < price['gum'])
 			{
 				buttonGroup.getAt(6).kill(); // gum tower button
 				bankruptImages.gum.reset(870, 480);
@@ -340,7 +340,7 @@ var playMatchState =
 				if(bankruptImages.gum.alive)
 					bankruptImages.gum.kill();
 			}
-			if(currentMoney < bombTowerPrice)
+			if(currentMoney < price['bomb'])
 			{
 				buttonGroup.getAt(7).kill(); // bomb tower button
 				bankruptImages.bomb.reset(870, 640);

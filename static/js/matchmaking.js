@@ -15,6 +15,7 @@ matchmakingState =
 					-> player 1: Brandon
 					-> player 2: Boo Boo
 		*/
+        //matchNum++;
 		game.state.start('playMatch');
 	},
 
