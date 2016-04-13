@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="phaser.js"></script> <!-- includes phaser library -->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <!-- LOAD CSS and JS files -->
+        <!--<link rel="stylesheet" href="brandonCSS.css">-->
+        
+		<script src="js/boot.js"></script>
+		<script src="js/load.js"></script>
+		<script src="js/login.js"></script>
+        <script src="js/matchmaking.js"></script>
+		<script src="js/play.js"></script>
+        <script src="js/matchResults.js"></script>
+        <script src="js/endRound.js"></script>
+        <script src="js/endGame.js"></script>
+		<script src="js/game.js"></script>
+    </head>
+
+    <body>
+	<center>
+        <div id="IntenseDefense"></div>
+  
+        <div id = "footer">
+            <br>
+                <p id="base"></p>
+                <p id="demo"></p>
+                <p id="positions"></p>    
+                <p id="towers"></p>
+				
+            Time till game Starts: <div id="gameStartTimer">0:30</div>
+            Timer: <div id ="timer">5:00</div>
+			
+            <p id="role info">
+                <p id="attacker">
+                    <p id="attacker-name">Attacker</p>
+                    <div id="attacker-money">Money: $2000</div>
+                </p>
+                <br>
+            
+                <p id="defender">
+                    <p id="defender-name">Defender</p>
+                    <div id="defender-money">Money: $600</div>
+                    <div id="health">Health: 2000</div>
+                    <div id="Tower-Placement-Error"></div>
+                </p>
+            </p>
+                <!-- 
+                    - possibly the rectangle box with game information or place in a new div id
+                    - Place footer information here
+                -->
+        </div>
+<!--        
+        
+    </div>  
+        
+-->        
+	</center>
+    </body>
+</html>
