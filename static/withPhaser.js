@@ -58,17 +58,8 @@ var lane = 'center';
 // Defender's choice
 var gTowerType = ""; // flag && global variable for tower placement - g for global
 
-// zombie bankrupt images ******************* will change this to array
-var standardZombieBankrupt;
-var strongZombieBankrupt;
-var healingZombieBankrupt;
-var generationsZombieBankrupt;
-
-// Tower bankrupt images
-var minigunTowerBankrupt;
-var shotgunTowerBankrupt;
-var gumTowerBankrupt;
-var bombTowerBankrupt;
+// zombie/Tower bankrupt images
+var bankruptImages = {};
 
 /* Classes */
 // Player Class
@@ -509,25 +500,33 @@ function create() {
     
     // Zombie bankrupt images - 
         //I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
-    standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
-    standardZombieBankrupt.kill(); // temporarily kill the image
-    strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
-    strongZombieBankrupt.kill(); // temporarily kill the image
-    healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
-    healingZombieBankrupt.kill(); // temporarily kill the image
-    generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
-    generationsZombieBankrupt.kill(); // temporarily kill the image
-    
+    var standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
+		standardZombieBankrupt.kill(); // temporarily kill the image
+		bankruptImages['standard'] = standardZombieBankrupt;
+    var strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
+		strongZombieBankrupt.kill(); // temporarily kill the image
+		bankruptImages['strong'] = strongZombieBankrupt;
+	var healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
+		healingZombieBankrupt.kill(); // temporarily kill the image
+		bankruptImages['healing'] = healingZombieBankrupt;
+	var generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
+		generationsZombieBankrupt.kill(); // temporarily kill the image
+		bankruptImages['generations'] = generationsZombieBankrupt;
+	
     // Tower bankrupt images -
         ////I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
-    minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
-    minigunTowerBankrupt.kill();
-    shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
-    shotgunTowerBankrupt.kill();
-    gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
-    gumTowerBankrupt.kill();
-    bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
-    bombTowerBankrupt.kill();
+    var minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
+		minigunTowerBankrupt.kill();
+		bankruptImages['minigun'] = minigunTowerBankrupt;
+    var shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
+		shotgunTowerBankrupt.kill();
+		bankruptImages['shotgun'] = shotgunTowerBankrupt;
+    var gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
+		gumTowerBankrupt.kill();
+		bankruptImages['gum'] = gumTowerBankrupt;
+    var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
+		bombTowerBankrupt.kill();
+		bankruptImages['bomb'] = bombTowerBankrupt;
 
 	if(player.state == 'attacker'){
 		//zombie path button (the red arrow on top of map)
@@ -990,118 +989,114 @@ function update() {
     // check if the attacker has enough money for zombie buttons
     if(player.state == 'attacker')
     {
-        minigunTowerBankrupt.reset(870, 160);
-        shotgunTowerBankrupt.reset(870, 320);
-        gumTowerBankrupt.reset(870, 480);
-        bombTowerBankrupt.reset(870, 640);
+		bankruptImages['minigun'].reset(870,160);
+		bankruptImages['shotgun'].reset(870, 320);
+		bankruptImages['gum'].reset(870, 480);
+		bankruptImages['bomb'].reset(870,640);
         
         var currentMoney = player.money;
         // standard zombie button
         if(currentMoney < standardZombiePrice) // kill button and display greyed out button
         {
             buttonGroup.getAt(0).kill(); // standard zombie button
-            standardZombieBankrupt.reset(40, 160);
+			bankruptImages['standard'].reset(40,160);
         }
         else // kill the greyed out image and display the button again
         {
             buttonGroup.getAt(0).reset(40, 160);
-            if(standardZombieBankrupt.alive)
-                standardZombieBankrupt.kill();
+            if(bankruptImages['standard'].alive)
+                bankruptImages['standard'].kill();
         }
         // strong zombie button
         if(currentMoney < strongZombiePrice) // kill button and display greyed out button
         {
             buttonGroup.getAt(1).kill(); // strong zombie button
-            strongZombieBankrupt.reset(40, 320);
+			bankruptImages['strong'].reset(40,320);
         }
         else // kill the greyed out image and display the button again
         {
             buttonGroup.getAt(1).reset(40, 320);
-            if(strongZombieBankrupt.alive)
-                strongZombieBankrupt.kill();
+            if(bankruptImages['strong'].alive)
+                bankruptImages['strong'].kill();
         }
         // healing zombie button
         if(currentMoney < healingZombiePrice) // kill button and display greyed out button
         {
             buttonGroup.getAt(2).kill(); // healing zombie button
-            healingZombieBankrupt.reset(40, 480);
+			bankruptImages['healing']reset(40,480);
         }
         else // kill the greyed out image and display the button again
         {
             buttonGroup.getAt(2).reset(40, 480);
-            if(healingZombieBankrupt.alive)
-                healingZombieBankrupt.kill();
+            if(bankruptImages['healing'].alive)
+                bankruptImages['healing'].kill();
         }
         // generations zombie button
         if(currentMoney < generationsZombiePrice) // kill button and display greyed out button
         {
             buttonGroup.getAt(3).kill(); // generations zombie button
-            generationsZombieBankrupt.reset(40, 640);
+            bankruptImages['generations'].reset(40,640);
         }
         else // kill the greyed out image and display the button again
         {
             buttonGroup.getAt(3).reset(40, 640);
-            if(generationsZombieBankrupt.alive)
-                generationsZombieBankrupt.kill();
+            if(bankruptImages['generations'].alive)
+                bankruptImages['generations'].kill();
         }
     }
     
     // defender check if user has enough money for tower purchases if not display bankrupt image
-    
-    
-    
-    bombTowerBankrupt;
     if(player.state == 'defender')
     {
-        standardZombieBankrupt.reset(40, 160);
-        strongZombieBankrupt.reset(40, 320);
-        healingZombieBankrupt.reset(40, 480);
-        generationsZombieBankrupt.reset(40, 640);
+        bankruptImages['standard'].reset(40, 160);
+        bankruptImages['strong'].reset(40, 320);
+        bankruptImages['healing'].reset(40, 480);
+        bankruptImages['generations'].reset(40, 640);
         
         var currentMoney = player.money;
         if(currentMoney < minigunTowerPrice)
         {
             buttonGroup.getAt(4).kill(); // minigun tower button
-            minigunTowerBankrupt.reset(870, 160);
+            bankruptImages['minigun'].reset(870, 160);
         }
         else
         {
             buttonGroup.getAt(4).reset(870, 160);
-            if(minigunTowerBankrupt.alive)
-                minigunTowerBankrupt.kill();
+            if(bankruptImages['minigun'].alive)
+                bankruptImages['minigun'].kill();
         }
         if(currentMoney < shotgunTowerPrice)
         {
             buttonGroup.getAt(5).kill(); // shotgun tower button
-            shotgunTowerBankrupt.reset(870, 320);
+            bankruptImages['shotgun'].reset(870, 320);
         }
         else
         {
             buttonGroup.getAt(5).reset(870, 320);
-            if(shotgunTowerBankrupt.alive)
-                shotgunTowerBankrupt.kill();
+            if(bankruptImages['shotgun'].alive)
+                bankruptImages['shotgun'].kill();
         }
         if(currentMoney < gumTowerPrice)
         {
             buttonGroup.getAt(6).kill(); // gum tower button
-            gumTowerBankrupt.reset(870, 480);
+            bankruptImages['gum'].reset(870, 480);
         }
         else
         {
             buttonGroup.getAt(6).reset(870, 480);
-            if(gumTowerBankrupt.alive)
-                gumTowerBankrupt.kill();
+            if(bankruptImages['gum'].alive)
+                bankruptImages['gum'].kill();
         }
         if(currentMoney < bombTowerPrice)
         {
             buttonGroup.getAt(7).kill(); // bomb tower button
-            bombTowerBankrupt.reset(870, 640);
+            bankruptImages['bomb'].reset(870, 640);
         }
         else
         {
             buttonGroup.getAt(7).reset(870, 640);
-            if(bombTowerBankrupt.alive)
-                bombTowerBankrupt.kill();
+            if(bankruptImages['bomb'].alive)
+                bankruptImages['bomb'].kill();
         }
     }
     
