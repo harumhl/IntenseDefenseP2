@@ -84,7 +84,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11225', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11222', "echo-protocol");
 
     
   // Handle messages sent by the server.
