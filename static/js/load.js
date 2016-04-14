@@ -15,7 +15,7 @@ var loadState =
 		game.load.image('title','images/Title.png');
 		game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
 		game.load.image('base','images/base.png');
-		game.load.image('bottomUpgradeBox', 'images/bottomBoxnew.png')
+		game.load.image('bottomUpgradeBox', 'images/BottomInfoBox/bottomBoxnew.png')
 		
 		/* images for buttons */
 		//zombie path button
@@ -40,8 +40,6 @@ var loadState =
 		game.load.image('bombBankrupt', 'images/Towers/bombBankrupt.png');
 		
 		
-		
-		
 		/* images for the actual objects on the map */
 		//towers
 		game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
@@ -63,6 +61,11 @@ var loadState =
 		game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
 		
 		game.load.image('zombieSpawn', 'images/zombieSpawn.png');
+        
+        // Spritesheets for upgrading a zombie
+        game.load.spritesheet('upgradeLvl1', 'images/BottomInfoBox/upgradeLvl1.png', 90, 25);
+        game.load.spritesheet('upgradeLvl2', 'images/BottomInfoBox/upgradeLvl2.png');
+        game.load.spritesheet('upgradeLvl3', 'images/BottomInfoBox/upgradeLvl3.png');
 		
 	},
 	
@@ -84,7 +87,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11221', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11223', "echo-protocol");
 
     
   // Handle messages sent by the server.

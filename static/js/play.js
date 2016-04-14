@@ -22,7 +22,9 @@ var playMatchState =
 		//load images on the background
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
 		game.add.sprite(0,0,'title');
-		
+        //load images for bottom upgrade box
+        bottomUpgradeBox = game.add.sprite(144, 890, 'bottomUpgradeBox');
+        
 		map = game.add.sprite(144,129,'map');
 		map.animations.add('plainMap', [0], true);
 		map.animations.add('towerPlacement', [1], true);
@@ -42,7 +44,7 @@ var playMatchState =
 		var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 1, 2);
 		var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 1, 2);
 		var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 1, 2);
-
+        
 		/*Attaching buttons to the screen*/
 		buttonGroup = game.add.group();
 		//zombie buttons
@@ -99,9 +101,6 @@ var playMatchState =
 			var zombieSpawn = game.add.image(470, spawn_y, 'zombieSpawn');
 			zombieSpawn.scale.setTo(0.1); 
 		}
-		
-        //load images for bottom upgrade box
-        bottomUpgradeBox = game.add.sprite(144, 890, 'bottomUpgradeBox');
         
 		//  The tower bullet groups
 		towerBullets = game.add.group(); // TEMP

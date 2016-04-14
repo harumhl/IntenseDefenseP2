@@ -89,7 +89,8 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 var bankruptImages = {};
 
 var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
-
+var BottomInfoTower;
+var BottomInfoTowerText;
 
 
 
@@ -270,14 +271,15 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     
     this.image.inputEnabled = true;
-    this.image.events.onInputDown.add(function() {
-        
-        this.image = game.add.sprite(510, 920, type + 'Tower');
-        this.image.scale.setTo(0.5);
+    this.image.events.onInputUp.add(function() {
+        BottomInfoTowerText = game.add.text(570, 920, type + ' Tower', bottomBoxStyle);
+        BottomInfoTower = game.add.sprite(510, 920, type + 'Tower');
+        BottomInfoTower.scale.setTo(0.5);
         var fireRateText = game.add.text(570, 970, "Fire Rate: 1", bottomBoxStyle);
         var damageText = game.add.text(570, 1025, "Damage: 1", bottomBoxStyle);
+        var lvl1Upgrade = game.add.button(700, 970, 'upgradeLvl1', function() {upgradeTower();}, this, 0,1,2);
         console.log("towerClicked!!");
-
+        
     });
     
         // this is so the attacker will not see the tower placements 
@@ -287,6 +289,13 @@ Tower = function(type, x, y, spriteName, bullets) {
     
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
+
+game.input.onDown.add(resetBottomInfo, self);
+
+function resetBottomInfo(event){
+    bottomInfoTowerText.kill();
+    BottomInfoTower.kill(); 
+}
 
 Tower.prototype.attack = function(underAttack) {
     console.log("att");
