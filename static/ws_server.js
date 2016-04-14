@@ -14,7 +14,7 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
-server.listen(11222, function() {
+server.listen(11221, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port 11225');
 });
 

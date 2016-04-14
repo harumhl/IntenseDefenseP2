@@ -18,7 +18,7 @@ var playMatchState =
 	{
 		
 		console.log('STATE:Play');
-		
+        
 		//load images on the background
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
 		game.add.sprite(0,0,'title');
@@ -100,6 +100,9 @@ var playMatchState =
 			zombieSpawn.scale.setTo(0.1); 
 		}
 		
+        //load images for bottom upgrade box
+        bottomUpgradeBox = game.add.sprite(144, 890, 'bottomUpgradeBox');
+        
 		//  The tower bullet groups
 		towerBullets = game.add.group(); // TEMP
 		towerBullets.enableBody = true;
@@ -148,9 +151,7 @@ var playMatchState =
 		//tower price tags
 		var minigunTowerText = game.add.text(885, 240, "$100", style);
 		var shotgunTowerText = game.add.text(885, 400, "$200", style);
-		var gumTowerText = game.add.text(885, 560, "$300", style);
-		var bombTowerText = game.add.text(885, 720, "$400", style);
-		
+
 		if (player.state == 'attacker')
 			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 		

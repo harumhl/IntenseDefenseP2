@@ -16,7 +16,7 @@
 
 /*      Phaser canvas     */
 // 733 = map height, 129 = title height
-var game = new Phaser.Game(1000, 733+129, Phaser.AUTO, 'IntenseDefense'/*, { preload: preload, create: create, update: update }*/);
+var game = new Phaser.Game(1000, 1000+129, Phaser.AUTO, 'IntenseDefense'/*, { preload: preload, create: create, update: update }*/);
 
 
 /*     Game states     */
@@ -55,6 +55,7 @@ var shotgunTowerToBePlaced;
 var gumTowerToBePlaced;
 var bombTowerToBePlaced;
 
+var bottomUpgradeBox;
 
 //Prices for zombies/towers
 var price = {
@@ -87,6 +88,7 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 // zombie/Tower bankrupt images
 var bankruptImages = {};
 
+var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
 
 
 
@@ -267,13 +269,25 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     
-    // this is so the attacker will not see the tower placements 
+    this.image.inputEnabled = true;
+    this.image.events.onInputDown.add(function() {
+        
+        this.image = game.add.sprite(510, 920, type + 'Tower');
+        this.image.scale.setTo(0.5);
+        var fireRateText = game.add.text(570, 970, "Fire Rate: 1", bottomBoxStyle);
+        var damageText = game.add.text(570, 1025, "Damage: 1", bottomBoxStyle);
+        console.log("towerClicked!!");
+
+    });
+    
+        // this is so the attacker will not see the tower placements 
     if(player.state == 'attacker' && !startRound){
         this.image.sendToBack();
     }
     
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
+
 Tower.prototype.attack = function(underAttack) {
     console.log("att");
     if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {

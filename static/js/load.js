@@ -15,7 +15,7 @@ var loadState =
 		game.load.image('title','images/Title.png');
 		game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
 		game.load.image('base','images/base.png');
-		
+		game.load.image('bottomUpgradeBox', 'images/bottomBoxnew.png')
 		
 		/* images for buttons */
 		//zombie path button
@@ -84,7 +84,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11222', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11221', "echo-protocol");
 
     
   // Handle messages sent by the server.
