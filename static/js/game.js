@@ -273,14 +273,12 @@ Tower = function(type, x, y, spriteName, bullets) {
         this.level = 1;
 	}
     
-    var fr = this.fireRate;
     var lvl = this.level;
     var damg = this.damage;
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
-    console.log(fr);
     this.image.inputEnabled = true;
-    this.image.events.onInputUp.add(function() {AddInfo(type, lvl, fr, damg);});
+    this.image.events.onInputUp.add(function() {upgradeTower()}, this);});
     
         // this is so the attacker will not see the tower placements 
     if(player.state == 'attacker' && !startRound){
@@ -290,8 +288,11 @@ Tower = function(type, x, y, spriteName, bullets) {
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 
-function AddInfo(type, level, fireRate, damage, event){
-        if(towerClicked == true){
+function upgradeTower(event){
+    
+    
+    
+    /*if(towerClicked == true){
             
             towerClicked = false;
             ResetBottomBox();
@@ -304,7 +305,7 @@ function AddInfo(type, level, fireRate, damage, event){
         var towerUpgrade = game.add.button(700, 970, 'upgradeLvl1', function() {upgradeTower(fireRate);}, this, 0,1,2);
         var towerDamageUpgrade = game.add.button(700, 1025, 'upgradeLvl1', function() {upgradeDamageTower();}, this, 0,1,2);
         towerClicked = true;
-        console.log("towerClicked!!");
+        console.log("towerClicked!!");*/
 };
 
 function ResetBottomBox(){
