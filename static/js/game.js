@@ -65,7 +65,8 @@ var base;
 var baseHealthText;
 var baseHealthStyle = {font: "20px Arial", fill: "#ffffff", align: "left" };
 
-var bottomBoxStyle = {font: "15px Arial", fill: "#F5F5F5", align: "center"};
+var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
+var bottomBoxTowerNameStyle = {font: "30px Arial", fill: "#F5F5F5", align: "center"};
 var BottomInfoTower;
 var BottomInfoTowerText;
 var towerClicked = false;
@@ -294,32 +295,35 @@ var Tower = function(type, x, y, spriteName, bullets) {
 
 Tower.prototype.upgradeT = function(){
     
-     if(towerClicked == true){
+    if(towerClicked == true){
             
             towerClicked = false;
             ResetBottomBox();
-        }
-    BottomInfoTowerText = game.add.text(570, 920, this.type + ' Tower', bottomBoxStyle);
+    }
+    
+    if(this.type == 'minigun')     BottomInfoTowerText = game.add.text(610, 920, "Minigun Tower", bottomBoxTowerNameStyle);
+    else if(this.type == 'shotgun')         BottomInfoTowerText = game.add.text(610, 920,'Shotgun Tower', bottomBoxTowerNameStyle);
+    else if(this.type == 'gum')         BottomInfoTowerText = game.add.text(610, 920, 'Gum Tower', bottomBoxTowerNameStyle);
+    else  BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
+
     BottomInfoTower = game.add.sprite(510, 920, this.type + 'Tower');
     BottomInfoTower.scale.setTo(0.5);
-    fireRateText = game.add.text(570, 970, 'Fire Rate:' + this.fireRate, bottomBoxStyle);
-    damageText = game.add.text(570, 1025, 'Damage:' + this.damage, bottomBoxStyle);
-    var towerUpgrade = game.add.button(700, 970, 'upgradeLvl1', function() {this.upgradeFireRate();}, this, 0,1,2);
-    var towerDamageUpgrade = game.add.button(700, 1025, 'upgradeLvl1', function() {this.upgradeDamage();}, this, 0,1,2);
+    fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
+    damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+    var towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.upgradeFireRate();}, this, 0,1,2);
+    var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.upgradeDamage();}, this, 0,1,2);
     towerClicked = true;
 };
 
 
 Tower.prototype.upgradeFireRate = function(){
     this.fireRate += 1000;
-    fireRateText.kill();
-    fireRateText = game.add.text(570, 970, "Fire Rate:" + this.fireRate, bottomBoxStyle);
+    fireRateText.setText("Fire Rate:  " + this.fireRate);
 };
 
 Tower.prototype.upgradeDamage = function(){
     this.damage += 100;
-    damageText.kill();
-    damageText = game.add.text(570, 1025, "Damage:" + this.damage, bottomBoxStyle);
+    damageText.setText("Damage:   " + this.damage);
 };
 
 function ResetBottomBox(){
