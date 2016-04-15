@@ -55,7 +55,22 @@ var shotgunTowerToBePlaced;
 var gumTowerToBePlaced;
 var bombTowerToBePlaced;
 
+// variables for the info box below the map
 var bottomUpgradeBox;
+var baseHealthBar;
+var baseHealthUp = 0; // acts as counter so the image doen't flash too fast goes up to 3
+var baseHealthDown = 0;
+var base;
+// text for base health
+var baseHealthText;
+var baseHealthStyle = {font: "20px Arial", fill: "#ffffff", align: "left" };
+
+var bottomBoxStyle = {font: "15px Arial", fill: "#F5F5F5", align: "center"};
+var BottomInfoTower;
+var BottomInfoTowerText;
+var towerClicked = false;
+var fireRateText;
+var damageText;
 
 //Prices for zombies/towers
 var price = {
@@ -88,18 +103,9 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 // zombie/Tower bankrupt images
 var bankruptImages = {};
 
-var bottomBoxStyle = {font: "15px Arial", fill: "#F5F5F5", align: "center"};
-var BottomInfoTower;
-var BottomInfoTowerText;
-var towerClicked = false;
-var fireRateText;
-var damageText;
-
 
 /*       Classes         */
 
-
-/* Classes */
 // Player Class
 Player = function(username, state, money) {
     this.username = username;
@@ -278,7 +284,7 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     this.image.inputEnabled = true;
-    this.image.events.onInputUp.add(function() {upgradeTower()}, this);});
+    //this.image.events.onInputUp.add(function() {upgradeTower()}, this);});
     
         // this is so the attacker will not see the tower placements 
     if(player.state == 'attacker' && !startRound){

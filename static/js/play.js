@@ -101,6 +101,37 @@ var playMatchState =
 			var zombieSpawn = game.add.image(470, spawn_y, 'zombieSpawn');
 			zombieSpawn.scale.setTo(0.1); 
 		}
+        //load images for bottom upgrade box
+        bottomUpgradeBox = game.add.sprite(144, 890, 'bottomUpgradeBox');
+		baseHealthBar = game.add.sprite(150, 900, 'baseHealth');
+			baseHealthBar.animations.add('100 health', [0], true);
+			baseHealthBar.animations.add('90 health', [1], true);
+			baseHealthBar.animations.add('80 health', [2], true);
+			baseHealthBar.animations.add('70 health', [3], true);
+			baseHealthBar.animations.add('60 health', [4], true);
+			baseHealthBar.animations.add('50 health', [5], true);
+			baseHealthBar.animations.add('40 health', [6], true);
+			baseHealthBar.animations.add('30 health up', [7], true);
+			baseHealthBar.animations.add('30 health down', [8], true);
+			baseHealthBar.animations.add('20 health up', [9], true);
+			baseHealthBar.animations.add('20 health down', [10], true);
+			baseHealthBar.animations.add('10 health up', [11], true);
+			baseHealthBar.animations.add('10 health down', [12], true);
+			baseHealthBar.animations.add('0 health', [13], true);
+            baseHealthBar.animations.play('100 Health');
+		// text within the health bar to show the player the current base health
+		baseHealthText = game.add.text(153,937,"Health: 2000", baseHealthStyle);
+
+
+		//animations for the base (shows the base taking damage)
+		base = game.add.sprite(432,780,'base'); // 6 frames total 100%,80%,60%,40%,20%,0%
+			base.animations.add('100 health',[0],true);
+			base.animations.add('80 health',[1],true);
+			base.animations.add('60 health',[2],true);
+			base.animations.add('40 health',[3],true);
+			base.animations.add('20 health',[4],true);
+			base.animations.add('10 health',[5],true);
+			base.play('100 health');
         
 		//  The tower bullet groups
 		towerBullets = game.add.group(); // TEMP
@@ -182,11 +213,104 @@ var playMatchState =
 			gumTowerToBePlaced.kill();
 			bombTowerToBePlaced.kill();
 		}
+        
+        
 	},
 	
 	
 	update: function()
 	{
+       //check the base health and update the health text and health bar
+		baseHealthText.setText("Health: " + baseHealth);
+		//console.log("health: " + baseHealth);
+		console.log("/:" +baseHealth/2000);
+		if(baseHealth/ 2000 >= .92)
+		{
+			baseHealthBar.play('100 health');
+			//base.play('100 health');
+            //base.play('80 health');
+		}
+		else if(baseHealth / 2000 < .92 && baseHealth/ 2000 > .89 ) // display 90 health bar
+		{
+			baseHealthBar.play('90 health');
+		}
+		else if(baseHealth / 2000 < .82 && baseHealth/ 2000 > .79 ) // display 80 health bar
+		{
+			baseHealthBar.play('80 health');
+			//base.play('80 health');
+		}
+		else if(baseHealth / 2000 < .72 && baseHealth/ 2000 > .69 ) // display 70 health bar
+		{
+			baseHealthBar.play('70 health');
+		}
+		else if(baseHealth / 2000 < .62 && baseHealth/ 2000 > .59 ) // display 60 health bar
+		{
+			baseHealthBar.play('60 health');
+			//base.play('60 health');
+		}
+		else if(baseHealth / 2000 < .52 && baseHealth/ 2000 > .49 ) // display 50 health bar
+		{
+			baseHealthBar.play('50 health');
+		}
+		else if(baseHealth / 2000 < .42 && baseHealth/ 2000 > .39 ) // display 40 health bar
+		{
+			baseHealthBar.play('40 health');
+			//base.play('40 health');
+		}
+		else if(baseHealth / 2000 < .32 && baseHealth/ 2000 > .29 ) // display 30 health bar
+		{	
+			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+			{
+				baseHealthBar.play('30 health up');
+				++baseHealthUp;
+				if(baseHealthUp == 20) baseHealthDown = 20;
+			}
+			else
+			{
+				baseHealthBar.play('30 health down');
+				--baseHealthDown;
+				if(baseHealthDown == 0) baseHealthUp = 0;
+			}
+		}
+		else if(baseHealth / 2000 < .22 && baseHealth/ 2000 > .19 ) // display 20 health bar
+		{	
+			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+			{
+				baseHealthBar.play('20 health up');
+				//base.play('20 health');
+				++baseHealthUp;
+				if(baseHealthUp == 20) baseHealthDown = 20;
+			}
+			else
+			{
+				baseHealthBar.play('20 health down');
+				//base.play('20 health');
+				--baseHealthDown;
+				if(baseHealthDown == 0) baseHealthUp = 0;
+			}
+		}
+		else if(baseHealth / 2000 < .12 && baseHealth/ 2000 > .09 ) // display 10 health bar
+		{	
+			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+			{
+				baseHealthBar.play('10 health up');
+				//base.play('10 health');
+				++baseHealthUp;
+				if(baseHealthUp == 20) baseHealthDown = 20;
+			}
+			else
+			{
+				baseHealthBar.play('10 health down');
+				//base.play('10 health');
+				--baseHealthDown;
+				if(baseHealthDown == 0) baseHealthUp = 0;
+			}
+		}
+		else if (baseHealth <= 0)
+		{
+			baseHealthBar.play('0 health');
+		}
+        
 		// Allow tower image to follow the mouse cursor when a tower button is clicked
 		if (player.state == 'defender') {
 			if (gTowerType == 'minigun') {
