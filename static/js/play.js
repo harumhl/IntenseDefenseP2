@@ -628,6 +628,7 @@ function countdown(minutes) { // function for the timer for each round
         //counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
         //console.log(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
         //matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        // DEFENDER DOES NOT SEE THE 30 SECOND TIMER DONT KNOW WHY
         newTime = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds)
         //matchTimer.setText(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
         matchTimer.setText(newTime);
