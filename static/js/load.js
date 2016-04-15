@@ -14,7 +14,7 @@ var loadState =
 		
 		game.load.image('title','images/Title.png');
 		game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
-		game.load.image('base','images/base.png');
+		game.load.spritesheet('base','images/baseSpt.png',110,83);
 		game.load.image('bottomUpgradeBox', 'images/BottomInfoBox/bottomBoxnew.png')
 		
 		/* images for buttons */
