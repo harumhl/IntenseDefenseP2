@@ -88,10 +88,12 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 // zombie/Tower bankrupt images
 var bankruptImages = {};
 
-var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
+var bottomBoxStyle = {font: "15px Arial", fill: "#F5F5F5", align: "center"};
 var BottomInfoTower;
 var BottomInfoTowerText;
-
+var towerClicked = false;
+var fireRateText;
+var damageText;
 
 
 /*       Classes         */
@@ -248,39 +250,37 @@ Tower = function(type, x, y, spriteName, bullets) {
     this.game = game;
 	this.bullets = towerBullets;
     this.nextFire = 0;
-
+    
 	if(type == 'minigun'){
 		this.fireRate = 750;
 		this.damage = 30;
+        this.level = 1;
 	}
 	else if(type == 'shotgun'){
 		this.fireRate = 950;
 		this.damage = 80;
+        this.level = 1;
 	}
 	else if(type == 'gum')
 	{
 		this.fireRate = 1000;
 		this.damage = 0;
+        this.level = 1;
 	}
 	else { // bomb
 		this.fireRate = 3000;
 		this.damage = 150;
+        this.level = 1;
 	}
-
+    
+    var fr = this.fireRate;
+    var lvl = this.level;
+    var damg = this.damage;
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
-    
+    console.log(fr);
     this.image.inputEnabled = true;
-    this.image.events.onInputUp.add(function() {
-        BottomInfoTowerText = game.add.text(570, 920, type + ' Tower', bottomBoxStyle);
-        BottomInfoTower = game.add.sprite(510, 920, type + 'Tower');
-        BottomInfoTower.scale.setTo(0.5);
-        var fireRateText = game.add.text(570, 970, "Fire Rate: 1", bottomBoxStyle);
-        var damageText = game.add.text(570, 1025, "Damage: 1", bottomBoxStyle);
-        var lvl1Upgrade = game.add.button(700, 970, 'upgradeLvl1', function() {upgradeTower();}, this, 0,1,2);
-        console.log("towerClicked!!");
-        
-    });
+    this.image.events.onInputUp.add(function() {AddInfo(type, lvl, fr, damg);});
     
         // this is so the attacker will not see the tower placements 
     if(player.state == 'attacker' && !startRound){
@@ -290,11 +290,38 @@ Tower = function(type, x, y, spriteName, bullets) {
     game.physics.enable(this.image, Phaser.Physics.ARCADE);
 };
 
-game.input.onDown.add(resetBottomInfo, self);
+function AddInfo(type, level, fireRate, damage, event){
+        if(towerClicked == true){
+            
+            towerClicked = false;
+            ResetBottomBox();
+        }
+        BottomInfoTowerText = game.add.text(570, 920, type + ' Tower', bottomBoxStyle);
+        BottomInfoTower = game.add.sprite(510, 920, type + 'Tower');
+        BottomInfoTower.scale.setTo(0.5);
+        fireRateText = game.add.text(570, 970, 'Fire Rate:' + fireRate, bottomBoxStyle);
+        damageText = game.add.text(570, 1025, 'Damage:' + damage, bottomBoxStyle);
+        var towerUpgrade = game.add.button(700, 970, 'upgradeLvl1', function() {upgradeTower(fireRate);}, this, 0,1,2);
+        var towerDamageUpgrade = game.add.button(700, 1025, 'upgradeLvl1', function() {upgradeDamageTower();}, this, 0,1,2);
+        towerClicked = true;
+        console.log("towerClicked!!");
+};
 
-function resetBottomInfo(event){
-    bottomInfoTowerText.kill();
-    BottomInfoTower.kill(); 
+function ResetBottomBox(){
+    console.log("entered reset");
+    BottomInfoTowerText.kill();
+    BottomInfoTower.kill();
+    fireRateText.kill();
+    damageText.kill();
+};
+
+function upgradeTower(rate){
+    
+        //rate = rate + 1000;
+        //fireRateText.kill();
+        //console.log(rate);
+        //fireRateText = game.add.text(570, 970, "Fire Rate: 2", bottomBoxStyle);
+    
 }
 
 Tower.prototype.attack = function(underAttack) {
