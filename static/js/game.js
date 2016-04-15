@@ -400,9 +400,11 @@ function newRound() {
 
 
 
-/*
-function countdown(minutes) { // function for the timer for each round
 
+
+
+function countdown(minutes) { // function for the timer for each round
+    console.log("countdown");
 	// adjusted this function to allow a 30 second timer as well
     var seconds = 60;
     var mins = minutes;
@@ -411,11 +413,11 @@ function countdown(minutes) { // function for the timer for each round
     if(mins < 1){
         seconds = mins*100;
         mins = 0;
-        console.log(mins+":"+seconds);
-        counter = document.getElementById("gameStartTimer");
+        //console.log(mins+":"+seconds);
+       // counter = document.getElementById("gameStartTimer");
     }
     else{
-        counter = document.getElementById("timer");
+        //counter = document.getElementById("timer");
     }
     function tick() {
         
@@ -429,8 +431,13 @@ function countdown(minutes) { // function for the timer for each round
             current_minutes = mins-1
         }
         seconds--;
-        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
-        matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        //counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        //console.log(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        //matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        // DEFENDER DOES NOT SEE THE 30 SECOND TIMER DONT KNOW WHY
+        newTime = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds)
+        //matchTimer.setText(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        matchTimer.setText(newTime);
         if(mins<1){
            if(seconds == 0 && current_minutes == 0){
                 socket.send("startRound");
@@ -460,7 +467,7 @@ function countdown(minutes) { // function for the timer for each round
 }
 
 
-*/
+
 function changePath(){
     /*
         frame #     Zombie path
