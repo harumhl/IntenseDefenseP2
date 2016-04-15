@@ -132,6 +132,23 @@ var playMatchState =
 			base.animations.add('10 health',[5],true);
 			base.play('100 health');
         
+        matchTimerTitle =  game.add.text(153, 982, "Timer:", infoTitleStyle);
+        matchTimer =  game.add.text(230, 975, "0:00", infoTextStyle);
+        moneyTitle =  game.add.text(153, 1015, "Money:", infoTitleStyle);
+        if(player.state == 'attacker')
+        {
+            moneyText =  game.add.text(230, 1010, "$2000", moneyTextStyle);
+            playerText = game.add.text(153,1055,("Attacker: " + player.username),infoTitleStyle);
+        }
+        else
+        {
+            moneyText =  game.add.text(230, 1010, "$1000", moneyTextStyle);
+            playerText = game.add.text(153,1055,("Defender: " + player.username),infoTitleStyle);
+        }
+        
+        //playerText = game.add.text(153,1055,("Username: " + player.username),infoTitleStyle);
+        
+        
 		//  The tower bullet groups
 		towerBullets = game.add.group(); // TEMP
 		towerBullets.enableBody = true;
@@ -220,94 +237,115 @@ var playMatchState =
 	update: function()
 	{
        //check the base health and update the health text and health bar
-		baseHealthText.setText("Health: " + baseHealth);
-		//console.log("health: " + baseHealth);
-		console.log("/:" +baseHealth/2000);
-		if(baseHealth/ 2000 >= .92)
-		{
-			baseHealthBar.play('100 health');
-			base.play('100 health');
-		}
-		else if(baseHealth / 2000 < .92 && baseHealth/ 2000 > .89 ) // display 90 health bar
-		{
-			baseHealthBar.play('90 health');
-		}
-		else if(baseHealth / 2000 < .82 && baseHealth/ 2000 > .79 ) // display 80 health bar
-		{
-			baseHealthBar.play('80 health');
-			base.play('80 health');
-		}
-		else if(baseHealth / 2000 < .72 && baseHealth/ 2000 > .69 ) // display 70 health bar
-		{
-			baseHealthBar.play('70 health');
-		}
-		else if(baseHealth / 2000 < .62 && baseHealth/ 2000 > .59 ) // display 60 health bar
-		{
-			baseHealthBar.play('60 health');
-			base.play('60 health');
-		}
-		else if(baseHealth / 2000 < .52 && baseHealth/ 2000 > .49 ) // display 50 health bar
-		{
-			baseHealthBar.play('50 health');
-		}
-		else if(baseHealth / 2000 < .42 && baseHealth/ 2000 > .39 ) // display 40 health bar
-		{
-			baseHealthBar.play('40 health');
-			base.play('40 health');
-		}
-		else if(baseHealth / 2000 < .32 && baseHealth/ 2000 > .29 ) // display 30 health bar
-		{	
-			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+        if(startRound){
+            baseHealthText.setText("Health: " + baseHealth);
+            //console.log("health: " + baseHealth);
+            //console.log("/:" +baseHealth/2000);
+            if(baseHealth/ 2000 >= .92)
+            {
+                baseHealthBar.play('100 health');
+                base.play('100 health');
+            }
+            else if(baseHealth / 2000 < .92 && baseHealth/ 2000 > .89 ) // display 90 health bar
+            {
+                baseHealthBar.play('90 health');
+            }
+            else if(baseHealth / 2000 < .82 && baseHealth/ 2000 > .79 ) // display 80 health bar
+            {
+                baseHealthBar.play('80 health');
+                base.play('80 health');
+            }
+            else if(baseHealth / 2000 < .72 && baseHealth/ 2000 > .69 ) // display 70 health bar
+            {
+                baseHealthBar.play('70 health');
+            }
+            else if(baseHealth / 2000 < .62 && baseHealth/ 2000 > .59 ) // display 60 health bar
+            {
+                baseHealthBar.play('60 health');
+                base.play('60 health');
+            }
+            else if(baseHealth / 2000 < .52 && baseHealth/ 2000 > .49 ) // display 50 health bar
+            {
+                baseHealthBar.play('50 health');
+            }
+            else if(baseHealth / 2000 < .42 && baseHealth/ 2000 > .39 ) // display 40 health bar
+            {
+                baseHealthBar.play('40 health');
+                base.play('40 health');
+            }
+            else if(baseHealth / 2000 < .32 && baseHealth/ 2000 > .29 ) // display 30 health bar
+            {	
+                if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+                {
+                    baseHealthBar.play('30 health up');
+                    ++baseHealthUp;
+                    if(baseHealthUp == 20) baseHealthDown = 20;
+                }
+                else
+                {
+                    baseHealthBar.play('30 health down');
+                    --baseHealthDown;
+                    if(baseHealthDown == 0) baseHealthUp = 0;
+                }
+            }
+            else if(baseHealth / 2000 < .22 && baseHealth/ 2000 > .19 ) // display 20 health bar
+            {	
+                if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+                {
+                    baseHealthBar.play('20 health up');
+                    base.play('20 health');
+                    ++baseHealthUp;
+                    if(baseHealthUp == 20) baseHealthDown = 20;
+                }
+                else
+                {
+                    baseHealthBar.play('20 health down');
+                    base.play('20 health');
+                    --baseHealthDown;
+                    if(baseHealthDown == 0) baseHealthUp = 0;
+                }
+            }
+            else if(baseHealth / 2000 < .12 && baseHealth/ 2000 > .09 ) // display 10 health bar
+            {	
+                if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
+                {
+                    baseHealthBar.play('10 health up');
+                    base.play('10 health');
+                    ++baseHealthUp;
+                    if(baseHealthUp == 20) baseHealthDown = 20;
+                }
+                else
+                {
+                    baseHealthBar.play('10 health down');
+                    base.play('10 health');
+                    --baseHealthDown;
+                    if(baseHealthDown == 0) baseHealthUp = 0;
+                }
+            }
+            else if (baseHealth <= 0)
+            {
+                baseHealthBar.play('0 health');
+            }
+            
+            
+            
+            //gradually add money to both players
+            moneyTimer++;
+			//console.log(moneyTimer);
+			if(moneyTimer >= regenTime)
 			{
-				baseHealthBar.play('30 health up');
-				++baseHealthUp;
-				if(baseHealthUp == 20) baseHealthDown = 20;
+				if(player.state == 'attacker'){
+					player.money += 50;
+					//document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                    moneyText.setText( "$" + player.money);
+				}
+				else if(player.state == 'defender'){ // defender
+					//moneyText.setText( "$" + player.money);
+                   // document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+                }
+					moneyTimer = 0;
 			}
-			else
-			{
-				baseHealthBar.play('30 health down');
-				--baseHealthDown;
-				if(baseHealthDown == 0) baseHealthUp = 0;
-			}
-		}
-		else if(baseHealth / 2000 < .22 && baseHealth/ 2000 > .19 ) // display 20 health bar
-		{	
-			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
-			{
-				baseHealthBar.play('20 health up');
-				base.play('20 health');
-				++baseHealthUp;
-				if(baseHealthUp == 20) baseHealthDown = 20;
-			}
-			else
-			{
-				baseHealthBar.play('20 health down');
-				base.play('20 health');
-				--baseHealthDown;
-				if(baseHealthDown == 0) baseHealthUp = 0;
-			}
-		}
-		else if(baseHealth / 2000 < .12 && baseHealth/ 2000 > .09 ) // display 10 health bar
-		{	
-			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
-			{
-				baseHealthBar.play('10 health up');
-				base.play('10 health');
-				++baseHealthUp;
-				if(baseHealthUp == 20) baseHealthDown = 20;
-			}
-			else
-			{
-				baseHealthBar.play('10 health down');
-				base.play('10 health');
-				--baseHealthDown;
-				if(baseHealthDown == 0) baseHealthUp = 0;
-			}
-		}
-		else if (baseHealth <= 0)
-		{
-			baseHealthBar.play('0 health');
-		}
+        }
         
 		// Allow tower image to follow the mouse cursor when a tower button is clicked
 		if (player.state == 'defender') {
@@ -345,20 +383,9 @@ var playMatchState =
 			}
 		}
 		
-		//gradually add money to both players
+		
 		if(startRound){
-			moneyTimer++;
 			
-			if(moneyTimer >= regenTime)
-			{
-				if(player.state == 'attacker'){
-					player.money += 50;
-					document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-				}
-				else // defender
-					document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-					moneyTimer = 0;
-			}
 		}
 		
 		// check if the attacker has enough money for zombie buttons
@@ -566,3 +593,128 @@ var playMatchState =
 	}
 	
 };
+
+
+
+
+function countdown(minutes) { // function for the timer for each round
+    console.log("countdown");
+	// adjusted this function to allow a 30 second timer as well
+    var seconds = 60;
+    var mins = minutes;
+    var counter;
+	
+    if(mins < 1){
+        seconds = mins*100;
+        mins = 0;
+        //console.log(mins+":"+seconds);
+       // counter = document.getElementById("gameStartTimer");
+    }
+    else{
+        //counter = document.getElementById("timer");
+    }
+    function tick() {
+        
+        //var counter = document.getElementById("timer");
+        //counter = document.getElementById("gameStartTimer");
+        var current_minutes;
+        if(mins<1){
+            current_minutes = 0;
+        }
+        else{
+            current_minutes = mins-1
+        }
+        seconds--;
+        //counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        //console.log(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        //matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        newTime = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds)
+        //matchTimer.setText(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        matchTimer.setText(newTime);
+        if(mins<1){
+           if(seconds == 0 && current_minutes == 0){
+                socket.send("startRound");
+                console.log("start Round");
+                // tower placement done start game allow both players to start playing now
+           }   
+        }
+        else{
+            if(seconds == 0 && current_minutes == 0){
+                endRound('defender');         
+                //end of match: defender wins
+            }
+		}
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+ 
+            if(mins > 1){
+ 
+               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+               setTimeout(function () { countdown(mins - 1); }, 1000);
+ 
+            }
+        }
+    }
+    tick();
+}
+
+
+/*
+
+function preMatch(seconds) { // function for the timer for each round
+
+	// adjusted this function to allow a 30 second timer as well
+    var seconds;// = 60;
+    var mins;// = minutes;
+    var counter;
+	
+        seconds = seconds*100;
+        mins = 0;
+        console.log(mins+":"+seconds);
+        counter = document.getElementById("gameStartTimer");
+  
+    function tick() {
+        
+        //var counter = document.getElementById("timer");
+        //counter = document.getElementById("gameStartTimer");
+        var current_minutes;
+        if(mins<1){
+            current_minutes = 0;
+        }
+        else{
+            current_minutes = mins-1
+        }
+        seconds--;
+        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        console.log(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        //matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        //newTime = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if(mins<1){
+           if(seconds == 0 && current_minutes == 0){
+                socket.send("startRound");
+                console.log("start Round");
+                // tower placement done start game allow both players to start playing now
+           }   
+        }
+        else{
+            if(seconds == 0 && current_minutes == 0){
+                endRound('defender');         
+                //end of match: defender wins
+            }
+		}
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+ 
+            if(mins > 1){
+ 
+               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+               setTimeout(function () { countdown(mins - 1); }, 1000);
+ 
+            }
+        }
+    }
+    tick();
+}
+*/

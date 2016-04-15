@@ -89,7 +89,7 @@ window.onload = function() {
     var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11999', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11888', "echo-protocol");
 
     
   // Handle messages sent by the server.
@@ -195,7 +195,7 @@ window.onload = function() {
             
             socket.send(player.state + 'Name ' + player.username);
             console.log("Defender start placing towers!");
-            countdown(.31); // extra second for login time
+            countdown(.21); // extra second for login time
         }
 		else
 		{

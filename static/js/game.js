@@ -72,6 +72,17 @@ var towerClicked = false;
 var fireRateText;
 var damageText;
 
+var matchTimerTitle;
+var matchTimer; //the timer countdown i.e. "5:00" == 5 minutes
+var newTime; // variable used to overwrite the timer text
+var moneyTitle;
+var moneyText; // the actual amount of money the user has i.e. "$2000"
+var playerText; // display players name on the info box
+
+var infoTitleStyle = {font: "20px Arial", fill: "#000000", align: "left" };
+var infoTextStyle = {font: "30px Arial", fill: "#000000", align: "left" };
+var moneyTextStyle = {font: "30px Arial", fill: "#004d00", align: "left" };
+
 //Prices for zombies/towers
 var price = {
     standard:100,   strong:200,     healing:300,    generations:400,
@@ -386,6 +397,10 @@ function newRound() {
 		// restart timers
 	*/
 }
+
+
+
+/*
 function countdown(minutes) { // function for the timer for each round
 
 	// adjusted this function to allow a 30 second timer as well
@@ -415,10 +430,11 @@ function countdown(minutes) { // function for the timer for each round
         }
         seconds--;
         counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        matchTimer.setText = current_minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
         if(mins<1){
            if(seconds == 0 && current_minutes == 0){
                 socket.send("startRound");
-               console.log("start Round");
+                console.log("start Round");
                 // tower placement done start game allow both players to start playing now
            }   
         }
@@ -442,6 +458,9 @@ function countdown(minutes) { // function for the timer for each round
     }
     tick();
 }
+
+
+*/
 function changePath(){
     /*
         frame #     Zombie path
