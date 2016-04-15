@@ -31,7 +31,6 @@ var playMatchState =
 		map.play('plainMap');
 		map.inputEnabled = true;
 		map.events.onInputDown.add(mouseClick, this);
-		var base = game.add.sprite(432,780,'base');
 		
 		/*Creating each button*/
 		// Zombie Buttons
@@ -227,8 +226,7 @@ var playMatchState =
 		if(baseHealth/ 2000 >= .92)
 		{
 			baseHealthBar.play('100 health');
-			//base.play('100 health');
-            //base.play('80 health');
+			base.play('100 health');
 		}
 		else if(baseHealth / 2000 < .92 && baseHealth/ 2000 > .89 ) // display 90 health bar
 		{
@@ -237,7 +235,7 @@ var playMatchState =
 		else if(baseHealth / 2000 < .82 && baseHealth/ 2000 > .79 ) // display 80 health bar
 		{
 			baseHealthBar.play('80 health');
-			//base.play('80 health');
+			base.play('80 health');
 		}
 		else if(baseHealth / 2000 < .72 && baseHealth/ 2000 > .69 ) // display 70 health bar
 		{
@@ -246,7 +244,7 @@ var playMatchState =
 		else if(baseHealth / 2000 < .62 && baseHealth/ 2000 > .59 ) // display 60 health bar
 		{
 			baseHealthBar.play('60 health');
-			//base.play('60 health');
+			base.play('60 health');
 		}
 		else if(baseHealth / 2000 < .52 && baseHealth/ 2000 > .49 ) // display 50 health bar
 		{
@@ -255,7 +253,7 @@ var playMatchState =
 		else if(baseHealth / 2000 < .42 && baseHealth/ 2000 > .39 ) // display 40 health bar
 		{
 			baseHealthBar.play('40 health');
-			//base.play('40 health');
+			base.play('40 health');
 		}
 		else if(baseHealth / 2000 < .32 && baseHealth/ 2000 > .29 ) // display 30 health bar
 		{	
@@ -277,14 +275,14 @@ var playMatchState =
 			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
 			{
 				baseHealthBar.play('20 health up');
-				//base.play('20 health');
+				base.play('20 health');
 				++baseHealthUp;
 				if(baseHealthUp == 20) baseHealthDown = 20;
 			}
 			else
 			{
 				baseHealthBar.play('20 health down');
-				//base.play('20 health');
+				base.play('20 health');
 				--baseHealthDown;
 				if(baseHealthDown == 0) baseHealthUp = 0;
 			}
@@ -294,14 +292,14 @@ var playMatchState =
 			if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
 			{
 				baseHealthBar.play('10 health up');
-				//base.play('10 health');
+				base.play('10 health');
 				++baseHealthUp;
 				if(baseHealthUp == 20) baseHealthDown = 20;
 			}
 			else
 			{
 				baseHealthBar.play('10 health down');
-				//base.play('10 health');
+				base.play('10 health');
 				--baseHealthDown;
 				if(baseHealthDown == 0) baseHealthUp = 0;
 			}
