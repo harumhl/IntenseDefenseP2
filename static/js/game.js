@@ -328,7 +328,8 @@ Tower.prototype.upgradeT = function(){
 
 
 Tower.prototype.upgradeFireRate = function(){
-    this.fireRate += 1000;
+    // agustin this needs to be - not + becuase the lower the number the more it shoots, its weird but its backwards like that
+    this.fireRate -= 200;
     fireRateText.setText("Fire Rate:  " + this.fireRate);
 };
 
