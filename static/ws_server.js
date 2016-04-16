@@ -45,19 +45,19 @@ wsServer.on('request', function(request) {
     connections.push(connection);
 	if(attackerAvailable)
 	{
-		connection.sendUTF('Attacker');
+		connection.sendUTF('attacker');
 		attackerAvailable = false;
 		connection.role = 0;
 	}
 	else if(defenderAvailable)
 	{
-		connection.sendUTF('Defender');
+		connection.sendUTF('defender');
 		defenderAvailable = false;
 		connection.role = 1;
 	}
 	else
 	{
-		connection.sendUTF('Observer');
+		connection.sendUTF('observer');
 		connection.role = 2;
 	}
 	if(!attackerAvailable && !defenderAvailable)

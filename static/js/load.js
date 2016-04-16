@@ -86,7 +86,6 @@ var loadState =
 
 
 window.onload = function() {
-    var playerName = prompt("Please enter your username:", "username");
     
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11888', "echo-protocol");
@@ -96,23 +95,13 @@ window.onload = function() {
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-		if(message == 'Attacker'){
-			state = 'attacker';
+      console.log("M: "+message);
+      
+		if(message == 'attacker' || message == 'defender'){
+			state = message;
 			console.log(state);
-			//document.getElementById("state").innerHTML = "Attacker";
-            player = new Player(playerName, state, 2000);
-            console.log(player.username + ' ' + player.state);
-            document.getElementById("attacker-name").innerHTML = "Attacker: " + player.username;
 		}
-		else if(message == 'Defender'){
-			state = 'defender';
-			console.log(state);
-			//document.getElementById("state").innerHTML = "Defender";
-             player = new Player(playerName, state, 1000);
-            console.log(player.username + ' ' + player.state);
-            document.getElementById("defender-name").innerHTML = "Defender: " + player.username;
-		}
-		else if(message == 'Observer'){
+		else if(message == 'observer'){
 			state = 'observer';
 			console.log(state);
 			//document.getElementById("state").innerHTML = "Observer";
