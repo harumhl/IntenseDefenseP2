@@ -10,9 +10,9 @@ app.get('/', function(req, res) {
 });
 
 
-
-app.listen(13010, function(){
+var portNum = 13010;
+app.listen(portNum, function(){
 console.log(__dirname);
-console.log('Example app listening on port 13010');
+console.log('Example app listening on port '+portNum);
 
 });
