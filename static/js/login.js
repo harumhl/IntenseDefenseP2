@@ -8,6 +8,7 @@
 
 
 var enterHit;
+var backspaceHit;
 var loginState =
 {
 
@@ -54,7 +55,10 @@ var loginState =
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
         game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // ignores spacebar
         
-        game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function () {enterHit = true;;}, this);
+        // when user hits enter the enter the game
+        game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function () {enterHit = true;}, this);
+        // backspace delete characters
+        game.input.keyboard.addKey(Phaser.Keyboard.BACKSPACE).onDown.add(function () {backspaceHit = true;}, this);
         
         
         instructionButtonGroup = game.add.group();
@@ -93,6 +97,12 @@ var loginState =
             //usernameText.events.onInputDown.add(function(){usernameClicked = true;}, this);
             
             keyboardInput = false;
+        }
+        if (backspaceHit && username !="" && state != ''){
+            console.log("backspace: " + username.substring(0,username.length-1));
+            username = username.substring(0,username.length-1);
+            usernameText.setText("username: " + username);
+            backspaceHit = false;
         }
         if (enterHit && username != "" && state != '') {
             if(state == 'attacker')
