@@ -569,6 +569,7 @@ function sendAddZombie(zombieType){
             else{
                 canBuy = true;
                 player.money -= 100;
+                moneyText.setText( "$" + player.money);
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
@@ -579,6 +580,7 @@ function sendAddZombie(zombieType){
             else{
                 canBuy = true;
                 player.money -= 200;
+                moneyText.setText( "$" + player.money);
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
@@ -589,6 +591,7 @@ function sendAddZombie(zombieType){
             else{
                 canBuy = true;
                 player.money -= 300;
+                moneyText.setText( "$" + player.money);
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
@@ -599,6 +602,7 @@ function sendAddZombie(zombieType){
             else{
                 canBuy = true;
                 player.money -= 400;
+                moneyText.setText( "$" + player.money);
                 document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }

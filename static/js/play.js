@@ -197,7 +197,10 @@ var playMatchState =
 		//tower price tags
 		var minigunTowerText = game.add.text(885, 240, "$100", style);
 		var shotgunTowerText = game.add.text(885, 400, "$200", style);
-
+        var gumTowerText = game.add.text(885, 560, "$300",style);
+        var bombTowerText = game.add.text(885, 720, "$400",style);
+            
+            
 		if (player.state == 'attacker')
 			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 		
