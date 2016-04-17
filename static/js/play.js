@@ -203,12 +203,36 @@ var playMatchState =
 		var shotgunTowerText = game.add.text(885, 400, "$200", style);
         var gumTowerText = game.add.text(885, 560, "$300",style);
         var bombTowerText = game.add.text(885, 720, "$400",style);
-            
-            
-		if (player.state == 'attacker')
+        
+        if (player.state == 'attacker')
+        {
 			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
-		
-		if (player.state == 'defender') {
+
+            console.log("plz gray out");
+            buttonGroup.getAt(0).kill();
+            buttonGroup.getAt(1).kill();
+            buttonGroup.getAt(2).kill();
+            buttonGroup.getAt(3).kill();
+            
+            bankruptImages.standard.reset(40, 160);
+            bankruptImages.strong.reset(40, 320);
+            bankruptImages.healing.reset(40, 480);
+            bankruptImages.generations.reset(40, 640);
+            
+            bankruptImages.minigun.reset(870,160);
+            bankruptImages.shotgun.reset(870, 320);
+            bankruptImages.gum.reset(870, 480);
+            bankruptImages.bomb.reset(870,640);
+        }
+		if (player.state == 'defender') 
+        {
+            buttonGroup.getAt(4).kill();
+            buttonGroup.getAt(5).kill();
+            buttonGroup.getAt(6).kill();
+            buttonGroup.getAt(7).kill();                
+        }
+		if (player.state == 'defender')
+        {
 			minigunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'minigunTower');
 			shotgunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'shotgunTower');
 			gumTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'gumTower');
@@ -243,7 +267,7 @@ var playMatchState =
 	
 	update: function()
 	{
-       //check the base health and update the health text and health bar
+        //check the base health and update the health text and health bar
         if(startRound){
             baseHealthText.setText("Health: " + baseHealth);
             //console.log("health: " + baseHealth);
@@ -398,7 +422,7 @@ var playMatchState =
 		}
 		
 		// check if the attacker has enough money for zombie buttons
-		if(player.state == 'attacker')
+		if(player.state == 'attacker' && startRound)
 		{
 			bankruptImages.minigun.reset(870,160);
 			bankruptImages.shotgun.reset(870, 320);

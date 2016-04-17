@@ -56,7 +56,7 @@ var loadState =
 		game.load.image('bullet', 'images/bullet.png');
 		
 		//curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
+		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain2.png');
 		//curtain for both players, When first loggin in will be presented this image hiding the map 
 		game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
 		
@@ -180,7 +180,7 @@ window.onload = function() {
                 console.log("HERRRRRREEEEEEEEEEEEEEEEEEEEEEEEE");
                 if(player.state == 'attacker'){
                     matchmakingCurtain.destroy();
-                    attackerCurtain = game.add.sprite(0,129,'attckerCurtain');
+                    attackerCurtain = game.add.sprite(144,129,'attckerCurtain');
                 }
 
                 socket.send(player.state + 'Name ' + player.username);
