@@ -4,7 +4,7 @@ endRoundState =
 {
 	preload: function()
 	{
-
+        rescale();
 	},
 	create: function()
 	{
@@ -27,6 +27,6 @@ endRoundState =
 	},
 	update: function()
 	{
-
-	}
+        rescale();
+	}  
 };

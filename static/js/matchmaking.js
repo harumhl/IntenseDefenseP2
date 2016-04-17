@@ -4,7 +4,7 @@ matchmakingState =
 {
 	preload: function()
 	{
-
+        rescale();
 	},
 	create: function()
 	{
@@ -21,7 +21,7 @@ matchmakingState =
 
 	update: function()
 	{
-
+        rescale();
 	}
 	
 };

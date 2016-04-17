@@ -10,11 +10,11 @@
 var enterHit;
 var loginState =
 {
-	
-	create: function()
+    create: function()
 	{
 		console.log('STATE: login');
         enterHit = false;
+        rescale();
         
         game.add.sprite(0,0,'title');
 		game.stage.backgroundColor = "#000000"; // gray background color
@@ -41,6 +41,7 @@ var loginState =
 	},
     update: function()
     {
+        rescale();
         if (keyboardInput)
         {
             //usernameText.destroy();

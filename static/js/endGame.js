@@ -2,7 +2,7 @@ endGameState =
 {
 	preload: function()
 	{
-
+        rescale();
 	},
 	create: function()
 	{
@@ -10,6 +10,6 @@ endGameState =
 	},
 	update: function()
 	{
-
+        rescale();
 	}
 };

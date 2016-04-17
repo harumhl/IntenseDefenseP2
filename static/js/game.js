@@ -18,7 +18,6 @@
 // 733 = map height, 129 = title height
 var game = new Phaser.Game(1000, 1000+129, Phaser.AUTO, 'IntenseDefense'/*, { preload: preload, create: create, update: update }*/);
 
-
 /*     Game states     */
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
@@ -808,7 +807,14 @@ function hoverOverButton(type){
     //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
 
 }
-
+function rescale() {
+    // game auto-scale
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE; 
+    var scaleX = parent.innerWidth / this.game.width; 
+    var scaleY = parent.innerHeight / this.game.height; 
+    var scaleAxis = scaleX < scaleY ? scaleX : scaleY; 
+    game.scale.setUserScale(scaleAxis, scaleAxis, 0, 0); 
+}
 
 
 

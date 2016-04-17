@@ -18,6 +18,7 @@ var playMatchState =
 	{
 		
 		console.log('STATE:Play');
+        rescale();
         
 		//load images on the background
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
@@ -290,6 +291,8 @@ var playMatchState =
 	
 	update: function()
 	{
+        rescale();
+        
         if (startRound && onlyOnce == 0) 
             onlyOnce = 1;
         

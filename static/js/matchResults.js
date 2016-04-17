@@ -4,7 +4,7 @@ matchResultsState =
 {
 	preload: function()
 	{
-
+        rescale();
 	},
 	create: function()
 	{
@@ -32,6 +32,6 @@ matchResultsState =
 	},
 	update: function()
 	{
-
+        rescale();
 	}
 };
