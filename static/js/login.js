@@ -21,35 +21,13 @@ var loginState =
         
         game.add.sprite(0,0,'title');
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
-/*
-		var standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
-		var strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
-		var healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
-		var generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
-		var minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
-		var shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
-		var gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
-		var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');        
-*/      
+    
         var textStyle = {font: "65px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
         var greeting = game.add.text(90, 200, "Welcome to IntenseDefense!\nEnter your username\nand hit Enter to login", textStyle);
 
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
         instructionSheet.kill();
         
-        /*var instruction = game.add.text(800,1050, "Click for instruction\nof the game", {font: "30px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-        instruction.anchor.set(0.5);
-        instruction.inputEnabled = true;
-        instruction.input.enableDrag();
-        instruction.events.onInputDown.add(function(){
-            instructionSheet = game.add.sprite(0,0,'instructionSheet');
-            var closeInstruction = game.add.text(800,1050, "Close instruction sheet", {font: "30px Arial", fill: "#000000", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-            closeInstruction.anchor.set(0.5);
-            closeInstruction.inputEnabled = true;
-            closeInstruction.input.enableDrag();
-            closeInstruction.events.onInputDown.add(function(){instructionSheet.destroy(), closeInstruction.destroy();}, this);
-        }, this);
-        */
         usernameText = game.add.text(45, 600, "username: ", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
 
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
@@ -87,19 +65,14 @@ var loginState =
         rescale();
         if (keyboardInput)
         {
-            //usernameText.destroy();
-            //usernameText = game.add.text(10, game.world.centerY, "username: "+username, textStyle);
             usernameText.setText("username: " + username);
-
-            //console.log("username:_"+username+"_");
             
             usernameText.inputEnabled = true;
-            //usernameText.events.onInputDown.add(function(){usernameClicked = true;}, this);
             
             keyboardInput = false;
         }
         if (backspaceHit && username !="" && state != ''){
-            console.log("backspace: " + username.substring(0,username.length-1));
+            //console.log("backspace: " + username.substring(0,username.length-1));
             username = username.substring(0,username.length-1);
             usernameText.setText("username: " + username);
             backspaceHit = false;
