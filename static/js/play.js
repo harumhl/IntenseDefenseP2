@@ -44,6 +44,7 @@ var playMatchState =
 		var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 1, 2);
 		var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 1, 2);
         
+        // Display related information on the bottom box when a mouse cursor hovers over the buttons
         standardZombieButton.onInputOver.add(function(){
             console.log("hover over");
             

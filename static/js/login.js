@@ -7,7 +7,7 @@
 
 
 
-
+var enterHit;
 var loginState =
 {
 	
@@ -15,12 +15,17 @@ var loginState =
 	{
 		console.log('STATE: login');
         
-        var info = game.add.text(10, 200, "click your user name when done", textStyle);
+        enterHit = false;
+        
+        var info = game.add.text(10, 200, "hit 'enter' when done", textStyle);
 
         usernameText = game.add.text(10, game.world.centerY, "username: ", textStyle);
 
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
-        game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // consumes spacebar
+        game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // ignores spacebar
+        
+        game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function () {enterHit = true;;}, this);
+
 
 	},
     update: function()
@@ -34,11 +39,11 @@ var loginState =
             //console.log("username:_"+username+"_");
             
             usernameText.inputEnabled = true;
-            usernameText.events.onInputDown.add(function(){usernameClicked = true;}, this);
+            //usernameText.events.onInputDown.add(function(){usernameClicked = true;}, this);
             
             keyboardInput = false;
         }
-        if (usernameClicked && username != "" && state != '') {
+        if (enterHit && username != "" && state != '') {
             if(state == 'attacker')
                 player = new Player(username, state, 2000);
             if(state == 'defender')
@@ -52,7 +57,6 @@ var loginState =
 	
 	
 };
-
 
 function keyPressed(char) {
     //console.log("pressed:_"+char+"_");
