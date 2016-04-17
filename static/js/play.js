@@ -516,7 +516,7 @@ var playMatchState =
                 {
                     buttonGroup.getAt(3).reset(40, 640);
                     if(bankruptImages.generations.alive)
-                        bankruptImages.standard.kill();
+                        bankruptImages.generations.kill();
                 }
             }
 
