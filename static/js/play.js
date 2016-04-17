@@ -44,6 +44,43 @@ var playMatchState =
 		var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 1, 2);
 		var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 1, 2);
         
+        standardZombieButton.onInputOver.add(function(){
+            console.log("hover over");
+            
+            if (BottomInfoTowerText != undefined)
+                BottomInfoTowerText.kill();
+            if (BottomInfoTower != undefined)
+                BottomInfoTower.kill();
+            //fireRateText.kill();
+            //damageText.kill();
+            
+            BottomInfoTowerText = game.add.text(610, 920,'Standard Zombie', {font: "30px Arial", fill: "#F5F5F5", align: "center"});
+
+            BottomInfoTower = game.add.sprite(510, 920, 'standardZombie');
+            BottomInfoTower.scale.setTo(0.5);
+            //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
+            //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+
+        }, this);
+        minigunTowerButton.onInputOver.add(function(){
+            console.log("hover over");
+            
+            if (BottomInfoTowerText != undefined)
+                BottomInfoTowerText.kill();
+            if (BottomInfoTower != undefined)
+                BottomInfoTower.kill();
+            //fireRateText.kill();
+            //damageText.kill();
+            
+            BottomInfoTowerText = game.add.text(610, 920,'Minigun Tower', {font: "30px Arial", fill: "#F5F5F5", align: "center"});
+
+            BottomInfoTower = game.add.sprite(510, 920, 'minigunTower');
+            BottomInfoTower.scale.setTo(0.5);
+            //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
+            //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+
+        }, this);
+        
 		/*Attaching buttons to the screen*/
 		buttonGroup = game.add.group();
 		//zombie buttons
