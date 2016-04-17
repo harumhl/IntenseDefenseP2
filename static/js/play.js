@@ -104,12 +104,22 @@ var playMatchState =
 		var gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
 			gumTowerBankrupt.kill();
 			bankruptImages['gum'] = gumTowerBankrupt;
-		var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
+		//var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
+        var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
 			bombTowerBankrupt.kill();
 			bankruptImages['bomb'] = bombTowerBankrupt;
 
         // Display related information on the bottom box when a mouse cursor hovers over the buttons
         // The hoverOverButton is defined in game.js on the bottom
+        standardZombieBankrupt.inputEnabled = true;
+        strongZombieBankrupt.inputEnabled = true;
+        healingZombieBankrupt.inputEnabled = true;
+        generationsZombieBankrupt.inputEnabled = true;
+        minigunTowerBankrupt.inputEnabled = true;
+        shotgunTowerBankrupt.inputEnabled = true;
+        gumTowerBankrupt.inputEnabled = true;
+        bombTowerBankrupt.inputEnabled = true;
+
         standardZombieBankrupt.events.onInputOver.add(function(){console.log("bankrupt hover over"); hoverOverButton('standardZombie')}, this);
         strongZombieBankrupt.events.onInputOver.add(function(){hoverOverButton('strongZombie')}, this);
         healingZombieBankrupt.events.onInputOver.add(function(){hoverOverButton('healingZombie')}, this);
@@ -118,6 +128,15 @@ var playMatchState =
         shotgunTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('shotgunTower')}, this);
         gumTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('gumTower')}, this);
         bombTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('bombTower')}, this);
+        
+        standardZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
+        strongZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
+        healingZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
+        generationsZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
+        minigunTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
+        shotgunTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
+        gumTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
+        bombTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
         
         
 		if(player.state == 'attacker'){
