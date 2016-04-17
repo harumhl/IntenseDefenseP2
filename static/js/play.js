@@ -335,12 +335,14 @@ var playMatchState =
 			if(moneyTimer >= regenTime)
 			{
 				if(player.state == 'attacker'){
-					player.money += 50;
-					//document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-                    moneyText.setText( "$" + player.money);
+					if(player.money < 2000){
+                        player.money += 50;
+                        //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                        moneyText.setText( "$" + player.money);
+                    }
 				}
 				else if(player.state == 'defender'){ // defender
-					//moneyText.setText( "$" + player.money);
+					moneyText.setText( "$" + player.money);
                    // document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
                 }
 					moneyTimer = 0;

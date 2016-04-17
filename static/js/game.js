@@ -252,14 +252,34 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 		}
 				
 		// Generate more money for defender
-		if(zombieArray[index].type == 'generations')
-			socket.send('defenderMoney 60');
-		else if(zombieArray[index].type == 'standard')
-			socket.send('defenderMoney 20');
-		else if(zombieArray[index].type == 'strong')
-			socket.send('defenderMoney 40');
-		else // healer zombie
-			socket.send('defenderMoney 40');
+		if(zombieArray[index].type == 'generations'){
+            if(player.state == 'defender'){
+                if(player.money < 2000)
+                    player.money += 60;
+            }
+			//socket.send('defenderMoney 60');
+        }
+		else if(zombieArray[index].type == 'standard'){
+			if(player.state == 'defender'){
+                if(player.money < 2000)
+                    player.money += 20;
+            }
+            //socket.send('defenderMoney 20');
+        }
+		else if(zombieArray[index].type == 'strong'){
+			if(player.state == 'defender'){
+                if(player.money < 2000)
+                    player.money += 40;
+            }
+            //socket.send('defenderMoney 40');
+        }
+		else{ // healer zombie
+            if(player.state == 'defender'){
+                if(player.money < 2000)
+                    player.money += 40;
+            }
+			//socket.send('defenderMoney 40');
+        }
 		
 		// deleting the zombie object from the arrays
 		zombieArray.splice(index, 1);
@@ -672,6 +692,9 @@ function mouseClick(item) {
 			else{
 				canBuy = true;
 				player.money -= price['minigun'];
+                
+                
+                moneyText.setText( "$" + player.money);
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
@@ -682,6 +705,8 @@ function mouseClick(item) {
 			else{
 				canBuy = true;
 				player.money -= price['shotgun'];
+                
+                moneyText.setText( "$" + player.money);
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
@@ -692,6 +717,8 @@ function mouseClick(item) {
 			else{
 				canBuy = true;
 				player.money -= price['gum'];
+                
+                moneyText.setText( "$" + player.money);
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
@@ -702,6 +729,8 @@ function mouseClick(item) {
 			else{
 				canBuy = true;
 				player.money -= price['bomb'];
+                
+                moneyText.setText( "$" + player.money);
 				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
