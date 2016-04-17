@@ -17,9 +17,9 @@ var loginState =
         
         enterHit = false;
         
-        var info = game.add.text(10, 200, "hit 'enter' when done", textStyle);
+        var info = game.add.text(30, 200, "hit 'enter' when done", textStyle);
 
-        usernameText = game.add.text(10, game.world.centerY, "username: ", textStyle);
+        usernameText = game.add.text(30, game.world.centerY, "username: ", textStyle);
 
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
         game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // ignores spacebar

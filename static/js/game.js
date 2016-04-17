@@ -780,7 +780,34 @@ function mouseClick(item) {
 		}
 	}
 }
+function hoverOverButton(type){
+    console.log("hover over");
 
+    if (BottomInfoTowerText != undefined)
+        BottomInfoTowerText.kill();
+    if (BottomInfoTower != undefined)
+        BottomInfoTower.kill();
+    //fireRateText.kill();
+    //damageText.kill();
+
+    var typeFullName = "";
+    if      (type == 'standardZombie')  typeFullName = 'Standard Zombie';
+    else if (type == 'strongZombie')    typeFullName = 'Strong Zombie';
+    else if (type == 'healingZombie')   typeFullName = 'Healing Zombie';
+    else if (type == 'generationsZombie') typeFullName = 'Generations Zombie';
+    else if (type == 'minigunTower')    typeFullName = 'Minigun Tower';
+    else if (type == 'shotgunTower')    typeFullName = 'Shotgun Tower';
+    else if (type == 'gumTower')        typeFullName = 'Gum Tower';
+    else if (type == 'bombTower')       typeFullName = 'Bomb Tower';
+
+    BottomInfoTowerText = game.add.text(610, 920, typeFullName, {font: "30px Arial", fill: "#F5F5F5", align: "center"});
+
+    BottomInfoTower = game.add.sprite(510, 920, type);
+    BottomInfoTower.scale.setTo(0.5);
+    //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
+    //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+
+}
 
 
 
