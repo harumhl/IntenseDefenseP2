@@ -55,6 +55,10 @@ var shotgunTowerToBePlaced;
 var gumTowerToBePlaced;
 var bombTowerToBePlaced;
 
+// controls bug when user is placing tower, this will not allow the user to also click
+// on a placed tower to pull up the upgrade options
+var placingTower = false;
+
 // variables for the info box below the map
 var bottomUpgradeBox;
 var baseHealthBar;
@@ -336,9 +340,8 @@ var Tower = function(type, x, y, spriteName, bullets) {
 };
 
 Tower.prototype.upgradeT = function(){
-    
+    if(placingTower) break;
     if(towerClicked == true){
-            
             towerClicked = false;
             ResetBottomBox();
     }
@@ -651,6 +654,8 @@ function buyTower(type) {
     else if (gTowerType == 'gum')       gumTowerToBePlaced.reset(870,480);
     else if (gTowerType == 'bomb')      bombTowerToBePlaced.reset(870,640);
     
+    placingTower = true;
+    
 }
 function mouseClick(item) {
 	var notOnLane = false;
@@ -750,6 +755,7 @@ function mouseClick(item) {
             else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
             
 			gTowerType = "";
+            placingTower = false;
 		}
 	}
 }

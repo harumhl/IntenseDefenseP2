@@ -177,6 +177,10 @@ var playMatchState =
 		shotgunBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
 		shotgunBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
 
+
+            gum bullets
+
+
 		bombBullets    = game.add.group();
 		bombBullets.enableBody = true;
 		bombBullets.physicsBodyType = Phaser.Physics.ARCADE;
