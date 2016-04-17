@@ -329,7 +329,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     this.image.inputEnabled = true;
     
-    // this is so the attacker will not see the tower placements 
+    // this is so the attacker will not see the tower placements in pre-mastch
     if(player.state == 'attacker' && !startRound){
         this.image.sendToBack();
     }
@@ -340,37 +340,54 @@ var Tower = function(type, x, y, spriteName, bullets) {
 };
 
 Tower.prototype.upgradeT = function(){
-    if(placingTower) break;
-    if(towerClicked == true){
-            towerClicked = false;
-            ResetBottomBox();
+    if(placingTower == true) {
+        console.log("placingTower: " + placingTower.toString());
+        return; // if player is currently trying to place a tower dont give them the option to try to upgrade
     }
-    
-    if(this.type == 'minigun')     BottomInfoTowerText = game.add.text(610, 920, "Minigun Tower", bottomBoxTowerNameStyle);
-    else if(this.type == 'shotgun')         BottomInfoTowerText = game.add.text(610, 920,'Shotgun Tower', bottomBoxTowerNameStyle);
-    else if(this.type == 'gum')         BottomInfoTowerText = game.add.text(610, 920, 'Gum Tower', bottomBoxTowerNameStyle);
-    else  BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
+    if(player.state == 'defender'){
+        if(towerClicked == true){
+                towerClicked = false;
+                ResetBottomBox();
+        }
 
-    BottomInfoTower = game.add.sprite(510, 920, this.type + 'Tower');
-    BottomInfoTower.scale.setTo(0.5);
-    fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
-    damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
-    var towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.upgradeFireRate();}, this, 0,1,2);
-    var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.upgradeDamage();}, this, 0,1,2);
-    towerClicked = true;
+        if(this.type == 'minigun')     BottomInfoTowerText = game.add.text(610, 920, "Minigun Tower", bottomBoxTowerNameStyle);
+        else if(this.type == 'shotgun')         BottomInfoTowerText = game.add.text(610, 920,'Shotgun Tower', bottomBoxTowerNameStyle);
+        else if(this.type == 'gum')         BottomInfoTowerText = game.add.text(610, 920, 'Gum Tower', bottomBoxTowerNameStyle);
+        else  BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
+
+        BottomInfoTower = game.add.sprite(510, 920, this.type + 'Tower');
+        BottomInfoTower.scale.setTo(0.5);
+        fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
+        damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+        var towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fireRate"); }, this, 0,1,2);
+        var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.upgradeDamage();}, this, 0,1,2);
+        towerClicked = true;
+    }
 };
 
 
 Tower.prototype.upgradeFireRate = function(){
     // agustin this needs to be - not + becuase the lower the number the more it shoots, its weird but its backwards like that
-    this.fireRate -= 200;
-    fireRateText.setText("Fire Rate:  " + this.fireRate);
+    this.fireRate -= 100;
+    if(player.state == 'defender')
+        fireRateText.setText("Fire Rate:  " + this.fireRate);
 };
 
 Tower.prototype.upgradeDamage = function(){
-    this.damage += 100;
-    damageText.setText("Damage:   " + this.damage);
+    this.damage += 25;
+    if(player.state == 'defender')
+        damageText.setText("Damage:   " + this.damage);
 };
+
+Tower.prototype.sendUpgrade = function(upgradeType){
+    //console.log("upgradeType: " + upgradeType);
+    var posX = this.pos_x;
+    var posY = this.pos_y;
+    var type = this.type;
+    console.log("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type+":");
+    socket.send("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type);
+
+}
 
 function ResetBottomBox(){
     BottomInfoTowerText.kill();
@@ -378,6 +395,10 @@ function ResetBottomBox(){
     fireRateText.kill();
     damageText.kill();
 };
+
+function sendUpgrade(upgradeType){
+ //this.upgradeFireRate();  
+}
 
 
 Tower.prototype.attack = function(underAttack) {

@@ -63,16 +63,6 @@ wsServer.on('request', function(request) {
 		connection.sendUTF('observer');
 		connection.role = 2;
 	}
-	if(!attackerAvailable && !defenderAvailable)
-	{
-        console.log("connected");
-            //for(var i = 0; i<connections.length; i++){
-                        //connections[i].sendUTF('startRound');
-            //            connections[i].sendUTF('defenderPlaceTowers');
-            //}
-
-	}
-   
     
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
