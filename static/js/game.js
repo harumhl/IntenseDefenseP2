@@ -124,7 +124,7 @@ var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234
 var username = "";
 var keyboardInput = false;
 var usernameText;
-var textStyle = {font: "65px Arial", fill: "#ff0044", align: "left", boundsAlignH: "left", boundsAlignV: "middle"};
+var textStyle = {font: "65px Arial", fill: "#FFFFFF", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
 var usernameClicked = false;
 
 

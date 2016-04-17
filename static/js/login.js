@@ -14,12 +14,23 @@ var loginState =
 	create: function()
 	{
 		console.log('STATE: login');
-        
         enterHit = false;
         
-        var info = game.add.text(30, 200, "hit 'enter' when done", textStyle);
+        game.add.sprite(0,0,'title');
+		game.stage.backgroundColor = "#000000"; // gray background color
 
-        usernameText = game.add.text(30, game.world.centerY, "username: ", textStyle);
+		var standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
+		var strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
+		var healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
+		var generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
+		var minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
+		var shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
+		var gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
+		var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');        
+        
+        var greeting = game.add.text(200, 200, "Welcome to\nIntense Defense\ngame\n\nEnter your username", textStyle);
+
+        usernameText = game.add.text(45, 730, "username: ", textStyle);
 
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
         game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // ignores spacebar
