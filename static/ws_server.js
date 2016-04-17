@@ -8,6 +8,9 @@ var binaryModifier = 0;
 var zombieGroup;
 var attackerAvailable = true;
 var defenderAvailable = true;
+var attackerLoggedIn = false; // these variables control when the timer for placing initial towers start
+var defenderLoggedIn = false;
+
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
@@ -62,15 +65,45 @@ wsServer.on('request', function(request) {
 	}
 	if(!attackerAvailable && !defenderAvailable)
 	{
-		for(var i = 0; i<connections.length; i++){
-					//connections[i].sendUTF('startRound');
-					connections[i].sendUTF('defenderPlaceTowers');
-				}
+        console.log("connected");
+            //for(var i = 0; i<connections.length; i++){
+                        //connections[i].sendUTF('startRound');
+            //            connections[i].sendUTF('defenderPlaceTowers');
+            //}
+
 	}
+   
+    
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-			if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
+               
+            if(message.utf8Data.substring(0,10) == 'logged in ')
+            {
+                //console.log("HERE::"+message.utf8Data.substring(10,18) + "::");
+                if(message.utf8Data.substring(10,18) == 'attacker')
+                {
+                    //console.log("attacker HERE");
+                    attackerLoggedIn = true;
+                    //console.log("-----> attacker loggin in");
+                }
+                else if(message.utf8Data.substring(10,18) == 'defender')
+                {
+                    //console.log("defender HERE");
+                    defenderLoggedIn = true;
+                    //console.log("-----> defender loggin in");
+                }
+                
+                // if both players are logged in then start the pre-match timer
+                if(attackerLoggedIn && defenderLoggedIn)
+                {
+                     for(var i = 0; i<connections.length; i++){
+                                    //connections[i].sendUTF('startRound');
+                                    connections[i].sendUTF('defenderPlaceTowers');
+                     }
+                }
+            }
+			else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
 				//console.log('Received Message: ' + message.utf8Data);
 				for(var i = 0; i<connections.length; i++){
@@ -164,9 +197,15 @@ wsServer.on('request', function(request) {
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 		if(connection.role == 0)
+        {
 			attackerAvailable = true;
+            attackerLoggedIn = false;
+        }
 		else if(connection.role == 1)
+        {
 			defenderAvailable = true;
+            defenderLoggedIn = false;
+        }
     });
 });
 

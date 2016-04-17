@@ -177,14 +177,15 @@ window.onload = function() {
         {
             console.log("defenderplacetowers");
  
-            if(player.state == 'attacker'){
-                matchmakingCurtain.destroy();
-                attackerCurtain = game.add.sprite(0,129,'attckerCurtain');
-            }
-            
-            socket.send(player.state + 'Name ' + player.username);
-            console.log("Defender start placing towers!");
-            countdown(.21); // extra second for login time
+                console.log("HERRRRRREEEEEEEEEEEEEEEEEEEEEEEEE");
+                if(player.state == 'attacker'){
+                    matchmakingCurtain.destroy();
+                    attackerCurtain = game.add.sprite(0,129,'attckerCurtain');
+                }
+
+                socket.send(player.state + 'Name ' + player.username);
+                console.log("Defender start placing towers!");
+                countdown(.21); // extra second for login time
         }
 		else
 		{

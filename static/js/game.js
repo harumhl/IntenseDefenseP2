@@ -115,6 +115,17 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 // zombie/Tower bankrupt images
 var bankruptImages = {};
 
+// variables used for the login game state
+var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890._"; // possible values for username
+var username = "";
+var keyboardInput = false;
+var usernameText;
+var textStyle = {font: "65px Arial", fill: "#ff0044", align: "left", boundsAlignH: "left", boundsAlignV: "middle"};
+var usernameClicked = false;
+
+
+
+
 
 /*       Classes         */
 
@@ -442,6 +453,8 @@ function countdown(minutes) { // function for the timer for each round
         // DEFENDER DOES NOT SEE THE 30 SECOND TIMER DONT KNOW WHY
         newTime = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds)
         //matchTimer.setText(current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds));
+        if(typeof matchTimer == "undefined")
+            matchTimer =  game.add.text(230, 975, "0:00", infoTextStyle);
         matchTimer.setText(newTime);
         if(mins<1){
            if(seconds == 0 && current_minutes == 0){
