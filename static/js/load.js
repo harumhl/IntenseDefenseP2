@@ -184,7 +184,6 @@ window.onload = function() {
         {
             console.log("defenderplacetowers");
  
-                console.log("HERRRRRREEEEEEEEEEEEEEEEEEEEEEEEE");
                 if(player.state == 'attacker'){
                     matchmakingCurtain.destroy();
                     attackerCurtain = game.add.sprite(144,129,'attckerCurtain');
@@ -193,6 +192,10 @@ window.onload = function() {
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
                 countdown(.21); // extra second for login time
+            
+            
+            
+            if(buttonGroup.getAt(0).exists)console.log("button exists!@!!!!!!!!!!!!!!");
         }
         else if(message.substring(0,7) == "upgrade")
         {

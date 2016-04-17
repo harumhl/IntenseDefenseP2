@@ -56,6 +56,15 @@ var playMatchState =
         gumTowerButton.onInputOver.add(function(){hoverOverButton('gumTower')}, this);
         bombTowerButton.onInputOver.add(function(){hoverOverButton('bombTower')}, this);
         
+        standardZombieButton.onInputOut.add(hoverOutButton, this);
+        strongZombieButton.onInputOut.add(hoverOutButton, this);
+        healingZombieButton.onInputOut.add(hoverOutButton, this);
+        generationsZombieButton.onInputOut.add(hoverOutButton, this);
+        minigunTowerButton.onInputOut.add(hoverOutButton, this);
+        shotgunTowerButton.onInputOut.add(hoverOutButton, this);
+        gumTowerButton.onInputOut.add(hoverOutButton, this);
+        bombTowerButton.onInputOut.add(hoverOutButton, this);
+        
 		/*Attaching buttons to the screen*/
 		buttonGroup = game.add.group();
 		//zombie buttons

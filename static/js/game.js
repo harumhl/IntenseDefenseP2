@@ -810,6 +810,14 @@ function hoverOverButton(type){
     //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
 
 }
+function hoverOutButton(){
+
+    if (BottomInfoTowerText != undefined)
+        BottomInfoTowerText.kill();
+    if (BottomInfoTower != undefined)
+        BottomInfoTower.kill();
+}
+
 function rescale() {
     // game auto-scale
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE; 
