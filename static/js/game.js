@@ -39,6 +39,7 @@ var map;
 var player;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
+var instructionButtonGroup;
 var zombieStatArray = []; // array of zombies (for server side)
 var zombieArray = [];     // array of zombies (for client side)
 var towerArray = [];      // array of towers
@@ -123,8 +124,10 @@ var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234
 var username = "";
 var keyboardInput = false;
 var usernameText;
-var textStyle = {font: "65px Arial", fill: "#FFFFFF", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
+var textStyle = {font: "65px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
 var usernameClicked = false;
+
+var instructionSheet;
 
 
 
