@@ -30,6 +30,20 @@ var loginState =
         
         var greeting = game.add.text(200, 200, "Welcome to\nIntense Defense\ngame\n\nEnter your username", textStyle);
 
+        var instruction = game.add.text(800,930, "Click for instruction\nof the game", {font: "30px Arial", fill: "#FFFFFF", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
+        var instructionSheet;
+        instruction.anchor.set(0.5);
+        instruction.inputEnabled = true;
+        instruction.input.enableDrag();
+        instruction.events.onInputDown.add(function(){
+            instructionSheet = game.add.sprite(0,0,'instructionSheet');
+            var closeInstruction = game.add.text(800,930, "Close instruction sheet", {font: "30px Arial", fill: "#000000", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
+            closeInstruction.anchor.set(0.5);
+            closeInstruction.inputEnabled = true;
+            closeInstruction.input.enableDrag();
+            closeInstruction.events.onInputDown.add(function(){instructionSheet.kill()}, this);
+        }, this);
+        
         usernameText = game.add.text(45, 730, "username: ", textStyle);
 
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);

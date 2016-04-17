@@ -16,7 +16,7 @@ var loadState =
 		game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
 		game.load.spritesheet('base','images/BottomInfoBox/baseSpt.png',110,83);
 		game.load.image('bottomUpgradeBox', 'images/BottomInfoBox/bottomBoxnew.png')
-		
+		game.load.image('instructionSheet', 'images/instructionSheet.png');
 		/* images for buttons */
 		//zombie path button
 		game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
