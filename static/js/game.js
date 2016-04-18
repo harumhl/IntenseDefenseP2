@@ -44,9 +44,9 @@ var zombieStatArray = []; // array of zombies (for server side)
 var zombieArray = [];     // array of zombies (for client side)
 var towerArray = [];      // array of towers
 
-var towerBullets; // temp
 var minigunBullets;
 var shotgunBullets;
+var gumBullets;
 var bombBullets;
 
 // Tower image following the mouse cursor once a tower button is clicked
@@ -312,24 +312,25 @@ var Tower = function(type, x, y, spriteName, bullets) {
     this.pos_x = x-20; //tower's topleft position (displayed tower image size: 55x55)
     this.pos_y = y-25; //tower's topleft position (displayed tower image size: 55x55)
     this.game = game;
-	this.bullets = towerBullets;
     this.nextFire = 0;
     
 	if(type == 'minigun'){
+        this.bullets = minigunBullets;
 		this.fireRate = 750;
 		this.damage = 30;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
 	}
 	else if(type == 'shotgun'){
+        this.bullets = shotgunBullets;
 		this.fireRate = 950;
 		this.damage = 80;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
 
 	}
-	else if(type == 'gum')
-	{
+	else if(type == 'gum') {
+        this.bullets = gumBullets;
 		this.fireRate = 1000;
 		this.damage = 0;
         this.fireRateLevel = 1;

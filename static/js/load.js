@@ -60,7 +60,9 @@ var loadState =
 		game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
 		
 		// bullet used for now to shoot from the towers, image will be changed later
-		game.load.image('bullet', 'images/bullet.png');
+		game.load.image('minigunBullet', 'images/minigunBullet.png');
+        game.load.image('shotgunBullet', 'images/shotgunBullet.png');
+        game.load.image('gumBullet', 'images/gumBullet.png');
         game.load.image('bombBullet', 'images/bombBullet.png');
 		
 		//curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
