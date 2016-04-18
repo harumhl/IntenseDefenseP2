@@ -72,8 +72,9 @@ var loadState =
         /*   Bottom infor box spritesheets   */  
         // Spritesheets for upgrading a zombie
         game.load.spritesheet('upgradeLvl1', 'images/BottomInfoBox/upgradeLvl1.png', 90, 25);
-        game.load.spritesheet('upgradeLvl2', 'images/BottomInfoBox/upgradeLvl2.png');
-        game.load.spritesheet('upgradeLvl3', 'images/BottomInfoBox/upgradeLvl3.png');
+        game.load.spritesheet('upgradeLvl2', 'images/BottomInfoBox/upgradeLvl2.png', 90, 25);
+        game.load.spritesheet('upgradeLvl3', 'images/BottomInfoBox/upgradeLvl3.png', 90, 25);
+        game.load.image('upgradeMax', 'images/BottomInfoBox/upgradeMax.png');
         game.load.spritesheet('baseHealth', 'images/BottomInfoBox/baseHealth.png', 297,63); // Total 14 frames
 		
 	},
@@ -95,7 +96,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11888', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11118', "echo-protocol");
 
     
   // Handle messages sent by the server.

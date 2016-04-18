@@ -76,6 +76,8 @@ var BottomInfoTowerText;
 var towerClicked = false;
 var fireRateText;
 var damageText;
+var upgradeFireRateButton;
+var upgradeDamageButton;
 
 var matchTimerTitle;
 var matchTimer; //the timer countdown i.e. "5:00" == 5 minutes
@@ -310,24 +312,31 @@ var Tower = function(type, x, y, spriteName, bullets) {
 	if(type == 'minigun'){
 		this.fireRate = 750;
 		this.damage = 30;
-        this.level = 1;
+        this.fireRateLevel = 1;
+        this.damageLevel = 1;
 	}
 	else if(type == 'shotgun'){
 		this.fireRate = 950;
 		this.damage = 80;
-        this.level = 1;
+        this.fireRateLevel = 1;
+        this.damageLevel = 1;
+
 	}
 	else if(type == 'gum')
 	{
 		this.fireRate = 1000;
 		this.damage = 0;
-        this.level = 1;
+        this.fireRateLevel = 1;
+        this.damageLevel = 1;
+
 	}
 	else { // bomb
 		this.fireRate = 3000;
 		this.damage = 150;
-        this.level = 1;
+        this.fireRateLevel = 1;
+        this.damageLevel = 1;
 	}
+    
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     this.image.inputEnabled = true;
@@ -362,39 +371,77 @@ Tower.prototype.upgradeT = function(){
         BottomInfoTower.scale.setTo(0.5);
         fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
-        towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fireRate"); }, this, 0,1,2);
-        towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage");}, this, 0,1,2);
+        console.log("here asldkfjasldkfj" + this.fireRateLevel);
+
+        if(this.fireRateLevel == 1)
+        {
+             upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fire rate");}, this, 0,1,2);
+        }
+        if(this.damageLevel == 1)
+        {
+             upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate");}, this, 0,1,2);
+        }
         towerClicked = true;
     }
 };
 
 
 Tower.prototype.upgradeFireRate = function(){
-    // agustin this needs to be - not + becuase the lower the number the more it shoots, its weird but its backwards like that
     this.fireRate -= 100;
-    if(player.state == 'defender')
+    if(player.state == 'defender'){
         fireRateText.setText("Fire Rate:  " + this.fireRate);
+        this.fireRateLevel += 1;
+    }
     
-        
-    // here update the button ??
+        switch(this.fireRateLevel){
+        case 2:
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);        
+        break;
+        case 3:
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);
+        break;
+        case 4:
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+        break;
+        }
 };
 
 Tower.prototype.upgradeDamage = function(){
     this.damage += 25;
-    if(player.state == 'defender')
+    if(player.state == 'defender'){
         damageText.setText("Damage:   " + this.damage);
-    
-    // here update the button ??
+        this.damageLevel += 1;
+    }
+    switch(this.damageLevel){
+        case 2:
+            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+        break;
+        case 3:
+            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+        break;
+        case 4:
+            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+        break;
+    }
 };
 
 Tower.prototype.sendUpgrade = function(upgradeType){
     //console.log("upgradeType: " + upgradeType);
+    if(upgradeType == "fire rate"){
+        this.upgradeFireRate();
+    }
+    
+    if (upgradeType == "damage rate"){
+        this.upgradeDamage();
+    }
+    
     var posX = this.pos_x;
     var posY = this.pos_y;
     var type = this.type;
     console.log("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type+":");
     socket.send("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type);
-};
+
+}
 
 function ResetBottomBox(){
     BottomInfoTowerText.kill();
@@ -420,9 +467,6 @@ Tower.prototype.attack = function(underAttack) {
         //underAttack.hurt(34, bullet, frontIndex);
     }
 };
-
-
-
 
 
 /*      Global functions    */
@@ -794,10 +838,10 @@ function hoverOverButton(type){
         BottomInfoTowerText.kill();
     if (BottomInfoTower != undefined)
         BottomInfoTower.kill();
-    if (towerUpgrade != undefined)
-        towerUpgrade.kill();
-    if (towerDamageUpgrade != undefined)
-        towerDamageUpgrade.kill();
+    if (upgradeFireRateButton != undefined)
+        upgradeFireRateButton.kill();
+    if (upgradeDamageButton != undefined)
+        upgradeDamageButton.kill();
     if (fireRateText != undefined)
         fireRateText.kill();
     if (damageText != undefined)
