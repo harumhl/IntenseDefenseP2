@@ -212,7 +212,17 @@ var playMatchState =
 		towerBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
 		towerBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
 		
-		/*WILL CHANGE ONCE BRANDON'S MAKES ALL BULLET IMAGES
+        bombBullets    = game.add.group();
+        bombBullets.enableBody = true;
+        bombBullets.physicsBodyType = Phaser.Physics.ARCADE;
+        bombBullets.createMultiple(30, 'bombBullet'); // creating 30 bullet sprites
+        
+        bombBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
+        bombBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
+        bombBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
+        bombBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
+
+        /*WILL CHANGE ONCE BRANDON'S MAKES ALL BULLET IMAGES
 		minigunBullets = game.add.group();
 		minigunBullets.enableBody = true;
 		minigunBullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -231,15 +241,6 @@ var playMatchState =
 
 
             gum bullets
-
-
-		bombBullets    = game.add.group();
-		bombBullets.enableBody = true;
-		bombBullets.physicsBodyType = Phaser.Physics.ARCADE;
-		bombBullets.createMultiple(30, '_____'); // creating 30 bullet sprites
-
-		bombBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
-		bombBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
 		*/
 		
 		/*Price labels for the zombie/tower buttons*/
@@ -631,6 +632,12 @@ var playMatchState =
 						bullet.kill();
 						zombieArray[j].hurt(towerArray[i].damage, j);
 				}, null, this);
+
+                game.physics.arcade.overlap(bombBullets, zombieArray[j].image,
+                    function(zombie,bullet){ //console.log("pre overlap");
+                        bullet.kill();
+                        zombieArray[j].hurt(towerArray[i].damage, j);
+                }, null, this);
 			}
 			
 			// If it's not ready for the tower to shoot, then skip the whole process for it

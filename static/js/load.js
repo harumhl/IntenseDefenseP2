@@ -61,6 +61,7 @@ var loadState =
 		
 		// bullet used for now to shoot from the towers, image will be changed later
 		game.load.image('bullet', 'images/bullet.png');
+        game.load.image('bombBullet', 'images/bombBullet.png');
 		
 		//curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain2.png');
