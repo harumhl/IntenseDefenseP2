@@ -129,7 +129,8 @@ var usernameClicked = false;
 
 var instructionSheet;
 
-
+var towerUpgrade;
+var towerDamageUpgrade;
 
 
 
@@ -361,8 +362,8 @@ Tower.prototype.upgradeT = function(){
         BottomInfoTower.scale.setTo(0.5);
         fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
-        var towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fireRate"); }, this, 0,1,2);
-        var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage");}, this, 0,1,2);
+        towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fireRate"); }, this, 0,1,2);
+        towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage");}, this, 0,1,2);
         towerClicked = true;
     }
 };
@@ -788,6 +789,15 @@ function hoverOverButton(type){
         BottomInfoTowerText.kill();
     if (BottomInfoTower != undefined)
         BottomInfoTower.kill();
+    if (towerUpgrade.exists)
+        towerUpgrade.kill();
+    if (towerDamageUpgrade.exists)
+        towerDamageUpgrade.kill();
+    if (fireRateText.exists)
+        fireRateText.kill();
+    if (damageText.exists)
+        damageText.kill();
+
     //fireRateText.kill();
     //damageText.kill();
 
