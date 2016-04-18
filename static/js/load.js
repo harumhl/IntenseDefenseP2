@@ -102,7 +102,7 @@ window.onload = function() {
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-      console.log("M: "+message);
+     // console.log("M@" + new Date() + ": " + message);
       
 		if(message == 'attacker' || message == 'defender'){
 			state = message;
@@ -191,11 +191,8 @@ window.onload = function() {
 
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
-                countdown(.21); // extra second for login time
+                countdown(0.31); // extra second for login time
             
-            
-            
-            if(buttonGroup.getAt(0).exists)console.log("button exists!@!!!!!!!!!!!!!!");
         }
         else if(message.substring(0,7) == "upgrade")
         {

@@ -243,7 +243,7 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 };
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
     this.health -= damage;
-	console.log("bam");
+	//console.log("bam");
     
     if (this.health <= 0) { // killing the zombie
         
@@ -404,7 +404,7 @@ function ResetBottomBox(){
 };
 
 Tower.prototype.attack = function(underAttack) {
-    console.log("att");
+   // console.log("att");
     if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
 		
         this.nextFire = this.game.time.now + this.fireRate;
@@ -556,6 +556,11 @@ function changePath(){
     currentPathFrame = buttonGroup.getAt(8).frame;
 }
 function damageBase(index) {
+    /* POSSIBLE ERROR */
+    if(zombieArray[index] == undefined) {
+        console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
+        return;
+    }
 	baseHealth -= zombieArray[index].damage;
     document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	
@@ -789,13 +794,13 @@ function hoverOverButton(type){
         BottomInfoTowerText.kill();
     if (BottomInfoTower != undefined)
         BottomInfoTower.kill();
-    if (towerUpgrade.exists)
+    if (towerUpgrade != undefined)
         towerUpgrade.kill();
-    if (towerDamageUpgrade.exists)
+    if (towerDamageUpgrade != undefined)
         towerDamageUpgrade.kill();
-    if (fireRateText.exists)
+    if (fireRateText != undefined)
         fireRateText.kill();
-    if (damageText.exists)
+    if (damageText != undefined)
         damageText.kill();
 
     //fireRateText.kill();
@@ -817,6 +822,8 @@ function hoverOverButton(type){
     BottomInfoTower.scale.setTo(0.5);
     //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
     //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
+    
+    
 
 }
 function hoverOutButton(){

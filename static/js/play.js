@@ -627,7 +627,7 @@ var playMatchState =
 			// For every zombie and every tower, "overlap" of bullet+zombie will cause the damage
 			for (var j=0; j< zombieArray.length; j++) {
 				game.physics.arcade.overlap(towerBullets, zombieArray[j].image,
-					function(zombie,bullet){ console.log("pre overlap");
+					function(zombie,bullet){ //console.log("pre overlap");
 						bullet.kill();
 						zombieArray[j].hurt(towerArray[i].damage, j);
 				}, null, this);
