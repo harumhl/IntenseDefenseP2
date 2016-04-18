@@ -362,7 +362,7 @@ Tower.prototype.upgradeT = function(){
         fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
         var towerUpgrade = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fireRate"); }, this, 0,1,2);
-        var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.upgradeDamage();}, this, 0,1,2);
+        var towerDamageUpgrade = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage");}, this, 0,1,2);
         towerClicked = true;
     }
 };
@@ -373,12 +373,17 @@ Tower.prototype.upgradeFireRate = function(){
     this.fireRate -= 100;
     if(player.state == 'defender')
         fireRateText.setText("Fire Rate:  " + this.fireRate);
+    
+        
+    // here update the button ??
 };
 
 Tower.prototype.upgradeDamage = function(){
     this.damage += 25;
     if(player.state == 'defender')
         damageText.setText("Damage:   " + this.damage);
+    
+    // here update the button ??
 };
 
 Tower.prototype.sendUpgrade = function(upgradeType){
@@ -388,8 +393,7 @@ Tower.prototype.sendUpgrade = function(upgradeType){
     var type = this.type;
     console.log("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type+":");
     socket.send("upgrade " + upgradeType + ":"+this.pos_x+":"+this.pos_y+":"+this.type);
-
-}
+};
 
 function ResetBottomBox(){
     BottomInfoTowerText.kill();
@@ -397,11 +401,6 @@ function ResetBottomBox(){
     fireRateText.kill();
     damageText.kill();
 };
-
-function sendUpgrade(upgradeType){
- //this.upgradeFireRate();  
-}
-
 
 Tower.prototype.attack = function(underAttack) {
     console.log("att");

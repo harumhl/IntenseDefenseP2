@@ -200,28 +200,26 @@ window.onload = function() {
         else if(message.substring(0,7) == "upgrade")
         {
             console.log("upgradeee");
-            if(message.substring(8,16) == "fireRate")
-            {
-                var submessage = message.split(":");
-                var posX = submessage[1];
-                var posY = submessage[2];
-                var towerType = submessage[3];
-                console.log(submessage);
-                console.log("X: "+posX+" Y:"+posY+" type:" +towerType);
-                
-                for(i = 0; i <towerArray.length; i++){
-                    if(towerArray[i].pos_x == posX){
-                        if(towerArray[i].pos_y == posY){
-                            if(towerArray[i].type == towerType)
+            var submessage = message.split(":");
+            var posX = submessage[1];
+            var posY = submessage[2];
+            var towerType = submessage[3];
+            //console.log(submessage);
+            //console.log("X: "+posX+" Y:"+posY+" type:" +towerType);
+
+            for(i = 0; i <towerArray.length; i++){
+                if(towerArray[i].pos_x == posX){
+                    if(towerArray[i].pos_y == posY){
+                        if(towerArray[i].type == towerType)
+                        {
+                            if(message.substring(8,16) == "fireRate")
                                 towerArray[i].upgradeFireRate();
+                            if(messafe.substring(8,14) == "damage")
+                                towerArray[i].upgradeDamage();
                         }
                     }
                 }
             }
-            else if(message.substring(8,16) == "fireRate")
-            {
-            }
-            else console.log("soclose");
         }
 		else
 		{
