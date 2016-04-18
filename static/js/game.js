@@ -298,6 +298,12 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
     }
     return false;
 };
+Zombie.prototype.hurts(damage, indexArray) {
+    for (var i=0; i < indexArray.length; i++) {
+        zombieArray[indexArray[i]].hurt(damage, indexArray[i]);
+        if (i >= 4) break; // attack up to five, maximum for bomb tower, 0<= i <=4
+    }
+}
 
 // Tower Class
 var Tower = function(type, x, y, spriteName, bullets) {
