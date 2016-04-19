@@ -240,6 +240,13 @@ var playMatchState =
         bombBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
         bombBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
 
+        explosions = game.add.group();
+        for (var i = 0; i < 10; i++)
+        {
+            var explosionAnimation = explosions.create(0, 0, 'explosion', [0], false);
+            explosionAnimation.anchor.setTo(0.5, 0.5);
+            explosionAnimation.animations.add('explosion',[0,1,2,3,4],true);
+        }
 		
 		/*Price labels for the zombie/tower buttons*/
 		// Same style for each text
@@ -616,12 +623,14 @@ var playMatchState =
 		
 		// Applying tower attacks
 		var withinRangeArray = []; // empty array now
+        var bombArray = [];
 		towerSize = 55; // width and height of towers. towersize / 2 = offset.
 		offset = towerSize/2;
 		
 		// Going through every tower (one by one)
 		for (var i=0; i< towerArray.length; i++) {
 			withinRangeArray = [];
+            bombArray = [];
 
 			// For every zombie and every tower, "overlap" of bullet+zombie will cause the damage
 			for (var j=0; j< zombieArray.length; j++) {
@@ -640,16 +649,11 @@ var playMatchState =
                         bullet.kill();
                         zombieArray[j].hurt(towerArray[i].damage, j);
                 }, null, this);
-
-                game.physics.arcade.overlap(bombBullets, zombieArray[j].image,
-                    function(zombie,bullet){ //console.log("pre overlap");
-                        bullet.kill();
-                        zombieArray[j].hurt(towerArray[i].damage, j);
-                }, null, this);
 			}
 			
 			// If it's not ready for the tower to shoot, then skip the whole process for it
-			if (game.time.now+30 < towerArray[i].nextFire) continue;
+            // BOMB TOWER's OVERLAP doesn't work if this is one (it's defined down unlike the rest on above)
+			//if (game.time.now+30 < towerArray[i].nextFire) continue;
 
 			var towerCenterX = parseInt(towerArray[i].pos_x) + parseInt(offset);
 			var towerCenterY = parseInt(towerArray[i].pos_y) + parseInt(offset);
@@ -676,13 +680,17 @@ var playMatchState =
 			if (withinRangeArray.length == 0) continue;
 
 			// 2. Choosing the specific one to attack
+            console.log("wR: "+withinRangeArray.length);
+            bombArray.splice(0,0,withinRangeArray[0]);
 			var frontIndex = withinRangeArray[0];
+            var newFrontIndex = true;
 			for (var j=0; j< withinRangeArray.length; j++) {
 
 				// placed ahead in terms of y-coordinate
 				// Instead of having a zombie > frontZombie (then it crashes when they are on top of each other)
 				if (zombieArray[withinRangeArray[j]].y - zombieArray[frontIndex].y > 1) {
 					frontIndex = withinRangeArray[j];
+                    bombArray.splice(0,0,withinRangeArray[j]);//at 0, delete none, inser the index
 				}
 				
 				// last x-value changing lane - as heading towards the base
@@ -691,6 +699,7 @@ var playMatchState =
 					// closer to the base in x value
 					if (Math.abs(zombieArray[withinRangeArray[j]].y-485) < Math.abs(zombieArray[frontIndex].y-485)) { // 485 NOT FIXED!!
 						frontIndex = withinRangeArray[j];
+                        bombArray.splice(0,0,withinRangeArray[j]);//at 0, delete none, inser the index
 					}
 				}
 				
@@ -700,15 +709,53 @@ var playMatchState =
 					// further from the zombie factory in x value
 					if (Math.abs(zombieArray[frontIndex].y-485) < Math.abs(zombieArray[j].y-485)) { // 485 NOT FIXED!!
 						frontIndex = withinRangeArray[j];
+                        bombArray.splice(0,0,withinRangeArray[j]);//at 0, delete none, inser the index
 					}
 				}
+                if(!newFrontIndex) bombArray.push(withinRangeArray[j]);
+                newFrontIndex = false;
 			}
 
 			// 3. attack!
-			towerArray[i].attack(zombieArray[frontIndex]);
+            for (var j=0; j< zombieArray.length; j++) {
+                if (zombieArray[j].image == undefined) { console.log("f undef"); continue; }
+                game.physics.arcade.overlap(bombBullets, zombieArray[j].image,
+                    function(zombie,bullet){ console.log("oouch2");
+                        bullet.kill();
+                                            
+                        var explosionAnimation = explosions.getFirstExists(false);
+                        explosionAnimation.reset(zombieArray[j].pos_x, zombieArray[j].pos_y);
+
+                        zombieArray[j].hurts(towerArray[i].damage, bombArray);
+                }, null, this);
+            }
+            
+            if (towerArray[i].type == "bomb")
+            {
+                var target = -1;
+                
+                if (bombArray.length >= 5) // bullets towards the third, damage first~fifth
+                    target = bombArray[2];
+                else if (bombArray.length >= 3) // bullets towards the second, damage first~3rd/4th
+                    target = bombArray[1];
+                else if (bombArray.length > 0)
+                    target = bombArray[0];
+                
+                if (zombieArray.length == 0) continue;
+                
+                console.log("target: "+target+"_"+bombArray.length+"_"+zombieArray.length);
+                while (zombieArray[target] == undefined) {
+                    target++;
+                    if (target == bombArray.length) continue;
+                }
+                if (target == -1) continue;
+                
+                towerArray[i].attack(zombieArray[target]);
+            }
+            else
+                towerArray[i].attack(zombieArray[frontIndex]);
 			
 		} // end of for-loop for towerArray
 	}
 	
 };
-

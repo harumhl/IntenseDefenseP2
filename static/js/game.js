@@ -48,6 +48,7 @@ var minigunBullets;
 var shotgunBullets;
 var gumBullets;
 var bombBullets;
+var explosions;
 
 // Tower image following the mouse cursor once a tower button is clicked
 var minigunTowerToBePlaced;
@@ -300,6 +301,7 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 };
 Zombie.prototype.hurts = function (damage, indexArray) {
     for (var i=0; i < indexArray.length; i++) {
+        if (zombieArray[indexArray[i]] == undefined) continue;
         zombieArray[indexArray[i]].hurt(damage, indexArray[i]);
         if (i >= 4) break; // attack up to five, maximum for bomb tower, 0<= i <=4
     }
@@ -339,7 +341,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 	}
 	else { // bomb
         this.bullets = bombBullets;
-		this.fireRate = 3000;
+		this.fireRate = 1000;
 		this.damage = 150;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
