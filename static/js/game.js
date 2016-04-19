@@ -401,14 +401,35 @@ Tower.prototype.upgradeT = function(){
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
         console.log("here asldkfjasldkfj" + this.fireRateLevel);
 
-        if(this.fireRateLevel == 1)
-        {
-             upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fire rate");}, this, 0,1,2);
+        switch(this.fireRateLevel){
+            case 1:
+                 upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);  
+            break;
+            case 2:
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);        
+            break;
+            case 3:
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);
+            break;
+            case 4:
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+            break;
         }
-        if(this.damageLevel == 1)
-        {
-             upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate");}, this, 0,1,2);
-        }
+        
+        switch(this.damageLevel){
+            case 1:
+                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+            break;
+            case 2:
+                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+            break;
+            case 3:
+                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+            break;
+            case 4:
+                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+            break;
+    }
         towerClicked = true;
     }
 };
