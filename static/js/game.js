@@ -880,6 +880,16 @@ function mouseClick(item) {
 		}
 	}
 }
+function cancelTowerClick() {
+    map.play('plainMap');
+    
+    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
+    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
+    else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
+    else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
+    
+    gTowerType = "";
+}
 function hoverOverButton(type){
     console.log("hover over");
 

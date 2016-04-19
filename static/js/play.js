@@ -318,7 +318,10 @@ var playMatchState =
 			gumTowerToBePlaced.kill();
 			bombTowerToBePlaced.kill();
 		}
-        
+
+        // Hit ESC button to cancel tower selection from a tower button
+        game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(function () {
+            cancelTowerClick();}, this);
         
 	},
 	
