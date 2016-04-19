@@ -399,7 +399,7 @@ Tower.prototype.upgradeT = function(){
         BottomInfoTower.scale.setTo(0.5);
         fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
-        console.log("here asldkfjasldkfj" + this.fireRateLevel);
+       // console.log("here asldkfjasldkfj" + this.fireRateLevel);
 
         switch(this.fireRateLevel){
             case 1:
@@ -418,17 +418,18 @@ Tower.prototype.upgradeT = function(){
         
         switch(this.damageLevel){
             case 1:
-                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 2:
-                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 3:
-                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 4:
-                this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
             break;
+                //this.upgrade.....
     }
         towerClicked = true;
     }
@@ -885,6 +886,8 @@ function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
 }
 function hoverOverButton(type){
     console.log("hover over");
+    console.log("FR button: "+upgradeFireRateButton);
+    console.log("DMG button: "+upgradeDamageButton);
 
     if (BottomInfoTowerText != undefined)
         BottomInfoTowerText.kill();
@@ -892,10 +895,14 @@ function hoverOverButton(type){
         BottomInfoTower.kill();
     if (upgradeFireRateButton != undefined)
         upgradeFireRateButton.kill();
-    if (upgradeDamageButton != undefined)
+    if (upgradeDamageButton != undefined){
         upgradeDamageButton.kill();
-    if (fireRateText != undefined)
+        console.log("KILL BUTTON");
+    }
+    if (fireRateText != undefined){
         fireRateText.kill();
+            console.log("KILL BUTTON");
+    }
     if (damageText != undefined)
         damageText.kill();
 
