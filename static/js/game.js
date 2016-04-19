@@ -32,9 +32,6 @@ game.state.start('boot');
 
 
 /*    Global Variables     */
-
-
-
 var map;
 var player;
 
@@ -44,6 +41,12 @@ var zombieStatArray = []; // array of zombies (for server side)
 var zombieArray = [];     // array of zombies (for client side)
 var towerArray = [];      // array of towers
 
+var zombieFullNames = ['standardZombie', 'strongZombie', 'healingZombie', 'generationsZombie'];
+var towerFullNames  = ['minigunTower',   'shotgunTower', 'gumTower',      'bombTower'];
+
+var zombieNames = ['standard', 'strong',  'healing', 'generations'];
+var towerNames  = ['minigun',  'shotgun', 'gum',     'bomb'];
+
 var minigunBullets;
 var shotgunBullets;
 var gumBullets;
@@ -51,10 +54,7 @@ var bombBullets;
 var explosions;
 
 // Tower image following the mouse cursor once a tower button is clicked
-var minigunTowerToBePlaced;
-var shotgunTowerToBePlaced;
-var gumTowerToBePlaced;
-var bombTowerToBePlaced;
+var followMouse = [];
 
 // controls bug when user is placing tower, this will not allow the user to also click
 // on a placed tower to pull up the upgrade options
@@ -761,19 +761,16 @@ function buyTower(type) {
     /* this turns on the flag only.
      in mouseClick(item){}, it will place a tower if a tower is clicked then click on a map */
     
-    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
-    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
-    else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
-    else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
-
+    cancelTowerClick(false, false);
+    
     gTowerType = type;
     if(player.state == 'defender')
 		map.play('towerPlacement');
     
-    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.reset(870,160);
-    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.reset(870,320);
-    else if (gTowerType == 'gum')       gumTowerToBePlaced.reset(870,480);
-    else if (gTowerType == 'bomb')      bombTowerToBePlaced.reset(870,640);
+    if      (gTowerType == 'minigun')   followMouse['minigun'].reset(870,160);
+    else if (gTowerType == 'shotgun')   followMouse['shotgun'].reset(870,320);
+    else if (gTowerType == 'gum')       followMouse['gum'].reset(870,480);
+    else if (gTowerType == 'bomb')      followMouse['bomb'].reset(870,640);
     
     placingTower = true;
     
@@ -866,29 +863,25 @@ function mouseClick(item) {
 		}
 		
 		if(notOnLane && canBuy) {
-			map.play('plainMap');
 			document.getElementById("Tower-Placement-Error").innerHTML = "";
 			socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
+
+            cancelTowerClick(true);
             
-            if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
-            else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
-            else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
-            else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
-            
-			gTowerType = "";
             placingTower = false;
 		}
 	}
 }
-function cancelTowerClick() {
-    map.play('plainMap');
+function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
+    if (killTowerPlacementMap)
+        map.play('plainMap');
     
-    if      (gTowerType == 'minigun')   minigunTowerToBePlaced.kill();
-    else if (gTowerType == 'shotgun')   shotgunTowerToBePlaced.kill();
-    else if (gTowerType == 'gum')       gumTowerToBePlaced.kill();
-    else if (gTowerType == 'bomb')      bombTowerToBePlaced.kill();
+    if      (gTowerType == 'minigun')   followMouse['minigun'].kill();
+    else if (gTowerType == 'shotgun')   followMouse['shotgun'].kill();
+    else if (gTowerType == 'gum')       followMouse['gum'].kill();
+    else if (gTowerType == 'bomb')      followMouse['bomb'].kill();
     
-    gTowerType = "";
+    if(emptyGTowerType) gTowerType = "";
 }
 function hoverOverButton(type){
     console.log("hover over");

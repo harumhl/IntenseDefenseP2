@@ -291,37 +291,25 @@ var playMatchState =
         }
 		if (player.state == 'defender')
         {
-			minigunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'minigunTower');
-			shotgunTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'shotgunTower');
-			gumTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'gumTower');
-			bombTowerToBePlaced = game.add.sprite(game.world.centerX, game.world.centerY, 'bombTower');
-
-			minigunTowerToBePlaced.anchor.set(0.5);
-			shotgunTowerToBePlaced.anchor.set(0.5);
-			gumTowerToBePlaced.anchor.set(0.5);
-			bombTowerToBePlaced.anchor.set(0.5);
-
-			// Half of the size
-			minigunTowerToBePlaced.scale.setTo(0.5);
-			shotgunTowerToBePlaced.scale.setTo(0.5);
-			gumTowerToBePlaced.scale.setTo(0.5);
-			bombTowerToBePlaced.scale.setTo(0.5);
-			
-			//  And enable the Sprite to have a physics body:
-			game.physics.arcade.enable(minigunTowerToBePlaced);
-			game.physics.arcade.enable(shotgunTowerToBePlaced);
-			game.physics.arcade.enable(gumTowerToBePlaced);
-			game.physics.arcade.enable(bombTowerToBePlaced);
-			
-			minigunTowerToBePlaced.kill();
-			shotgunTowerToBePlaced.kill();
-			gumTowerToBePlaced.kill();
-			bombTowerToBePlaced.kill();
+            followMouse['minigun'] = game.add.sprite(0,0,'minigunTower');
+            followMouse['shotgun'] = game.add.sprite(0,0,'shotgunTower');
+            followMouse['gum']     = game.add.sprite(0,0,'gumTower');
+            followMouse['bomb']    = game.add.sprite(0,0,'bombTower');
+            
+            for (var i=0; i < Object.keys(followMouse).length; i++)
+            {
+                followMouse[ towerNames[i] ].anchor.set(0.5);
+                followMouse[ towerNames[i] ].scale.setTo(0.5);
+                
+                game.physics.arcade.enable(followMouse[ towerNames[i] ]);
+                followMouse[ towerNames[i] ].kill();
+            }
+            
 		}
 
         // Hit ESC button to cancel tower selection from a tower button
         game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(function () {
-            cancelTowerClick();}, this);
+            cancelTowerClick(true);}, this);
         
         // Display instruction button (and one for cancelling it)
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
@@ -491,40 +479,33 @@ var playMatchState =
 			}
         }
         
-		// Allow tower image to follow the mouse cursor when a tower button is clicked
 		if (player.state == 'defender') {
-			if (gTowerType == 'minigun') {
-				if (game.physics.arcade.distanceToPointer(minigunTowerToBePlaced, game.input.activePointer) > 1) {
-					game.physics.arcade.moveToPointer(minigunTowerToBePlaced, 300, game.input.activePointer, 10);
-				}
-				if (game.physics.arcade.distanceToPointer(minigunTowerToBePlaced, game.input.activePointer) > 0.1) {
-					game.physics.arcade.moveToPointer(minigunTowerToBePlaced, 300, game.input.activePointer, 50);
-				}
-			}
-			else if (gTowerType == 'shotgun') {
-				if (game.physics.arcade.distanceToPointer(shotgunTowerToBePlaced, game.input.activePointer) > 1) {
-					game.physics.arcade.moveToPointer(shotgunTowerToBePlaced, 300, game.input.activePointer, 10);
-				}
-				if (game.physics.arcade.distanceToPointer(shotgunTowerToBePlaced, game.input.activePointer) > 0.1) {
-					game.physics.arcade.moveToPointer(shotgunTowerToBePlaced, 300, game.input.activePointer, 50);
-				}
-			}
-			else if (gTowerType == 'gum') {
-				if (game.physics.arcade.distanceToPointer(gumTowerToBePlaced, game.input.activePointer) > 1) {
-					game.physics.arcade.moveToPointer(gumTowerToBePlaced, 300, game.input.activePointer, 10);
-				}
-				if (game.physics.arcade.distanceToPointer(gumTowerToBePlaced, game.input.activePointer) > 0.1) {
-					game.physics.arcade.moveToPointer(gumTowerToBePlaced, 300, game.input.activePointer, 50);
-				}
-			}
-			else if (gTowerType == 'bomb') {
-				if (game.physics.arcade.distanceToPointer(bombTowerToBePlaced, game.input.activePointer) > 1) {
-					game.physics.arcade.moveToPointer(bombTowerToBePlaced, 300, game.input.activePointer, 10);
-				}
-				if (game.physics.arcade.distanceToPointer(bombTowerToBePlaced, game.input.activePointer) > 0.1) {
-					game.physics.arcade.moveToPointer(bombTowerToBePlaced, 300, game.input.activePointer, 50);
-				}
-			}
+            
+            // Allow tower image to follow the mouse cursor when a tower button is clicked
+            for (var i=0; i < Object.keys(followMouse).length; i++)
+            {
+                // No tower selected. Skip the rest
+                if (gTowerType == "") break;
+                
+                // if one of the tower is selected: minigun, shotgun, gum, bomb
+                if (gTowerType == towerNames[i])
+                {
+                    // rather far, bring it close fast
+                    if (game.physics.arcade.distanceToPointer(
+                            followMouse[ towerNames[i] ],game.input.activePointer) > 1)
+                    {
+                        game.physics.arcade.moveToPointer(
+                            followMouse[ towerNames[i] ], 300, game.input.activePointer, 10);
+                    }
+                    // rather close, bring it close slowly
+                    if (game.physics.arcade.distanceToPointer(
+                            followMouse[ towerNames[i] ],game.input.activePointer) > 0.1)
+                    {
+                        game.physics.arcade.moveToPointer(
+                            followMouse[ towerNames[i] ], 300, game.input.activePointer, 50);
+                    }
+                }
+            }
 		}
 		
 		
