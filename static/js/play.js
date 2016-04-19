@@ -355,42 +355,51 @@ var playMatchState =
             baseHealthText.setText("Health: " + baseHealth);
             //console.log("health: " + baseHealth);
             //console.log("/:" +baseHealth/2000);
-            if(baseHealth/ 2000 >= .92)
+            percentageBaseHealth = baseHealth / 2000;
+            if( percentageBaseHealth >= .92)
             {
+                //console.log("play 100");
                 baseHealthBar.play('100 health');
                 base.play('100 health');
             }
-            else if(baseHealth / 2000 < .92 && baseHealth/ 2000 > .89 ) // display 90 health bar
+            else if( percentageBaseHealth < .92 && percentageBaseHealth > .89 ) // display 90 health bar
             {
+                //console.log("play 90");
                 baseHealthBar.play('90 health');
             }
-            else if(baseHealth / 2000 < .82 && baseHealth/ 2000 > .79 ) // display 80 health bar
+            else if(percentageBaseHealth < .82 && percentageBaseHealth > .79 ) // display 80 health bar
             {
+                //console.log("play 80");
                 baseHealthBar.play('80 health');
                 base.play('80 health');
             }
-            else if(baseHealth / 2000 < .72 && baseHealth/ 2000 > .69 ) // display 70 health bar
+            else if(percentageBaseHealth < .72 && percentageBaseHealth > .69 ) // display 70 health bar
             {
+                //console.log("play 70");
                 baseHealthBar.play('70 health');
             }
-            else if(baseHealth / 2000 < .62 && baseHealth/ 2000 > .59 ) // display 60 health bar
+            else if(percentageBaseHealth < .62 && percentageBaseHealth > .59 ) // display 60 health bar
             {
+                //console.log("play 60");
                 baseHealthBar.play('60 health');
                 base.play('60 health');
             }
-            else if(baseHealth / 2000 < .52 && baseHealth/ 2000 > .49 ) // display 50 health bar
+            else if(percentageBaseHealth < .52 && percentageBaseHealth > .49 ) // display 50 health bar
             {
+                //console.log("play 50");
                 baseHealthBar.play('50 health');
             }
-            else if(baseHealth / 2000 < .42 && baseHealth/ 2000 > .39 ) // display 40 health bar
+            else if(percentageBaseHealth < .42 && percentageBaseHealth > .39 ) // display 40 health bar
             {
+                //console.log("play 40");
                 baseHealthBar.play('40 health');
                 base.play('40 health');
             }
-            else if(baseHealth / 2000 < .32 && baseHealth/ 2000 > .29 ) // display 30 health bar
+            else if(percentageBaseHealth < .32 && percentageBaseHealth > .29 ) // display 30 health bar
             {	
                 if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
                 {
+                    //console.log("play 30");
                     baseHealthBar.play('30 health up');
                     ++baseHealthUp;
                     if(baseHealthUp == 20) baseHealthDown = 20;
@@ -402,10 +411,11 @@ var playMatchState =
                     if(baseHealthDown == 0) baseHealthUp = 0;
                 }
             }
-            else if(baseHealth / 2000 < .22 && baseHealth/ 2000 > .19 ) // display 20 health bar
+            else if(percentageBaseHealth < .22 && percentageBaseHealth > .19 ) // display 20 health bar
             {	
                 if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
                 {
+                    //console.log("play 20");
                     baseHealthBar.play('20 health up');
                     base.play('20 health');
                     ++baseHealthUp;
@@ -419,10 +429,11 @@ var playMatchState =
                     if(baseHealthDown == 0) baseHealthUp = 0;
                 }
             }
-            else if(baseHealth / 2000 < .12 && baseHealth/ 2000 > .09 ) // display 10 health bar
+            else if(percentageBaseHealth < .12 && percentageBaseHealth > .09 ) // display 10 health bar
             {	
                 if(baseHealthUp < 20 && baseHealthDown == 0) // simply controls which flashing health bar image to display
                 {
+                    //console.log("play 10");
                     baseHealthBar.play('10 health up');
                     base.play('10 health');
                     ++baseHealthUp;
