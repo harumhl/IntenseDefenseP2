@@ -21,6 +21,7 @@ var loadState =
         game.load.spritesheet('instructionsButton', 'images/generalButtons/instructionsButton.png',200,100);
         game.load.spritesheet('closeInstructionsButton', 'images/generalButtons/closeInstructionsButton.png',200,100);
         game.load.image('instructionSheet', 'images/instructionSheet.png');
+        game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
         
         
         
@@ -100,7 +101,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11888', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11008', "echo-protocol");
 
     
   // Handle messages sent by the server.

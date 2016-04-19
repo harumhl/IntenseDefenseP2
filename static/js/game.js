@@ -36,7 +36,8 @@ var map;
 var player;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
-var instructionButtonGroup;
+var loginButtonGroup; // set of buttons used in login state
+
 var zombieStatArray = []; // array of zombies (for server side)
 var zombieArray = [];     // array of zombies (for client side)
 var towerArray = [];      // array of towers

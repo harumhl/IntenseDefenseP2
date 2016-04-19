@@ -9,15 +9,26 @@
 
 var enterHit;
 var backspaceHit;
+var loginButtonGroup;
+var charCount = 0;
+var errorText;
+
 var loginState =
 {
 
     
     create: function()
 	{
+         var graphics = game.add.graphics(0, 0);
+        graphics.beginFill(0xFFFFFF);
+        graphics.lineStyle(1, 0x000000, 1);
+        graphics.drawRect(239, 597, 600, 50);
+        graphics.endFill();
+        
 		console.log('STATE: login');
         enterHit = false;
         rescale();
+        loginButtonGroup = game.add.group();
         
         game.add.sprite(0,0,'title');
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
@@ -29,7 +40,9 @@ var loginState =
         instructionSheet.kill();
         
         usernameText = game.add.text(45, 600, "username: ", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-
+        var loginButton = game.make.button(45,675, 'loginButton', loginClicked, this, 0, 1, 2);
+        loginButton.scale.setTo(.75);
+        
         game.input.keyboard.addCallbacks(this, null, null, keyPressed);
         game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR); // ignores spacebar
         
@@ -38,8 +51,9 @@ var loginState =
         // backspace delete characters
         game.input.keyboard.addKey(Phaser.Keyboard.BACKSPACE).onDown.add(function () {backspaceHit = true;}, this);
         
-        
-        instructionButtonGroup = game.add.group();
+        errorText = game.add.text(239,597, "Sorry you reached the max length of the username (12 characters)", {font: "25px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
+        errorText.kill()
+       
         var instructionButton = game.make.button(775,1000, 'instructionsButton', function(){
             instructionButton.kill();
             instructionSheet.reset(0,0);// = game.add.sprite(0,0,'instructionSheet');
@@ -56,12 +70,20 @@ var loginState =
         
         closeInstructionButton.kill();
    
-        instructionButtonGroup.add(instructionButton);
-        instructionButtonGroup.add(closeInstructionButton);
+        loginButtonGroup.add(instructionButton);
+        loginButtonGroup.add(closeInstructionButton);
+        loginButtonGroup.add(loginButton);
 
 	},
     update: function()
     {
+        
+        if(errorText.exists)
+        {
+            if(charCount < 12){
+                errorText.kill();
+            }
+        }
         rescale();
         if (keyboardInput)
         {
@@ -76,13 +98,14 @@ var loginState =
             username = username.substring(0,username.length-1);
             usernameText.setText("username: " + username);
             backspaceHit = false;
+            --charCount;
         }
         if (enterHit && username != "" && state != '') {
             if(state == 'attacker')
                 player = new Player(username, state, 2000);
             if(state == 'defender')
                 player = new Player(username, state, 1000);
-
+            charCount = 0;
                 console.log('login: '+player.username + ' ' + player.state);
                 socket.send('logged in ' + state);
                 game.state.start('matchmaking');
@@ -101,7 +124,20 @@ function keyPressed(char) {
         //  If they pressed one of the letters in the word, flag it as correct
         if (char === usernamePossible.charAt(i))
         {
-            username += char;
+            ++charCount;
+            if(charCount > 12){
+                errorText.reset(239,690);
+                --charCount;
+                console.log("H "+charCount);
+                
+            }
+            else{
+                
+                
+                console.log(charCount);
+                username += char;
+                
+            }
         }
     }
 }
@@ -115,4 +151,15 @@ function showInstructions(){
     closeInstruction.inputEnabled = true;
     closeInstruction.input.enableDrag();
     closeInstruction.events.onInputDown.add(function(){instructionSheet.kill()}, this);*/
+}
+
+function loginClicked(){
+    if(state == 'attacker')
+        player = new Player(username, state, 2000);
+    if(state == 'defender')
+        player = new Player(username, state, 1000);
+    
+    console.log('login: '+player.username + ' ' + player.state);
+    socket.send('logged in ' + state);
+    game.state.start('matchmaking');
 }
