@@ -153,6 +153,8 @@ Zombie = function(type, lane, inX, inY) {
 	this.pos_y = inY; // real positions topleft
     this.alive = true;
    	this.time = game.time.now;
+	this.amount = 0;
+	this.countdown = 0;
 	
     if(type == 'standard')
 	{
@@ -244,8 +246,24 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 		this.x = this.x + 50*(bulletTravelTime/1000)*this.speed;
 	}
 };
+Zombie.prototype.slow = function(amount, index){
+	if(amount < this.amount){
+		if(this.amount < 0){
+				this.speed = this.speed*this.amount;
+		}	
+		this.speed = this.speed/(-amount);
+		this.amount = amount;
+	}
+	zombieStatArray[index].speed = this.speed;
+	this.countdown = 20;
+	console.log(this.countdown);
+	
+}
 Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND ARG
-    this.health -= damage;
+    if(damage > 0)
+		this.health -= damage;
+	else
+		this.slow(damage, index);
 	//console.log("bam");
     
     if (this.health <= 0) { // killing the zombie
@@ -334,7 +352,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 	else if(type == 'gum') {
         this.bullets = gumBullets;
 		this.fireRate = 1000;
-		this.damage = 0;
+		this.damage = -2;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
 

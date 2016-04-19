@@ -447,6 +447,22 @@ var playMatchState =
                 }
 					moneyTimer = 0;
 			}
+			for(var i = 0; i<zombieArray.length; i++){
+				if(zombieArray[i].countdown != 0){
+					if(zombieArray[i].countdown == 1){
+						zombieArray[i].countdown--;
+						console.log('BEFORE'+zombieArray[i].speed);
+						zombieArray[i].speed *= (-zombieArray[i].amount);
+						console.log('AFTER'+zombieArray[i].speed);
+						zombieStatArray[i].speed = zombieArray[i].speed;
+						zombieArray[i].amount = 0;
+					}	
+					else
+						zombieArray[i].countdown--;
+					console.log(zombieArray[i].countdown);
+				}
+				
+			}
         }
         
 		// Allow tower image to follow the mouse cursor when a tower button is clicked
