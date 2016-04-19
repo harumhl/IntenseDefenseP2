@@ -162,6 +162,13 @@ window.onload = function() {
 			towerArray.push(new Tower(towerType, pos_x, pos_y));
 			
 		}
+        else if (message == 'switchRoles') {
+            if      (player.state == 'attacker') player.state = 'defender';
+            else if (player.state == 'defender') player.state = 'attacker';
+            
+            console.log("switchRole: "+player.state);
+            roleSwitched = true;
+        }
         else if(message == "startRound")
         {
             // destroy the curatin and bring the tower sprites to the front so the attacker can see them now
@@ -188,7 +195,8 @@ window.onload = function() {
         else if(message == "defenderPlaceTowers")
         {
             console.log("defenderplacetowers");
- 
+            defenderPlaceTowers = true;
+
                 if(player.state == 'attacker'){
                     matchmakingCurtain.destroy();
                     attackerCurtain = game.add.sprite(144,129,'attckerCurtain');

@@ -10,6 +10,7 @@ var attackerAvailable = true;
 var defenderAvailable = true;
 var attackerLoggedIn = false; // these variables control when the timer for placing initial towers start
 var defenderLoggedIn = false;
+var roleChangedToNumber = 0;
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
@@ -91,9 +92,23 @@ wsServer.on('request', function(request) {
                                     //connections[i].sendUTF('startRound');
                                     connections[i].sendUTF('defenderPlaceTowers');
                      }
+                  attackerLoggedIn = false;
+                  defenderLoggedIn = false;
                 }
             }
-			else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
+            else if(message.utf8Data == 'switchRoles')
+            {
+                roleChangedToNumber++;
+                console.log("roleChangedToNumber: "+roleChangedToNumber);
+                  
+                if (roleChangedToNumber == 2) {
+                  roleChangedToNumber = 0;
+                
+                  for(var i = 0; i<connections.length; i++)
+                    connections[i].sendUTF('switchRoles');
+                  }
+                }
+            else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
 				//console.log('Received Message: ' + message.utf8Data);
 				for(var i = 0; i<connections.length; i++){

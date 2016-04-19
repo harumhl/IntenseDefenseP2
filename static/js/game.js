@@ -135,6 +135,11 @@ var instructionSheet;
 var towerUpgrade;
 var towerDamageUpgrade;
 
+var matchOver = false;
+var roleChangedToNumber = 0;
+var roleSwitched = false;
+var winner = '';
+var defenderPlaceTowers = false;
 
 
 /*       Classes         */
@@ -605,6 +610,7 @@ function countdown(minutes) { // function for the timer for each round
         }
         else{
             if(seconds == 0 && current_minutes == 0){
+                winner = 'defender';
                 endRound('defender');         
                 //end of match: defender wins
             }
@@ -664,21 +670,24 @@ function damageBase(index) {
 	zombieArray.splice(index, 1);
 	zombieStatArray.splice(index,1);
 	
-	if(baseHealth <= 0)
+    if(baseHealth <= 0) {
+        winner = 'attacker';
 		endRound('attacker');
+    }
 	
 	// inside the countdown(), endRound('defender') will be called accordingly
 	
 	return true;
 }
 function endRound(winner) {
-	if(winner == "attacker")
-		window.alert("Attacker Wins!");
-	else
-		window.alert("Defender Wins!");
-	
+    if(winner == "attacker")//		window.alert("Attacker Wins!");
+        console.log("Attacker Wins!");
+    else                    //		window.alert("Defender Wins!");
+        console.log("Defender Wins!");
+    
     startRound = false;
-	newRound();
+    matchOver = true;
+    newRound();
 }
 
 function sendAddZombie(zombieType){ 

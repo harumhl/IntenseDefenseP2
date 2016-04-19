@@ -19,7 +19,14 @@ var playMatchState =
 		
 		console.log('STATE:Play');
         rescale();
-        
+        matchNum++;
+        matchOver = false;
+        roleSwitched = false;
+        winner = '';
+        baseHealth = 2000;
+        if (player.state == 'attacker') player.money = 2000;
+        if (player.state == 'defender') player.money = 1000;
+
 		//load images on the background
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
 		game.add.sprite(0,0,'title');
@@ -341,7 +348,10 @@ var playMatchState =
 	{
         rescale();
         
-        if (startRound && onlyOnce == 0) 
+        if (matchOver)
+            game.state.start('matchResults');
+
+        if (startRound && onlyOnce == 0)
             onlyOnce = 1;
         
         if (onlyOnce == 1) {
@@ -350,6 +360,10 @@ var playMatchState =
 
             onlyOnce = 2;    
         }
+        if(defenderPlaceTowers && player.state == 'attacker') {
+            matchmakingCurtain.destroy();
+        }
+
         //check the base health and update the health text and health bar
         if(startRound){
             baseHealthText.setText("Health: " + baseHealth);
