@@ -323,6 +323,29 @@ var playMatchState =
         game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(function () {
             cancelTowerClick();}, this);
         
+        // Display instruction button (and one for cancelling it)
+        instructionSheet = game.add.sprite(0,0,'instructionSheet');
+        instructionSheet.kill();
+
+        instructionButtonGroup = game.add.group();
+        var instructionButton = game.make.button(865,800, 'instructionsButton', function(){
+            instructionButton.kill();
+            instructionSheet.reset(0,0);
+            closeInstructionButton.reset(865,800);
+            usernameText.kill();
+        }, this, 0,1,2);
+    
+        var closeInstructionButton = game.make.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();
+            closeInstructionButton.kill();
+            instructionButton.reset(865,800);
+        }, this, 0, 1, 2);
+        closeInstructionButton.kill();
+        instructionButton.scale.setTo(0.5);
+        closeInstructionButton.scale.setTo(0.5);
+        
+        instructionButtonGroup.add(instructionButton);
+        instructionButtonGroup.add(closeInstructionButton);
+        
 	},
 	
 	
