@@ -315,8 +315,7 @@ var playMatchState =
                 baseHealthBar.play('0 health');
             }
             else
-            {
-                // simply controls which flashing health bar image to display
+            {   // simply controls which flashing health bar image to display
                 if(baseHealthUp < 20 && baseHealthDown == 0)
                 {
                     baseHealthBar.play(roundToTenDigit+" health up");
@@ -329,50 +328,79 @@ var playMatchState =
                     --baseHealthDown;
                     if(baseHealthDown == 0) baseHealthUp = 0;
                 }
-
             }
         }
         
-            
-            
-            //gradually add money to both players
-            moneyTimer++;
-			//console.log(moneyTimer);
-			if(moneyTimer >= regenTime)
-			{
-				if(player.state == 'attacker'){
-					if(player.money < 2000){
-                        player.money += 50;
-                        //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
-                        moneyText.setText( "$" + player.money);
-                    }
-				}
-				else if(player.state == 'defender'){ // defender
-					moneyText.setText( "$" + player.money);
-                   // document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+        //gradually add money to both players
+        moneyTimer++;
+        //console.log(moneyTimer);
+        if(moneyTimer >= regenTime)
+        {
+            if(player.state == 'attacker'){
+                if(player.money < 2000){
+                    player.money += 50;
+                    //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                    moneyText.setText( "$" + player.money);
                 }
-					moneyTimer = 0;
-			}
-			for(var i = 0; i<zombieArray.length; i++){
-				if(zombieArray[i].countdown != 0){
-					if(zombieArray[i].countdown == 1){
-						zombieArray[i].countdown--;
-						console.log('BEFORE'+zombieArray[i].speed);
-						zombieArray[i].speed *= (-zombieArray[i].amount);
-						console.log('AFTER'+zombieArray[i].speed);
-						zombieStatArray[i].speed = zombieArray[i].speed;
-						zombieArray[i].amount = 0;
-					}	
-					else
-						zombieArray[i].countdown--;
-					console.log(zombieArray[i].countdown);
-				}
-				
-			}
+            }
+            else if(player.state == 'defender'){ // defender
+                moneyText.setText( "$" + player.money);
+                // document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+            }
+            moneyTimer = 0;
+        }
+        for(var i = 0; i<zombieArray.length; i++){
+            if(zombieArray[i].countdown != 0){
+                if(zombieArray[i].countdown == 1){
+                    zombieArray[i].countdown--;
+                    console.log('BEFORE'+zombieArray[i].speed);
+                    zombieArray[i].speed *= (-zombieArray[i].amount);
+                    console.log('AFTER'+zombieArray[i].speed);
+                    zombieStatArray[i].speed = zombieArray[i].speed;
+                    zombieArray[i].amount = 0;
+                }	
+                else
+                    zombieArray[i].countdown--;
+                console.log(zombieArray[i].countdown);
+            }
+        }
         
+        /* check if attacker has enough money for zombie purchases or display bankrupt image */
+        if(player.state == 'attacker')
+        {
+            for (var i=0; i < towerNames.length; i++)
+                bankruptImages[ towerNames[i] ].reset(870, 160*(i+1));
+            
+            if (!startRound)
+            {
+                for (var i=0; i < zombieNames.length; i++)
+                    bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
+            }
+            else // startRound
+            {
+                var currentMoney = player.money;
+                
+                for (var i=0; i < zombieNames.length; i++)
+                {
+                    if (currentMoney < price[ zombieNames[i] ])
+                    {
+                        buttons[ zombieNames[i] ].kill();
+                        bankruptImages[ zombieNames[i] ].reset(40,160*(i+1));
+                    }
+                    else // kill the greyed out image and display the button again
+                    {
+                        buttons[ zombieNames[i] ].reset(40,160*(i+1));
+                        
+                        if(bankruptImages[ zombieNames[i] ].alive)
+                            bankruptImages[ zombieNames[i] ].kill();
+                    }
+                }
+            }
+        }
+
 		if (player.state == 'defender') {
             
-            // Allow tower image to follow the mouse cursor when a tower button is clicked
+            /* Allow tower image to follow the mouse cursor when a tower button is clicked */
             for (var i=0; i < Object.keys(followMouse).length; i++)
             {
                 // No tower selected. Skip the rest
@@ -397,53 +425,12 @@ var playMatchState =
                     }
                 }
             }
-		}
-		
-		
-		// check if the attacker has enough money for zombie buttons
-		if(player.state == 'attacker')
-		{
-            for (var i=0; i < towerNames.length; i++)
-                bankruptImages[ towerNames[i] ].reset(870, 160*(i+1));
-            
-			if (!startRound) 
-            {
-                for (var i=0; i < zombieNames.length; i++)
-                    bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
-            }
-            else // startRound
-            {
-			     var currentMoney = player.money;
-                // standard zombie button
-                
-                
-                for (var i=0; i < zombieNames.length; i++)
-                {
-                    if (currentMoney < price[ zombieNames[i] ])
-                    {
-                        buttons[ zombieNames[i] ].kill();
-                        bankruptImages[ zombieNames[i] ].reset(40,160*(i+1));
-                    }
-                    else // kill the greyed out image and display the button again
-                    {
-                        buttons[ zombieNames[i] ].reset(40,160*(i+1));
 
-                        if(bankruptImages[ zombieNames[i] ].alive)
-                            bankruptImages[ zombieNames[i] ].kill();
-                    }
-                }
-
-            }
-
-		}
-		
-		// defender check if user has enough money for tower purchases if not display bankrupt image
-		if(player.state == 'defender')
-		{
+            /* check if defender has enough money for tower purchases or display bankrupt image */
             for (var i=0; i < zombieNames.length; i++)
                 bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
-			
-			var currentMoney = player.money;
+            
+            var currentMoney = player.money;
             
             for (var i=0; i < towerNames.length; i++)
             {
@@ -460,9 +447,10 @@ var playMatchState =
                         bankruptImages[ towerNames[i] ].kill();
                 }
             }
-
-            
-		}
+        }
+		
+		
+		
 		
 	   // Change settings for every zombie elements
 		if(state == 'attacker' && zombieStatArray.length > 0){
@@ -486,22 +474,16 @@ var playMatchState =
             bombArray = [];
 
 			// For every zombie and every tower, "overlap" of bullet+zombie will cause the damage
+            // This for loop does nothing at this point, but sets up for the case of future collision
 			for (var j=0; j< zombieArray.length; j++) {
-				game.physics.arcade.overlap(bulletss['minigun'], zombieArray[j].image,
-					function(zombie,bullet){ //console.log("pre overlap");
-						bullet.kill();
-						zombieArray[j].hurt(towerArray[i].damage, j);
-				}, null, this);
-                game.physics.arcade.overlap(bulletss['shotgun'], zombieArray[j].image,
-                    function(zombie,bullet){ //console.log("pre overlap");
-                        bullet.kill();
-                        zombieArray[j].hurt(towerArray[i].damage, j);
-                }, null, this);
-                game.physics.arcade.overlap(bulletss['gum'], zombieArray[j].image,
-                    function(zombie,bullet){ //console.log("pre overlap");
-                        bullet.kill();
-                        zombieArray[j].hurt(towerArray[i].damage, j);
-                }, null, this);
+                for (var k=0; k < towerNames.length-1; k++) // length-1 cuz bomb tower is done later
+                {
+                    game.physics.arcade.overlap(bulletss[ towerNames[k] ], zombieArray[j].image,
+                        function(zombie,bullet){ //console.log("pre overlap");
+                            bullet.kill();
+                            zombieArray[j].hurt(towerArray[i].damage, j);
+                    }, null, this);
+                }
 			}
 			
 			// If it's not ready for the tower to shoot, then skip the whole process for it
@@ -520,9 +502,9 @@ var playMatchState =
 				var topRange    = towerCenterY - towerSize *2;
 				var bottomRange = towerCenterY + towerSize *2;
 
-			var zombieCenterX = zombieArray[j].image.x + 55;
-			var zombieCenterY = zombieArray[j].image.y + 55;
-
+                var zombieCenterX = zombieArray[j].image.x + offset;
+                var zombieCenterY = zombieArray[j].image.y + offset;
+                
 				if (leftRange < zombieCenterX && zombieCenterX < rightRange &&
 					topRange  < zombieCenterY && zombieCenterY < bottomRange) {
 					
@@ -530,11 +512,10 @@ var playMatchState =
 				}
 			}
 			
-			if (withinRangeArray.length == 0) continue;
+			if (withinRangeArray.length == 0) continue; // none within attack range
 
-			// 2. Choosing the specific one to attack
-            console.log("wR: "+withinRangeArray.length);
-            bombArray.splice(0,0,withinRangeArray[0]);
+			// 2. Choosing the specific one(s) to attack
+            bombArray.splice(0,0,withinRangeArray[0]); // same as bombArray[0] = withinRangeArray[0];
 			var frontIndex = withinRangeArray[0];
             var newFrontIndex = true;
 			for (var j=0; j< withinRangeArray.length; j++) {
