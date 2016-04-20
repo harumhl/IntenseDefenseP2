@@ -115,7 +115,7 @@ window.onload = function() {
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-      //console.log("M@" + new Date() + ": " + message);
+      console.log("M@" + new Date() + ": " + message);
       
 		if(message == 'attacker' || message == 'defender'){
 			state = message;

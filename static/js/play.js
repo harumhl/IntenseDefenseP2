@@ -234,7 +234,7 @@ var playMatchState =
         }
 		if (player.state == 'defender')
         {
-			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
+			//matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
             // ???????????
             for (var i=0; i < towerNames.length; i++)
                 buttons[ towerNames[i] ].kill();
