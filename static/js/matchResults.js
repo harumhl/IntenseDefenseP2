@@ -43,7 +43,7 @@ matchResultsState =
         if (matchNum == 1) {
             
             if (roleSwitched && continueClicked) {
-                socket.send('logged in ' + state);
+                socket.send('logged in');
                 game.state.start('playMatch');
             }
         }

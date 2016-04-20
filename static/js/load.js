@@ -85,7 +85,7 @@ var loadState =
 	},
 	
 	create: function()
-	{
+    {
 		game.state.start('login');
 	}
 };
@@ -108,7 +108,7 @@ window.onload = function() {
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-     // console.log("M@" + new Date() + ": " + message);
+      console.log("M@" + new Date() + ": " + message);
       
 		if(message == 'attacker' || message == 'defender'){
 			state = message;
@@ -117,9 +117,6 @@ window.onload = function() {
 		else if(message == 'observer'){
 			state = 'observer';
 			console.log(state);
-			//document.getElementById("state").innerHTML = "Observer";
-            player = new Player(playerName, state, 2000);
-            console.log(player.username + ' ' + player.state);
 		}
 		else if(message.length > 9 && message.substring(0,9) == 'addZombie')
 			buyZombie(message.substring(9, message.length));

@@ -46,7 +46,7 @@ wsServer.on('request', function(request) {
     }
 
     var connection = request.accept('echo-protocol', request.origin);
-    connections.push(connection);
+    connections.push(connection);/*
 	if(attackerAvailable)
 	{
 		connection.sendUTF('attacker');
@@ -64,13 +64,40 @@ wsServer.on('request', function(request) {
 		connection.sendUTF('observer');
 		connection.role = 2;
 	}
-    
+    */
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
                
-            if(message.utf8Data.substring(0,10) == 'logged in ')
+            if(message.utf8Data == 'logged in')
             {
+                if(!attackerLoggedIn)
+                {
+                    connection.sendUTF('attacker');
+                    attackerLoggedIn = true;
+                    connection.role = 0;
+                }
+                else if(!defenderLoggedIn)
+                {
+                    connection.sendUTF('defender');
+                    defenderLoggedIn = true;
+                    connection.role = 1;
+                }
+                else
+                {
+                    connection.sendUTF('observer');
+                    connection.role = 2;
+                }
+
+                if(attackerLoggedIn && defenderLoggedIn)
+                {
+                     for(var i = 0; i<connections.length; i++){
+                        connections[i].sendUTF('defenderPlaceTowers');
+                     }
+                    attackerLoggedIn = false;
+                    defenderLoggedIn = false;
+                }
+                /*
                 //console.log("HERE::"+message.utf8Data.substring(10,18) + "::");
                 if(message.utf8Data.substring(10,18) == 'attacker')
                 {
@@ -86,15 +113,7 @@ wsServer.on('request', function(request) {
                 }
                 
                 // if both players are logged in then start the pre-match timer
-                if(attackerLoggedIn && defenderLoggedIn)
-                {
-                     for(var i = 0; i<connections.length; i++){
-                                    //connections[i].sendUTF('startRound');
-                                    connections[i].sendUTF('defenderPlaceTowers');
-                     }
-                  attackerLoggedIn = false;
-                  defenderLoggedIn = false;
-                }
+                */
             }
             else if(message.utf8Data == 'switchRoles')
             {

@@ -8,6 +8,7 @@
 
 
 var enterHit;
+var enterHitOnce = 0; // 0 means enter hit none, 1 means once
 var backspaceHit;
 var loginButtonGroup;
 var charCount = 0;
@@ -100,15 +101,20 @@ var loginState =
             backspaceHit = false;
             --charCount;
         }
-        if (enterHit && username != "" && state != '') {
+        if (enterHit && enterHitOnce == 0)
+            enterHitOnce = 1;
+        if (enterHitOnce == 1 && username != "") {
+            loginClicked();
+            enterHitOnce = 2;
+        }
+        if (username != "" && state != undefined) {
             if(state == 'attacker')
                 player = new Player(username, state, 2000);
             if(state == 'defender')
                 player = new Player(username, state, 1000);
-            charCount = 0;
-                console.log('login: '+player.username + ' ' + player.state);
-                socket.send('logged in ' + state);
-                game.state.start('matchmaking');
+
+            console.log('login: '+player.username + ' ' + player.state);
+            game.state.start('matchmaking');
         }
     }
 	
@@ -154,12 +160,7 @@ function showInstructions(){
 }
 
 function loginClicked(){
-    if(state == 'attacker')
-        player = new Player(username, state, 2000);
-    if(state == 'defender')
-        player = new Player(username, state, 1000);
-    
-    console.log('login: '+player.username + ' ' + player.state);
-    socket.send('logged in ' + state);
-    game.state.start('matchmaking');
+    if (username == "") return; // not enough info for login
+    console.log("login clicked");
+    socket.send('logged in');
 }
