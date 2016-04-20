@@ -42,114 +42,78 @@ var playMatchState =
 		
 		/*Creating each button*/
 		// Zombie Buttons
-		var standardZombieButton = game.make.button(40, 160, 'standardZombieButton', function(){sendAddZombie("standard");}, this, 0, 1, 2);
-		var strongZombieButton  =  game.make.button(40, 320, 'strongZombieButton', function(){sendAddZombie("strong");}, this, 0, 1, 2);
-		var healingZombieButton  =  game.make.button(40, 480, 'healingZombieButton', function(){sendAddZombie("healing");}, this, 0, 1, 2);
-		var generationsZombieButton  =  game.make.button(40, 640, 'generationsZombieButton', function(){sendAddZombie("generations");}, this, 0, 1, 2);
-		// Tower Buttons
-		var minigunTowerButton  =  game.make.button(870, 160, 'minigunTowerButton', function(){buyTower("minigun");}, this, 0, 1, 2);
-		var shotgunTowerButton  =  game.make.button(870, 320, 'shotgunTowerButton', function(){buyTower("shotgun");}, this, 0, 1, 2);
-		var gumTowerButton  =  game.make.button(870, 480, 'gumTowerButton', function(){buyTower("gum");}, this, 0, 1, 2);
-		var bombTowerButton  =  game.make.button(870, 640, 'bombTowerButton', function(){buyTower("bomb");}, this, 0, 1, 2);
+        buttons['standard'] = game.add.button(40, 160, 'standardZombieButton', function(){
+                                              sendAddZombie("standard");}, this, 0, 1, 2);
+        buttons['strong']  =  game.add.button(40, 320, 'strongZombieButton', function(){
+                                               sendAddZombie("strong");}, this, 0, 1, 2);
+        buttons['healing']  =  game.add.button(40, 480, 'healingZombieButton', function(){
+                                                sendAddZombie("healing");}, this, 0, 1, 2);
+        buttons['generations']  =  game.add.button(40, 640, 'generationsZombieButton', function(){
+                                                    sendAddZombie("generations");}, this, 0, 1, 2);
+        // Tower Buttons
+        buttons['minigun']  =  game.add.button(870, 160, 'minigunTowerButton', function(){
+                                                buyTower("minigun");}, this, 0, 1, 2);
+        buttons['shotgun']  =  game.add.button(870, 320, 'shotgunTowerButton', function(){
+                                                buyTower("shotgun");}, this, 0, 1, 2);
+        buttons['gum']  =  game.add.button(870, 480, 'gumTowerButton', function(){
+                                            buyTower("gum");}, this, 0, 1, 2);
+        buttons['bomb']  =  game.add.button(870, 640, 'bombTowerButton', function(){
+                                             buyTower("bomb");}, this, 0, 1, 2);
         
-        // Display related information on the bottom box when a mouse cursor hovers over the buttons
-        // The hoverOverButton is defined in game.js on the bottom
-        standardZombieButton.onInputOver.add(function(){hoverOverButton('standardZombie')}, this);
-        strongZombieButton.onInputOver.add(function(){hoverOverButton('strongZombie')}, this);
-        healingZombieButton.onInputOver.add(function(){hoverOverButton('healingZombie')}, this);
-        generationsZombieButton.onInputOver.add(function(){hoverOverButton('generationsZombie')}, this);
-        minigunTowerButton.onInputOver.add(function(){hoverOverButton('minigunTower')}, this);
-        shotgunTowerButton.onInputOver.add(function(){hoverOverButton('shotgunTower')}, this);
-        gumTowerButton.onInputOver.add(function(){hoverOverButton('gumTower')}, this);
-        bombTowerButton.onInputOver.add(function(){hoverOverButton('bombTower')}, this);
-        
-        standardZombieButton.onInputOut.add(hoverOutButton, this);
-        strongZombieButton.onInputOut.add(hoverOutButton, this);
-        healingZombieButton.onInputOut.add(hoverOutButton, this);
-        generationsZombieButton.onInputOut.add(hoverOutButton, this);
-        minigunTowerButton.onInputOut.add(hoverOutButton, this);
-        shotgunTowerButton.onInputOut.add(hoverOutButton, this);
-        gumTowerButton.onInputOut.add(hoverOutButton, this);
-        bombTowerButton.onInputOut.add(hoverOutButton, this);
-        
-		/*Attaching buttons to the screen*/
-		buttonGroup = game.add.group();
-		//zombie buttons
-		buttonGroup.add(standardZombieButton);
-		buttonGroup.add(strongZombieButton);
-		buttonGroup.add(healingZombieButton);
-		buttonGroup.add(generationsZombieButton);
-		//tower buttons
-		buttonGroup.add(minigunTowerButton);
-		buttonGroup.add(shotgunTowerButton);
-		buttonGroup.add(gumTowerButton);
-		buttonGroup.add(bombTowerButton);
-		
-		// Zombie bankrupt images - 
-			//I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
-		var standardZombieBankrupt = game.add.sprite(40, 160, 'zombieBankrupt');
-			standardZombieBankrupt.kill(); // temporarily kill the image
-			bankruptImages['standard'] = standardZombieBankrupt;
-		var strongZombieBankrupt = game.add.sprite(40, 320, 'zombieBankrupt');
-			strongZombieBankrupt.kill(); // temporarily kill the image
-			bankruptImages['strong'] = strongZombieBankrupt;
-		var healingZombieBankrupt = game.add.sprite(40, 480, 'zombieBankrupt');
-			healingZombieBankrupt.kill(); // temporarily kill the image
-			bankruptImages['healing'] = healingZombieBankrupt;
-		var generationsZombieBankrupt = game.add.sprite(40, 640, 'zombieBankrupt');
-			generationsZombieBankrupt.kill(); // temporarily kill the image
-			bankruptImages['generations'] = generationsZombieBankrupt;
-		
-		// Tower bankrupt images -
-			////I have to add the sprite and then kill it so the webpage knows of its existence, and its easier to use the reset() function
-		var minigunTowerBankrupt = game.add.sprite(870, 160, 'minigunBankrupt');
-			minigunTowerBankrupt.kill();
-			bankruptImages['minigun'] = minigunTowerBankrupt;
-		var shotgunTowerBankrupt = game.add.sprite(870, 320, 'shotgunBankrupt');
-			shotgunTowerBankrupt.kill();
-			bankruptImages['shotgun'] = shotgunTowerBankrupt;
-		var gumTowerBankrupt = game.add.sprite(870, 480, 'gumBankrupt');
-			gumTowerBankrupt.kill();
-			bankruptImages['gum'] = gumTowerBankrupt;
-		//var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
-        var bombTowerBankrupt = game.add.sprite(870, 640, 'bombBankrupt');
-			bombTowerBankrupt.kill();
-			bankruptImages['bomb'] = bombTowerBankrupt;
+        for (var i=0; i < Object.keys(buttons).length; i++) // For all zombie and tower buttons
+        {
+            buttons[ names[i] ].onInputOut.add(hoverOutButton, this);
+            buttons[ names[i] ].inputEnabled = true;
+        }
+        // Hoverover function needs different arguments and putting that in a loop does not work
+        // -> it passes a reference, so by the time the function is called, the arg is different.
+        buttons['standard'].events.onInputOver.add(function(){hoverOverButton('standardZombie');});
+        buttons['strong'].events.onInputOver.add(function(){hoverOverButton('strongZombie');});
+        buttons['healing'].events.onInputOver.add(function(){hoverOverButton('healingZombie');});
+        buttons['generations'].events.onInputOver.add(function(){hoverOverButton('generationsZombie');});
+        buttons['minigun'].events.onInputOver.add(function(){hoverOverButton('minigunTower');});
+        buttons['shotgun'].events.onInputOver.add(function(){hoverOverButton('shotgunTower');});
+        buttons['gum'].events.onInputOver.add(function(){hoverOverButton('gumTower');});
+        buttons['bomb'].events.onInputOver.add(function(){hoverOverButton('bombTower');});
 
-        // Display related information on the bottom box when a mouse cursor hovers over the buttons
-        // The hoverOverButton is defined in game.js on the bottom
-        standardZombieBankrupt.inputEnabled = true;
-        strongZombieBankrupt.inputEnabled = true;
-        healingZombieBankrupt.inputEnabled = true;
-        generationsZombieBankrupt.inputEnabled = true;
-        minigunTowerBankrupt.inputEnabled = true;
-        shotgunTowerBankrupt.inputEnabled = true;
-        gumTowerBankrupt.inputEnabled = true;
-        bombTowerBankrupt.inputEnabled = true;
-
-        standardZombieBankrupt.events.onInputOver.add(function(){console.log("bankrupt hover over"); hoverOverButton('standardZombie')}, this);
-        strongZombieBankrupt.events.onInputOver.add(function(){hoverOverButton('strongZombie')}, this);
-        healingZombieBankrupt.events.onInputOver.add(function(){hoverOverButton('healingZombie')}, this);
-        generationsZombieBankrupt.events.onInputOver.add(function(){hoverOverButton('generationsZombie')}, this);
-        minigunTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('minigunTower')}, this);
-        shotgunTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('shotgunTower')}, this);
-        gumTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('gumTower')}, this);
-        bombTowerBankrupt.events.onInputOver.add(function(){hoverOverButton('bombTower')}, this);
+        // Zombie bankrupt images -
+        bankruptImages['standard'] = game.add.sprite(40, 160, 'zombieBankrupt');
+        bankruptImages['strong'] = game.add.sprite(40, 320, 'zombieBankrupt');
+        bankruptImages['healing'] = game.add.sprite(40, 480, 'zombieBankrupt');
+        bankruptImages['generations'] = game.add.sprite(40, 640, 'zombieBankrupt');
         
-        standardZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
-        strongZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
-        healingZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
-        generationsZombieBankrupt.events.onInputOut.add(hoverOutButton, this);
-        minigunTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
-        shotgunTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
-        gumTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
-        bombTowerBankrupt.events.onInputOut.add(hoverOutButton, this);
+        // Tower bankrupt images -
+        bankruptImages['minigun'] = game.add.sprite(870, 160, 'minigunBankrupt');
+        bankruptImages['shotgun'] = game.add.sprite(870, 320, 'shotgunBankrupt');
+        bankruptImages['gum'] = game.add.sprite(870, 480, 'gumBankrupt');
+        bankruptImages['bomb'] = game.add.sprite(870, 640, 'bombBankrupt');
         
+        for (var i=0; i < Object.keys(bankruptImages).length; i++)
+        {
+            bankruptImages[ names[i] ].inputEnabled = true;
+            bankruptImages[ names[i] ].events.onInputOut.add(hoverOutButton, this);
+            bankruptImages[ names[i] ].kill(); // use kill() and reset() to hide/show
+        }
+        bankruptImages['standard'].events.onInputOver.add(function(){
+                                                          hoverOverButton('standardZombie');});
+        bankruptImages['strong'].events.onInputOver.add(function(){
+                                                        hoverOverButton('strongZombie');});
+        bankruptImages['healing'].events.onInputOver.add(function(){
+                                                         hoverOverButton('healingZombie');});
+        bankruptImages['generations'].events.onInputOver.add(function(){
+                                                             hoverOverButton('generationsZombie');});
+        bankruptImages['minigun'].events.onInputOver.add(function(){
+                                                         hoverOverButton('minigunTower');});
+        bankruptImages['shotgun'].events.onInputOver.add(function(){
+                                                         hoverOverButton('shotgunTower');});
+        bankruptImages['gum'].events.onInputOver.add(function(){
+                                                     hoverOverButton('gumTower');});
+        bankruptImages['bomb'].events.onInputOver.add(function(){
+                                                      hoverOverButton('bombTower');});
         
 		if(player.state == 'attacker'){
 			//zombie path button (the red arrow on top of map)
-			var zombiePathButton = game.make.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
-			buttonGroup.add(zombiePathButton);
+			var zombiePathButton = game.add.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
 			
 			currentPathFrame = 0;
 		}
@@ -274,27 +238,21 @@ var playMatchState =
 			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 
             console.log("plz gray out");
-            buttonGroup.getAt(0).kill();
-            buttonGroup.getAt(1).kill();
-            buttonGroup.getAt(2).kill();
-            buttonGroup.getAt(3).kill();
             
-            bankruptImages.standard.reset(40, 160);
-            bankruptImages.strong.reset(40, 320);
-            bankruptImages.healing.reset(40, 480);
-            bankruptImages.generations.reset(40, 640);
-            
-            bankruptImages.minigun.reset(870,160);
-            bankruptImages.shotgun.reset(870, 320);
-            bankruptImages.gum.reset(870, 480);
-            bankruptImages.bomb.reset(870,640);
+            for (var i=0; i < zombieNames.length; i++)
+            {
+                buttons[ zombieNames[i] ].kill();
+                
+                bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
+                bankruptImages[ towerNames[i]  ].reset(870, 160*(i+1));
+            }
         }
 		if (player.state == 'defender') 
         {
-            buttonGroup.getAt(4).kill();
-            buttonGroup.getAt(5).kill();
-            buttonGroup.getAt(6).kill();
-            buttonGroup.getAt(7).kill();                
+            for (var i=0; i < towerNames.length; i++)
+            {
+                buttons[ towerNames[i] ].kill();
+            }
         }
 		if (player.state == 'defender')
         {
@@ -322,15 +280,15 @@ var playMatchState =
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
         instructionSheet.kill();
 
-        instructionButtonGroup = game.add.group();
-        var instructionButton = game.make.button(865,800, 'instructionsButton', function(){
+//        instructionButtonGroup = game.add.group();
+        var instructionButton = game.add.button(865,800, 'instructionsButton', function(){
             instructionButton.kill();
             instructionSheet.reset(0,0);
             closeInstructionButton.reset(865,800);
             usernameText.kill();
         }, this, 0,1,2);
     
-        var closeInstructionButton = game.make.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();
+        var closeInstructionButton = game.add.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();
             closeInstructionButton.kill();
             instructionButton.reset(865,800);
         }, this, 0, 1, 2);
@@ -338,8 +296,8 @@ var playMatchState =
         instructionButton.scale.setTo(0.5);
         closeInstructionButton.scale.setTo(0.5);
         
-        instructionButtonGroup.add(instructionButton);
-        instructionButtonGroup.add(closeInstructionButton);
+//        instructionButtonGroup.add(instructionButton);
+//        instructionButtonGroup.add(closeInstructionButton);
         
 	},
 	
@@ -537,69 +495,36 @@ var playMatchState =
 		// check if the attacker has enough money for zombie buttons
 		if(player.state == 'attacker')
 		{
-			bankruptImages.minigun.reset(870,160);
-			bankruptImages.shotgun.reset(870,320);
-			bankruptImages.gum.reset(870,480);
-			bankruptImages.bomb.reset(870,640);
+            for (var i=0; i < towerNames.length; i++)
+                bankruptImages[ towerNames[i] ].reset(870, 160*(i+1));
             
 			if (!startRound) 
             {
-                bankruptImages.standard.reset(40,160);
-                bankruptImages.strong.reset(40,320);
-                bankruptImages.healing.reset(40,480);
-                bankruptImages.generations.reset(40,640);
+                for (var i=0; i < zombieNames.length; i++)
+                    bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
             }
             else // startRound
             {
 			     var currentMoney = player.money;
                 // standard zombie button
-                if(currentMoney < price['standard']) // kill button and display greyed out button
+                
+                
+                for (var i=0; i < zombieNames.length; i++)
                 {
-                    buttonGroup.getAt(0).kill(); // standard zombie button
-                    bankruptImages.standard.reset(40,160);
+                    if (currentMoney < price[ zombieNames[i] ])
+                    {
+                        buttons[ zombieNames[i] ].kill();
+                        bankruptImages[ zombieNames[i] ].reset(40,160*(i+1));
+                    }
+                    else // kill the greyed out image and display the button again
+                    {
+                        buttons[ zombieNames[i] ].reset(40,160*(i+1));
+
+                        if(bankruptImages[ zombieNames[i] ].alive)
+                            bankruptImages[ zombieNames[i] ].kill();
+                    }
                 }
-                else // kill the greyed out image and display the button again
-                {
-                    buttonGroup.getAt(0).reset(40, 160);
-                    if(bankruptImages.standard.alive)
-                        bankruptImages.standard.kill();
-                }
-                // strong zombie button
-                if(currentMoney < price['strong']) // kill button and display greyed out button
-                {
-                    buttonGroup.getAt(1).kill(); // strong zombie button
-                    bankruptImages.strong.reset(40,320);
-                }
-                else // kill the greyed out image and display the button again
-                {
-                    buttonGroup.getAt(1).reset(40, 320);
-                    if(bankruptImages.strong.alive)
-                        bankruptImages.strong.kill();
-                }
-                // healing zombie button
-                if(currentMoney < price['healing']) // kill button and display greyed out button
-                {
-                    buttonGroup.getAt(2).kill(); // healing zombie button
-                    bankruptImages.healing.reset(40,480);
-                }
-                else // kill the greyed out image and display the button again
-                {
-                    buttonGroup.getAt(2).reset(40, 480);
-                    if(bankruptImages.healing.alive)
-                        bankruptImages.healing.kill();
-                }
-                // generations zombie button
-                if(currentMoney < price['generations']) // kill button and display greyed out button
-                {
-                    buttonGroup.getAt(3).kill(); // generations zombie button
-                    bankruptImages.generations.reset(40,640);
-                }
-                else // kill the greyed out image and display the button again
-                {
-                    buttonGroup.getAt(3).reset(40, 640);
-                    if(bankruptImages.generations.alive)
-                        bankruptImages.generations.kill();
-                }
+
             }
 
 		}
@@ -607,56 +532,28 @@ var playMatchState =
 		// defender check if user has enough money for tower purchases if not display bankrupt image
 		if(player.state == 'defender')
 		{
-			bankruptImages.standard.reset(40, 160);
-			bankruptImages.strong.reset(40, 320);
-			bankruptImages.healing.reset(40, 480);
-			bankruptImages.generations.reset(40, 640);
+            for (var i=0; i < zombieNames.length; i++)
+                bankruptImages[ zombieNames[i] ].reset(40, 160*(i+1));
 			
 			var currentMoney = player.money;
-			if(currentMoney < price['minigun'])
-			{
-				buttonGroup.getAt(4).kill(); // minigun tower button
-				bankruptImages.minigun.reset(870, 160);
-			}
-			else
-			{
-				buttonGroup.getAt(4).reset(870, 160);
-				if(bankruptImages.minigun.alive)
-					bankruptImages.minigun.kill();
-			}
-			if(currentMoney < price['shotgun'])
-			{
-				buttonGroup.getAt(5).kill(); // shotgun tower button
-				bankruptImages.shotgun.reset(870, 320);
-			}
-			else
-			{
-				buttonGroup.getAt(5).reset(870, 320);
-				if(bankruptImages.shotgun.alive)
-					bankruptImages.shotgun.kill();
-			}
-			if(currentMoney < price['gum'])
-			{
-				buttonGroup.getAt(6).kill(); // gum tower button
-				bankruptImages.gum.reset(870, 480);
-			}
-			else
-			{
-				buttonGroup.getAt(6).reset(870, 480);
-				if(bankruptImages.gum.alive)
-					bankruptImages.gum.kill();
-			}
-			if(currentMoney < price['bomb'])
-			{
-				buttonGroup.getAt(7).kill(); // bomb tower button
-				bankruptImages.bomb.reset(870, 640);
-			}
-			else
-			{
-				buttonGroup.getAt(7).reset(870, 640);
-				if(bankruptImages.bomb.alive)
-					bankruptImages.bomb.kill();
-			}
+            
+            for (var i=0; i < towerNames.length; i++)
+            {
+                if (currentMoney < price[ towerNames[i] ])
+                {
+                    buttons[ towerNames[i] ].kill();
+                    bankruptImages[ towerNames[i] ].reset(870,160*(i+1));
+                }
+                else // kill the greyed out image and display the button again
+                {
+                    buttons[ towerNames[i] ].reset(870,160*(i+1));
+                    
+                    if(bankruptImages[ towerNames[i] ].alive)
+                        bankruptImages[ towerNames[i] ].kill();
+                }
+            }
+
+            
 		}
 		
 	   // Change settings for every zombie elements

@@ -44,9 +44,14 @@ var towerArray = [];      // array of towers
 
 var zombieFullNames = ['standardZombie', 'strongZombie', 'healingZombie', 'generationsZombie'];
 var towerFullNames  = ['minigunTower',   'shotgunTower', 'gumTower',      'bombTower'];
+var fullNames = ['standardZombie', 'strongZombie', 'healingZombie', 'generationsZombie',
+                 'minigunTower',   'shotgunTower', 'gumTower',      'bombTower'];
+
 
 var zombieNames = ['standard', 'strong',  'healing', 'generations'];
 var towerNames  = ['minigun',  'shotgun', 'gum',     'bomb'];
+var names = ['standard', 'strong',  'healing', 'generations',
+             'minigun',  'shotgun', 'gum',     'bomb'];
 
 var minigunBullets;
 var shotgunBullets;
@@ -56,6 +61,8 @@ var explosions;
 
 // Tower image following the mouse cursor once a tower button is clicked
 var followMouse = [];
+
+var buttons = [];
 
 // controls bug when user is placing tower, this will not allow the user to also click
 // on a placed tower to pull up the upgrade options
@@ -895,7 +902,7 @@ function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
     if(emptyGTowerType) gTowerType = "";
 }
 function hoverOverButton(type){
-    console.log("hover over");
+    console.log("hover over: "+type+type.text+type.toString());
     console.log("FR button: "+upgradeFireRateButton);
     console.log("DMG button: "+upgradeDamageButton);
 
@@ -920,14 +927,14 @@ function hoverOverButton(type){
     //damageText.kill();
 
     var typeFullName = "";
-    if      (type == 'standardZombie')  typeFullName = 'Standard Zombie';
-    else if (type == 'strongZombie')    typeFullName = 'Strong Zombie';
-    else if (type == 'healingZombie')   typeFullName = 'Healing Zombie';
+    if      (type == 'standardZombie')    typeFullName = 'Standard Zombie';
+    else if (type == 'strongZombie')      typeFullName = 'Strong Zombie';
+    else if (type == 'healingZombie')     typeFullName = 'Healing Zombie';
     else if (type == 'generationsZombie') typeFullName = 'Generations Zombie';
-    else if (type == 'minigunTower')    typeFullName = 'Minigun Tower';
-    else if (type == 'shotgunTower')    typeFullName = 'Shotgun Tower';
-    else if (type == 'gumTower')        typeFullName = 'Gum Tower';
-    else if (type == 'bombTower')       typeFullName = 'Bomb Tower';
+    else if (type == 'minigunTower')      typeFullName = 'Minigun Tower';
+    else if (type == 'shotgunTower')      typeFullName = 'Shotgun Tower';
+    else if (type == 'gumTower')          typeFullName = 'Gum Tower';
+    else if (type == 'bombTower')         typeFullName = 'Bomb Tower';
 
     BottomInfoTowerText = game.add.text(610, 920, typeFullName, {font: "30px Arial", fill: "#F5F5F5", align: "center"});
 
