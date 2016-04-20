@@ -108,7 +108,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11088', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11012', "echo-protocol");
 
     
   // Handle messages sent by the server.

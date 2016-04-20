@@ -382,8 +382,16 @@ var playMatchState =
                 }	
                 else
                     zombieArray[i].countdown--;
-                console.log(zombieArray[i].countdown);
+				
             }
+			if(zombieArray[i].type == 'healing'){
+					if(zombieArray[i].healingCooldown == 0){
+						console.log('calling heal');
+						zombieArray[i].heal();
+					}
+					else
+						zombieArray[i].healingCooldown--;
+				}
         }
         
         /* check if attacker has enough money for zombie purchases or display bankrupt image */

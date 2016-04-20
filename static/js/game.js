@@ -186,6 +186,7 @@ Zombie = function(type, lane, inX, inY) {
    	this.time = game.time.now;
 	this.amount = 0;
 	this.countdown = 0;
+	this.healingCooldown = 0;
 	
     if(type == 'standard')
 	{
@@ -548,7 +549,21 @@ Tower.prototype.attack = function(underAttack) {
         //underAttack.hurt(34, bullet, frontIndex);
     }
 };
-
+Zombie.prototype.heal = function(){
+	//var healingRangeImage = game.add.sprite(this.pos_x, this.pos_y, 'healingCircle');
+	//healingRangeImage.visible = false;
+	//console.log('image created');
+	for (var j=0; j< zombieArray.length; j++) {
+		if(game.physics.arcade.distanceBetween(this, zombieArray[j]) < 50){
+				console.log(zombieArray[j].health);
+				zombieArray[j].health += 5;
+				console.log(zombieArray[j].health);
+		}
+	}
+	this.healingCooldown = 20;
+	//healingRangeImage.kill();
+	//console.log('image destroyed');
+}
 
 /*      Global functions    */
 
