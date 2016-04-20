@@ -331,7 +331,7 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 };
 Zombie.prototype.hurts = function (damage, indexArray) {
     for (var i=0; i < indexArray.length; i++) {
-        if (zombieArray[indexArray[i]] == undefined) continue;
+        if (zombieArray[indexArray[i]] == undefined) continue; // probably already dead
         zombieArray[indexArray[i]].hurt(damage, indexArray[i]);
         if (i >= 4) break; // attack up to five, maximum for bomb tower, 0<= i <=4
     }
