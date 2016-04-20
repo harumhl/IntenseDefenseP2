@@ -113,7 +113,7 @@ var playMatchState =
         
 		if(player.state == 'attacker'){
 			//zombie path button (the red arrow on top of map)
-			var zombiePathButton = game.add.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
+			zombiePathButton = game.add.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
 			
 			currentPathFrame = 0;
 		}
@@ -173,44 +173,26 @@ var playMatchState =
         
         
 		//  The tower bullet groups
-		minigunBullets = game.add.group();
-		minigunBullets.enableBody = true;
-		minigunBullets.physicsBodyType = Phaser.Physics.ARCADE;
-		minigunBullets.createMultiple(40, 'minigunBullet'); // creating 40 bullet sprites
-		
-		minigunBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
-		minigunBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
-		minigunBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
-		minigunBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
-		
-        shotgunBullets = game.add.group();
-        shotgunBullets.enableBody = true;
-        shotgunBullets.physicsBodyType = Phaser.Physics.ARCADE;
-        shotgunBullets.createMultiple(30, 'shotgunBullet'); // creating 30 bullet sprites
+        bulletss['minigun'] = game.add.group();
+        bulletss['shotgun'] = game.add.group();
+        bulletss['gum']     = game.add.group();
+        bulletss['bomb']    = game.add.group();
         
-        shotgunBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
-        shotgunBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
-        shotgunBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
-        shotgunBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
-
-        gumBullets = game.add.group();
-        gumBullets.enableBody = true;
-        gumBullets.physicsBodyType = Phaser.Physics.ARCADE;
-        gumBullets.createMultiple(30, 'gumBullet'); // creating 30 bullet sprites
+        for (var i=0; i < towerNames.length; i++) {
+            bulletss[ towerNames[i] ].enableBody = true;
+            bulletss[ towerNames[i] ].physicsBodyType = Phaser.Physics.ARCADE;
+            
+            bulletss[ towerNames[i] ].setAll('anchor.x', 0.5); // center of the object - not topleft
+            bulletss[ towerNames[i] ].setAll('anchor.y', 0.5); // center of the object - not topleft
+            bulletss[ towerNames[i] ].setAll('scale.x', 0.5);  // reducing the size to half
+            bulletss[ towerNames[i] ].setAll('scale.y', 0.5);  // reducing the size to half
+            
+        }
+        bulletss['minigun'].createMultiple(40, 'minigunBullet'); // creating 40 bullet
+        bulletss['shotgun'].createMultiple(30, 'shotgunBullet'); // creating 30 bullet
+        bulletss['gum'].createMultiple(30, 'minigunBullet');     // creating 30 bullet
+        bulletss['bomb'].createMultiple(30, 'bombBullet');       // creating 30 bullet
         
-        gumBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
-        gumBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
-
-        bombBullets = game.add.group();
-        bombBullets.enableBody = true;
-        bombBullets.physicsBodyType = Phaser.Physics.ARCADE;
-        bombBullets.createMultiple(30, 'bombBullet'); // creating 30 bullet sprites
-        
-        bombBullets.setAll('anchor.x', 0.5); // center of the object - not topleft
-        bombBullets.setAll('anchor.y', 0.5); // center of the object - not topleft
-        bombBullets.setAll('scale.x', 0.5);  // reducing the size to half of its original image size
-        bombBullets.setAll('scale.y', 0.5);  // reducing the size to half of its original image size
-
         explosions = game.add.group();
         for (var i = 0; i < 10; i++)
         {
@@ -387,7 +369,6 @@ var playMatchState =
 				}
 				
 			}
-        }
         
 		if (player.state == 'defender') {
             
@@ -506,17 +487,17 @@ var playMatchState =
 
 			// For every zombie and every tower, "overlap" of bullet+zombie will cause the damage
 			for (var j=0; j< zombieArray.length; j++) {
-				game.physics.arcade.overlap(minigunBullets, zombieArray[j].image,
+				game.physics.arcade.overlap(bulletss['minigun'], zombieArray[j].image,
 					function(zombie,bullet){ //console.log("pre overlap");
 						bullet.kill();
 						zombieArray[j].hurt(towerArray[i].damage, j);
 				}, null, this);
-                game.physics.arcade.overlap(shotgunBullets, zombieArray[j].image,
+                game.physics.arcade.overlap(bulletss['shotgun'], zombieArray[j].image,
                     function(zombie,bullet){ //console.log("pre overlap");
                         bullet.kill();
                         zombieArray[j].hurt(towerArray[i].damage, j);
                 }, null, this);
-                game.physics.arcade.overlap(gumBullets, zombieArray[j].image,
+                game.physics.arcade.overlap(bulletss['gum'], zombieArray[j].image,
                     function(zombie,bullet){ //console.log("pre overlap");
                         bullet.kill();
                         zombieArray[j].hurt(towerArray[i].damage, j);
@@ -591,7 +572,7 @@ var playMatchState =
 			// 3. attack!
             for (var j=0; j< zombieArray.length; j++) {
                 if (zombieArray[j].image == undefined) { console.log("f undef"); continue; }
-                game.physics.arcade.overlap(bombBullets, zombieArray[j].image,
+                game.physics.arcade.overlap(bulletss['bomb'], zombieArray[j].image,
                     function(zombie,bullet){ console.log("oouch2");
                         bullet.kill();
                                             

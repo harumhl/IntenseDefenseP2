@@ -53,12 +53,10 @@ var towerNames  = ['minigun',  'shotgun', 'gum',     'bomb'];
 var names = ['standard', 'strong',  'healing', 'generations',
              'minigun',  'shotgun', 'gum',     'bomb'];
 
-var minigunBullets;
-var shotgunBullets;
-var gumBullets;
-var bombBullets;
+var bulletss = []; // two "s" to emphasize that it's an array of bullets group
 var explosions;
 
+var zombiePathButton;
 // Tower image following the mouse cursor once a tower button is clicked
 var followMouse = [];
 
@@ -349,14 +347,14 @@ var Tower = function(type, x, y, spriteName, bullets) {
     this.nextFire = 0;
     
 	if(type == 'minigun'){
-        this.bullets = minigunBullets;
+        this.bullets = bulletss['minigun'];
 		this.fireRate = 750;
 		this.damage = 30;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
 	}
 	else if(type == 'shotgun'){
-        this.bullets = shotgunBullets;
+        this.bullets = bulletss['shotgun'];
 		this.fireRate = 950;
 		this.damage = 80;
         this.fireRateLevel = 1;
@@ -364,7 +362,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 
 	}
 	else if(type == 'gum') {
-        this.bullets = gumBullets;
+        this.bullets = bulletss['gum'];
 		this.fireRate = 1000;
 		this.damage = -2;
         this.fireRateLevel = 1;
@@ -372,7 +370,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 
 	}
 	else { // bomb
-        this.bullets = bombBullets;
+        this.bullets = bulletss['bomb'];
 		this.fireRate = 1000;
 		this.damage = 150;
         this.fireRateLevel = 1;
@@ -651,18 +649,18 @@ function changePath(){
 
 	// buttonGroup.getAt(8) == arrow button for attacker
     if(currentPathFrame == 0) {
-        buttonGroup.getAt(8).setFrames(3,4,5);
+        zombiePathButton.setFrames(3,4,5);
 		lane = 'right';
     }
     else if(currentPathFrame == 3) {
-        buttonGroup.getAt(8).setFrames(6,7,8);
+        zombiePathButton.setFrames(6,7,8);
 		lane = 'left';
     }
     else if(currentPathFrame == 6){
-        buttonGroup.getAt(8).setFrames(0,1,2);
+        zombiePathButton.setFrames(0,1,2);
 		lane = 'center';
     }
-    currentPathFrame = buttonGroup.getAt(8).frame;
+    currentPathFrame = zombiePathButton.frame;
 }
 function damageBase(index) {
     /* POSSIBLE ERROR */
