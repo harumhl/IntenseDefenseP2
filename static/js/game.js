@@ -37,6 +37,7 @@ var player;
 
 var buttonGroup; // array of 4 zombie buttons and 4 tower buttons, and zombit path button
 var loginButtonGroup; // set of buttons used in login state
+var loginButtonGroup; // set of buttons used in login state
 
 var zombieStatArray = []; // array of zombies (for server side)
 var zombieArray = [];     // array of zombies (for client side)
@@ -88,7 +89,7 @@ var upgradeDamageButton;
 
 var matchTimerTitle;
 var matchTimer; //the timer countdown i.e. "5:00" == 5 minutes
-var newTime; // variable used to overwrite the timer text
+var newTime = ""; // variable used to overwrite the timer text
 var moneyTitle;
 var moneyText; // the actual amount of money the user has i.e. "$2000"
 var playerText; // display players name on the info box
@@ -148,6 +149,23 @@ var roleSwitched = false;
 var winner = '';
 var defenderPlaceTowers = false;
 
+// matchResults variables needed
+var zombieCount = {standard:0,   strong:0,     healing:0,    generations:0};
+var towerCount = {minigun:0,    shotgun:0,    gum:0,        bomb:0};
+var endTime; // what was the timer at when match ended
+var endHealth; // what frame was the health bar at when match ended
+var roundMatchNum = {round:1, match:0};
+var playerNames = {attacker:"", defender:""};
+
+var checkone;//images for the green checkmarks
+var checktwo; 
+/* next 3 lines trying to fix the timer*/
+var seconds  = 60;
+var current_minutes;
+var attackerWon = false;
+
+var continueClicks = 0;
+
 
 /*       Classes         */
 
@@ -156,6 +174,7 @@ Player = function(username, state, money) {
     this.username = username;
     this.state = state;
 	this.money = money;
+	this.wins = 0;
 }
 // Zombie Class
 Zombie = function(type, lane, inX, inY) {
@@ -570,12 +589,12 @@ function newRound() {
 
 
 
-
+var timeout;
 function countdown(minutes) { // function for the timer for each round
     console.log("countdown");
 	// adjusted this function to allow a 30 second timer as well
-    var seconds = 60;
-    var mins = minutes;
+    seconds = 60;
+    mins = minutes;
     var counter;
 	
     if(mins < 1){
@@ -591,7 +610,7 @@ function countdown(minutes) { // function for the timer for each round
         
         //var counter = document.getElementById("timer");
         //counter = document.getElementById("gameStartTimer");
-        var current_minutes;
+        current_minutes;
         if(mins<1){
             current_minutes = 0;
         }
@@ -608,7 +627,8 @@ function countdown(minutes) { // function for the timer for each round
         if(typeof matchTimer == "undefined")
             matchTimer =  game.add.text(230, 975, "0:00", infoTextStyle);
         matchTimer.setText(newTime);
-        if(mins<1){
+        
+		if(mins<1){
            if(seconds == 0 && current_minutes == 0){
                 socket.send("startRound");
                 console.log("start Round");
@@ -616,21 +636,44 @@ function countdown(minutes) { // function for the timer for each round
            }   
         }
         else{
-            if(seconds == 0 && current_minutes == 0){
+            if(seconds <= 0 && current_minutes == 0 && !attackerWon){
                 winner = 'defender';
                 endRound('defender');         
                 //end of match: defender wins
             }
 		}
         if( seconds > 0 ) {
-            setTimeout(tick, 1000);
+            if(attackerWon){
+					console.log("RIGHT FUCKING HERE");
+					current_minutes = 0;
+					seconds = 0;
+					clearTimeout(timeout);
+					return;
+			}
+			else
+				timeout = setTimeout(tick, 1000);
         } else {
  
             if(mins > 1){
  
-               // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
-               setTimeout(function () { countdown(mins - 1); }, 1000);
- 
+                if(attackerWon){
+					console.log("RIGHT FUCKING HERE");
+					current_minutes = 0;
+					seconds = 0;
+					clearTimeout(timeout);
+					return;
+				}
+				else{
+					if(attackerWon){
+						current_minutes = 0;
+						seconds = 0;
+						
+						//tick();
+					}
+					else
+						timeout = setTimeout(function () { countdown(mins - 1); }, 1000);
+						// countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+				}
             }
         }
     }
@@ -668,8 +711,9 @@ function damageBase(index) {
         console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
         return;
     }
+	
 	baseHealth -= zombieArray[index].damage;
-    document.getElementById("health").innerHTML = " Health: " + baseHealth; 
+    //document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	
 	// Killing the zombie and removing it from the arrays
 	zombieArray[index].alive = false;    
@@ -679,7 +723,10 @@ function damageBase(index) {
 	
     if(baseHealth <= 0) {
         winner = 'attacker';
-		endRound('attacker');
+        attackerWon = true;
+        seconds = 0;
+        current_minutes = 0;
+ 		endRound('attacker');
     }
 	
 	// inside the countdown(), endRound('defender') will be called accordingly
@@ -705,13 +752,13 @@ function sendAddZombie(zombieType){
 		
         if(zombieType == "standard"){
             if( player.money < price['standard'] ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+                //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
                 canBuy = true;
                 player.money -= 100;
                 moneyText.setText( "$" + player.money);
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
         else if(zombieType == "strong"){
@@ -722,29 +769,29 @@ function sendAddZombie(zombieType){
                 canBuy = true;
                 player.money -= 200;
                 moneyText.setText( "$" + player.money);
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
         else if(zombieType == "healing"){
             if( player.money < price['healing'] ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+                ///document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
                 canBuy = true;
                 player.money -= 300;
                 moneyText.setText( "$" + player.money);
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                //.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
         else if(zombieType == "generations"){
             if( player.money < price['generations'] ){
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+                //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money + " - Not enough money";
             }
             else{
                 canBuy = true;
                 player.money -= 400;
                 moneyText.setText( "$" + player.money);
-                document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
+                //document.getElementById("attacker-money").innerHTML = "Money: $" + player.money;
             }
         }
 		
@@ -804,25 +851,25 @@ function mouseClick(item) {
 		
 		// Check if the defender is trying to place the tower on zombie lanes
 		if(mouse_x >= 185 && mouse_x <= 800 && mouse_y <= 215) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 185 && mouse_x <= 278 && mouse_y >= 162 && mouse_y <= 752) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 708 && mouse_x <= 800 && mouse_y >= 162 && mouse_y <= 752) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 201 && mouse_x <= 771 && mouse_y >= 666 && mouse_y <= 750) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 447 && mouse_x <= 540 && mouse_y >= 210 && mouse_y <= 820) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths";
 		}
 		else if(mouse_x >= 147 && mouse_x <= 817 && mouse_y >= 820 && mouse_y <= 858) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else if(mouse_x >= 410 && mouse_x <= 560 && mouse_y >= 750) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
+			//document.getElementById("Tower-Placement-Error").innerHTML = "Sorry, You can't place towers on the paths"; 
 		}
 		else {
 			notOnLane = true;
@@ -831,7 +878,7 @@ function mouseClick(item) {
 		// Check if the player has enough money for the zombie
 		if (gTowerType == "minigun") {
 			if(player.money < price['minigun']){
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
@@ -839,48 +886,48 @@ function mouseClick(item) {
                 
                 
                 moneyText.setText( "$" + player.money);
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "shotgun") {
 			if(player.money < price['shotgun']){
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
 				player.money -= price['shotgun'];
                 
                 moneyText.setText( "$" + player.money);
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "gum") {
 			if(player.money < price['gum']){
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
 				player.money -= price['gum'];
                 
                 moneyText.setText( "$" + player.money);
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		else if (gTowerType == "bomb") {
 			if(player.money < price['bomb']){
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
 			}
 			else{
 				canBuy = true;
 				player.money -= price['bomb'];
                 
                 moneyText.setText( "$" + player.money);
-				document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
+				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
 			}
 		}
 		
 		if(notOnLane && canBuy) {
-			document.getElementById("Tower-Placement-Error").innerHTML = "";
+			//document.getElementById("Tower-Placement-Error").innerHTML = "";
 			socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
 
             cancelTowerClick(true);
@@ -901,9 +948,9 @@ function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
     if(emptyGTowerType) gTowerType = "";
 }
 function hoverOverButton(type){
-    console.log("hover over: "+type+type.text+type.toString());
-    console.log("FR button: "+upgradeFireRateButton);
-    console.log("DMG button: "+upgradeDamageButton);
+    //console.log("hover over: "+type+type.text+type.toString());
+    //console.log("FR button: "+upgradeFireRateButton);
+    //console.log("DMG button: "+upgradeDamageButton);
 
     if (BottomInfoTowerText != undefined)
         BottomInfoTowerText.kill();
@@ -911,14 +958,10 @@ function hoverOverButton(type){
         BottomInfoTower.kill();
     if (upgradeFireRateButton != undefined)
         upgradeFireRateButton.kill();
-    if (upgradeDamageButton != undefined){
+    if (upgradeDamageButton != undefined)
         upgradeDamageButton.kill();
-        console.log("KILL BUTTON");
-    }
-    if (fireRateText != undefined){
+    if (fireRateText != undefined)
         fireRateText.kill();
-            console.log("KILL BUTTON");
-    }
     if (damageText != undefined)
         damageText.kill();
 
@@ -940,11 +983,10 @@ function hoverOverButton(type){
     BottomInfoTower = game.add.sprite(510, 920, type);
     BottomInfoTower.scale.setTo(0.5);
     //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
-    //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
-    
-    
+    //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle); 
 
 }
+
 function hoverOutButton(){
 
     if (BottomInfoTowerText != undefined)

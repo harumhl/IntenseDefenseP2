@@ -22,6 +22,7 @@ var loadState =
         game.load.spritesheet('closeInstructionsButton', 'images/generalButtons/closeInstructionsButton.png',200,100);
         game.load.image('instructionSheet', 'images/instructionSheet.png');
         game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
+		game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
         
         
         
@@ -82,6 +83,12 @@ var loadState =
         game.load.image('upgradeMax', 'images/BottomInfoBox/upgradeMax.png');
         game.load.spritesheet('baseHealth', 'images/BottomInfoBox/baseHealth.png', 297,63); // Total 14 frames
 		
+		/* stuff for matchResults state */
+        game.load.image('winner', 'images/endMatch/winner.png');
+        game.load.image('loser', 'images/endMatch/loser.png');
+        game.load.spritesheet('continueButton', 'images/endMatch/continue.png', 200, 100);
+        game.load.image('checkmark', 'images/endMatch/checkmark.png');
+		
 	},
 	
 	create: function()
@@ -101,14 +108,14 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11008', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11088', "echo-protocol");
 
     
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-      console.log("M@" + new Date() + ": " + message);
+      //console.log("M@" + new Date() + ": " + message);
       
 		if(message == 'attacker' || message == 'defender'){
 			state = message;
@@ -167,11 +174,34 @@ window.onload = function() {
             console.log("switchRole: "+player.state);
             roleSwitched = true;
         }
+		else if (message == 'continueClicked') {
+            continueClicks += 1;
+        }
+        else if (message == 'addCheckDef') {
+            checkone = game.add.image(165,975, 'checkmark');
+            checkone.scale.setTo(0.5);
+        }
+        else if (message == 'addCheckAtt') {
+            checktwo = game.add.image(650,975, 'checkmark');
+            checktwo.scale.setTo(0.5);
+			game.add.button(405,975, 'continueButton',function(){
+				console.log("BEFORE");
+				if(player.state == 'attacker')
+					socket.send('addCheckAtt');
+				else if(player.state == 'defender')
+					socket.send('addCheckDef');
+				
+				continueClicked = true;
+				
+				socket.send("continueClicked");
+            }, this, 0, 1, 2);
+        }
         else if(message == "startRound")
         {
             // destroy the curatin and bring the tower sprites to the front so the attacker can see them now
             if(player.state == 'attacker'){
-                attackerCurtain.destroy();
+                 if(attackerCurtain != undefined)
+					attackerCurtain.destroy();
                 for (var i=0; i< towerArray.length; i++)
                     towerArray[i].image.bringToTop();
             }
@@ -183,26 +213,33 @@ window.onload = function() {
         else if(message.substring(0,12) == 'attackerName')
         {
             attackerName = message.substring(13, message.length);
-            document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
+			playerNames['attacker'] = attackerName;
+            //document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
         }
         else if(message.substring(0,12) == 'defenderName')
         {
             defenderName = message.substring(13, message.length);
-            document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
+			playerNames['defender'] = defenderName;
+            //document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
         }
         else if(message == "defenderPlaceTowers")
         {
             console.log("defenderplacetowers");
             defenderPlaceTowers = true;
+			attackerWon = false;
 
                 if(player.state == 'attacker'){
-                    matchmakingCurtain.destroy();
-                    attackerCurtain = game.add.sprite(144,129,'attckerCurtain');
+                    attackerCurtain = game.add.image(144,129,'attckerCurtain');
+					console.log("ADD THE CURTAIN");
+					attackerCurtain.bringToTop();
+					if(attackerCurtain.exists)console.log("--ADD THE CURTAIN");
+					if(matchmakingCurtain != undefined)
+					matchmakingCurtain.destroy();
                 }
 
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
-                countdown(0.03); // extra second for login time
+                countdown(0.06); // extra second for login time
             
         }
         else if(message.substring(0,7) == "upgrade")

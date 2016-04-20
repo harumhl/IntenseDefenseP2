@@ -13,6 +13,8 @@
 
 var onlyOnce = 0;
 var timeStamp;
+var endHealthFrame = 0;
+
 var playMatchState = 
 {
 	create: function()
@@ -20,7 +22,7 @@ var playMatchState =
 		
 		console.log('STATE:Play');
         rescale();
-        matchNum++;
+        roundMatchNum['match'] += 1;
         matchOver = false;
         roleSwitched = false;
 		startRound = false;
@@ -232,6 +234,7 @@ var playMatchState =
         }
 		if (player.state == 'defender')
         {
+			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
             // ???????????
             for (var i=0; i < towerNames.length; i++)
                 buttons[ towerNames[i] ].kill();
@@ -282,9 +285,18 @@ var playMatchState =
 	update: function()
 	{
         rescale();
+		
+		// destroy the checkmarks from the matchResults game state
+		if(checkone != undefined)
+			checkone.destroy();
+		if(checktwo != undefined)
+			checktwo.destroy();
         
-        if (matchOver)
+        if (matchOver){
+            endTime = newTime;
+            endHealth = endHealthFrame;
             game.state.start('matchResults');
+        }
 
         if (startRound && onlyOnce == 0)
             onlyOnce = 1;
@@ -305,9 +317,15 @@ var playMatchState =
 
             percentageBaseHealth = baseHealth / 2000;
             
-            // 95% or higher = 100// 85% or higher = 90// 75% or higher = 80 // ...
+            // 95% or higher = 100// 85% ~ 95% = 90// 75% ~ 85% = 80 // ...
             var roundToTenDigit = Math.round(percentageBaseHealth * 10)*10;
 
+			endHealthFrame = 10 - roundToTenDigit/10;
+			// this helps calculate the correct end frame to show in the endMatch results
+			if (endHealthFrame > 7) endHealthFrame = endHealthFrame + (endHealthFrame - 7);
+			
+			//console.log("endHealthFrame: " + endHealthFrame + " %health: " + percentageBaseHealth);
+			
             if (roundToTenDigit >= 40)
             {
                 baseHealthBar.play(roundToTenDigit+" health");
@@ -325,7 +343,7 @@ var playMatchState =
                     ++baseHealthUp;
                     if(baseHealthUp == 20) baseHealthDown = 20;
                 }
-                else
+                else // 
                 {
                     baseHealthBar.play(roundToTenDigit+" health down");
                     --baseHealthDown;
