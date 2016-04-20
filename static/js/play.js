@@ -219,19 +219,17 @@ var playMatchState =
             explosionAnimation.animations.add('explosion',[0,1,2,3,4],true);
         }
 		
-		/*Price labels for the zombie/tower buttons*/
+		/* Price labels for the zombie/tower buttons */
 		// Same style for each text
 		var style = {font: "20px Arial", fill: "#29a329", align: "center" };
-		//zombie price tags
-		var standardZombieText = game.add.text(50, 240, "$100", style);
-		var strongZombieText = game.add.text(50, 400, "$200", style);
-		var healingZombieText = game.add.text(50, 560, "$300", style);
-		var generationsZombieText = game.add.text(50, 720, "$400", style);
-		//tower price tags
-		var minigunTowerText = game.add.text(885, 240, "$100", style);
-		var shotgunTowerText = game.add.text(885, 400, "$200", style);
-        var gumTowerText = game.add.text(885, 560, "$300",style);
-        var bombTowerText = game.add.text(885, 720, "$400",style);
+        priceText['standard']    = game.add.text(50, 240,  "$"+price['standard'], style);
+        priceText['strong']      = game.add.text(50, 400,  "$"+price['strong'], style);
+        priceText['healing']     = game.add.text(50, 560,  "$"+price['healing'], style);
+        priceText['generations'] = game.add.text(50, 720,  "$"+price['generations'], style);
+        priceText['minigun']     = game.add.text(882, 240, "$"+price['minigun'], style);
+        priceText['shotgun']     = game.add.text(882, 400, "$"+price['shotgun'], style);
+        priceText['gum']         = game.add.text(882, 560, "$"+price['gum'], style);
+        priceText['bomb']        = game.add.text(882, 720, "$"+price['bomb'], style);
         
         if (player.state == 'attacker')
         {
@@ -247,15 +245,13 @@ var playMatchState =
                 bankruptImages[ towerNames[i]  ].reset(870, 160*(i+1));
             }
         }
-		if (player.state == 'defender') 
-        {
-            for (var i=0; i < towerNames.length; i++)
-            {
-                buttons[ towerNames[i] ].kill();
-            }
-        }
 		if (player.state == 'defender')
         {
+            // ???????????
+            for (var i=0; i < towerNames.length; i++)
+                buttons[ towerNames[i] ].kill();
+
+            /* Tower images will follow the mouse cursor once a tower button is clicked */
             followMouse['minigun'] = game.add.sprite(0,0,'minigunTower');
             followMouse['shotgun'] = game.add.sprite(0,0,'shotgunTower');
             followMouse['gum']     = game.add.sprite(0,0,'gumTower');
@@ -269,7 +265,6 @@ var playMatchState =
                 game.physics.arcade.enable(followMouse[ towerNames[i] ]);
                 followMouse[ towerNames[i] ].kill();
             }
-            
 		}
 
         // Hit ESC button to cancel tower selection from a tower button
@@ -280,7 +275,6 @@ var playMatchState =
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
         instructionSheet.kill();
 
-//        instructionButtonGroup = game.add.group();
         var instructionButton = game.add.button(865,800, 'instructionsButton', function(){
             instructionButton.kill();
             instructionSheet.reset(0,0);
@@ -293,11 +287,9 @@ var playMatchState =
             instructionButton.reset(865,800);
         }, this, 0, 1, 2);
         closeInstructionButton.kill();
+        
         instructionButton.scale.setTo(0.5);
         closeInstructionButton.scale.setTo(0.5);
-        
-//        instructionButtonGroup.add(instructionButton);
-//        instructionButtonGroup.add(closeInstructionButton);
         
 	},
 	

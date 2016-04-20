@@ -103,6 +103,7 @@ var moneyTextStyle = {font: "30px Arial", fill: "#004d00", align: "left" };
 var price = {
     standard:100,   strong:200,     healing:300,    generations:400,
 	minigun:100,    shotgun:200,    gum:300,        bomb:400};
+var priceText = [];
 
 // Used to generate money for both players over time
 var moneyTimer = 0;
