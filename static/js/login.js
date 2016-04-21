@@ -13,6 +13,11 @@ var backspaceHit;
 var loginButtonGroup;
 var charCount = 0;
 var errorText;
+var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890._"; // possible values for username
+var username = "";
+var keyboardInput = false;
+var usernameText;
+var textStyle = {font: "65px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
 
 var loginState =
 {
