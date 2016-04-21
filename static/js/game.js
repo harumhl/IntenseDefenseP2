@@ -731,7 +731,6 @@ function changePath(){
     currentPathFrame = zombiePathButton.frame;
 }
 function damageBase(index) {
-    /* POSSIBLE ERROR */
     if(zombieArray[index] == undefined) {
         console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
         return;

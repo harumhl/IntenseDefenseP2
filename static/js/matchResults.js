@@ -9,6 +9,7 @@ matchResultsState =
 	},
 	create: function()
 	{
+	defenderPlaceTowers = false;
         game.add.sprite(0,0,'title');
         var endMatchTitleStyle = { font: "bold 60px Arial", fill: "#595959"};//boundsAlignH: "center", boundsAlignV: "middle" };
         var roundMatchStyle = { font: "25px Arial", fill: "#595959"};//, boundsAlignH: "center", boundsAlignV: "middle" };
@@ -134,7 +135,7 @@ matchResultsState =
 		if (roundMatchNum['match'] == 1) {
             
             if (roleSwitched && continueClicked /*&& continueClicks == 2*/) {
-                socket.send('logged in ' + state);
+                socket.send('logged in');
                 continueClicks = 0;
                 game.state.start('playMatch');
              }
