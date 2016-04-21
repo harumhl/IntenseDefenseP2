@@ -125,8 +125,11 @@ window.onload = function() {
 			state = 'observer';
 			console.log(state);
 		}
-		else if(message.length > 9 && message.substring(0,9) == 'addZombie')
-			buyZombie(message.substring(9, message.length));
+		else if(message.length > 9 && message.substring(0,9) == 'addZombie'){
+			var zombieType = message.substring(9, message.length);
+			buyZombie(zombieType);
+			zombieCount[zombieType] += 1;
+		}
 		else if(message == 'incoming')
 			incoming = true;
 		else if(message.substring(0,13) == 'defenderMoney'){
@@ -165,7 +168,7 @@ window.onload = function() {
 				
 			}
 			towerArray.push(new Tower(towerType, pos_x, pos_y));
-			
+			towerCount[towerType] += 1;
 		}
         else if (message == 'switchRoles') {
             if      (player.state == 'attacker') player.state = 'defender';
@@ -227,7 +230,8 @@ window.onload = function() {
             console.log("defenderplacetowers");
             defenderPlaceTowers = true;
 			attackerWon = false;
-
+		// causes error on defender side, but the block of code does not
+		// effect the defenders page at all
                 if(player.state == 'attacker'){
                     attackerCurtain = game.add.image(144,129,'attckerCurtain');
 					console.log("ADD THE CURTAIN");
