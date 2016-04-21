@@ -306,8 +306,18 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 		// create two more standard zombies
 		if(zombieArray[index].type == 'generations'){
 			for(var i = 0; i<2; i++) { 
-				zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 100, 1));
-				zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
+				if(zombieArray[index].direction == 'left'){
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y, 1));
+					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y));
+				}
+				else if(zombieArray[index].direction == 'right'){
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y, 1));
+					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y));
+				}
+				else{
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 1));
+					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
+				}
 			}
 		}
 				
