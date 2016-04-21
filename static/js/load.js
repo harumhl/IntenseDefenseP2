@@ -278,7 +278,7 @@ window.onload = function() {
 					damageBase(receivedArray[i]);
 			}
 			else{
-				if(receivedArray.length == zombieStatArray.length || lockout > 5){
+				if(receivedArray.length == zombieStatArray.length || lockout > 10){
 						zombieStatArray = receivedArray;
 						lockout = 0;
 					for(var i = 0; i<zombieStatArray.length; i++) {

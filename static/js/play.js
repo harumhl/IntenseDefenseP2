@@ -522,6 +522,7 @@ var playMatchState =
 			for (var j=0; j< zombieArray.length; j++) {
                 for (var k=0; k < towerNames.length-1; k++) // length-1 cuz bomb tower is done later
                 {
+					if (zombieArray[j] == undefined) continue;
                     game.physics.arcade.overlap(bulletss[ towerNames[k] ], zombieArray[j].image,
                         function(zombie,bullet){ //console.log("pre overlap");
                             bullet.kill();
