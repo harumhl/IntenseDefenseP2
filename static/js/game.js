@@ -307,15 +307,15 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 		if(zombieArray[index].type == 'generations'){
 			for(var i = 0; i<2; i++) { 
 				if(zombieArray[index].direction == 'left'){
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y, 1));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y));
 				}
 				else if(zombieArray[index].direction == 'right'){
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y, 1));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y));
 				}
 				else{
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 1));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
 				}
 			}
@@ -577,12 +577,13 @@ Zombie.prototype.heal = function(){
 
 /*      Global functions    */
 
-function zombieStat(_lane, _pos_x, _pos_y, _speed) {
+function zombieStat(_lane, _pos_x, _pos_y, _speed, _damage) {
 	this.lane   = _lane;
 	this.pos_x  = _pos_x;
 	this.pos_y  = _pos_y;
 	this.speed  = _speed;
 	this.direction = "";
+	this.damage = _damage;
 }
 
 function newRound() {
@@ -730,20 +731,21 @@ function changePath(){
     }
     currentPathFrame = zombiePathButton.frame;
 }
-function damageBase(index) {
-    if(zombieArray[index] == undefined) {
-        console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
-        return;
-    }
-	
-	baseHealth -= zombieArray[index].damage;
-    //document.getElementById("health").innerHTML = " Health: " + baseHealth; 
-	
+function cleanseZombie(index){
 	// Killing the zombie and removing it from the arrays
-	zombieArray[index].alive = false;    
+	//zombieArray[index].alive = false;    
 	zombieArray[index].image.kill();
 	zombieArray.splice(index, 1);
 	zombieStatArray.splice(index,1);
+}
+function damageBase(amount) {
+    /*if(zombieArray[index] == undefined) {
+        console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
+        return;
+    }*/
+	console.log('CALLING DAMAGE BASE'+amount);
+	baseHealth -= amount;
+    //document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	
     if(baseHealth <= 0) {
         winner = 'attacker';
@@ -829,19 +831,19 @@ function buyZombie(type) {
 	   by the caller of this function, "sendAddZombie" */
 	
     if (type == "standard"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1, 100));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
     else if (type == "strong"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.6));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.6, 200));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
 	else if (type == "healing"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1, 50));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
     else if (type == "generations"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.3));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.3, 200));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
 	}
 }

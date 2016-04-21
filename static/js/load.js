@@ -108,7 +108,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11012', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11008', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
@@ -116,7 +116,6 @@ window.onload = function() {
 	  var message = event.data;
 	 // var type = 'string';
       console.log("M@" + new Date() + ": " + message);
-      
 		if(message == 'attacker' || message == 'defender'){
 			state = message;
 			console.log(state);
@@ -270,12 +269,16 @@ window.onload = function() {
                 }
             }
         }
+		else if(message.substring(0,10) == 'baseDamage'){
+			console.log('damaging base '+message.substring(10, message.length));
+			damageBase(message.substring(10, message.length))
+		}
 		else
 		{
 			var receivedArray = JSON.parse(message);
 			if(typeof(receivedArray[0]) == 'number'){
 				for(var i = 0; i<receivedArray.length; i++)
-					damageBase(receivedArray[i]);
+					cleanseZombie(receivedArray[i]);
 			}
 			else{
 				if(receivedArray.length == zombieStatArray.length || lockout > 10){

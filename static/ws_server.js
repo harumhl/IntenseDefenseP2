@@ -11,6 +11,7 @@ var defenderAvailable = true;
 var attackerLoggedIn = false; // these variables control when the timer for placing initial towers start
 var defenderLoggedIn = false;
 var roleChangedToNumber = 0;
+var cooldown = 0;
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
@@ -18,7 +19,7 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
-var portNum = 11012;
+var portNum = 11008;
 server.listen(portNum, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port '+portNum);
 });
@@ -139,6 +140,7 @@ wsServer.on('request', function(request) {
 				//var zombieGroup = JSON.parse(message.utf8Data);
 				var obj = message.utf8Data;
 				var zombieStatArray = JSON.parse(obj);
+				var baseDamage = 0;
 				killIndexes = [];
 		        /*for(var x = 0; x<zombieStatArray.length; x++)
 				{
@@ -151,8 +153,15 @@ wsServer.on('request', function(request) {
 						zombieStatArray[i].direction = "down";
 						if(zombieStatArray[i].pos_y < 775)
 							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
-						else
-							killIndexes.push(i);
+						else {
+							if(cooldown == 0){
+								console.log(i+' '+zombieStatArray[i].damage);
+								baseDamage += zombieStatArray[i].damage;
+								killIndexes.push(i);
+							}
+							else 
+								cooldown--;
+						}
 					}
 					else if (zombieStatArray[i].lane == "right") // right lane
 					{
@@ -201,11 +210,15 @@ wsServer.on('request', function(request) {
 				}
 				//if(killIndexes.length >0)
 					//console.log(killIndexes.length);
-				if(killIndexes.length >0)
+				if(killIndexes.length > 0)
 				{
 					for(var y = 0; y<connections.length; y++){
-					connections[y].sendUTF(JSON.stringify(killIndexes));
+						connections[y].sendUTF(JSON.stringify(killIndexes));
+						connections[y].sendUTF('baseDamage'+baseDamage);
 					}
+					baseDamage = 0;
+					cooldown = 10;
+					killIndexes = [];
 				}
 					
 				//console.log(JSON.stringify(zombieStatArray));
