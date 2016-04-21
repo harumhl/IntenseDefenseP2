@@ -22,6 +22,12 @@ var playMatchState =
 		
 		console.log('STATE:Play');
         rescale();
+        //reset the zombie/Tower Count
+		for (var i=0; i < zombieNames.length; i++) 
+			zombieCount[ zombieNames[i] ] = 0;
+		for (var i=0; i < towerNames.length; i++) 
+			towerCount[ towerNames[i] ] = 0;
+			
         roundMatchNum['match'] += 1;
         matchOver = false;
         roleSwitched = false;
