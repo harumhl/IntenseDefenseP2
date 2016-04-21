@@ -285,6 +285,17 @@ var playMatchState =
 	update: function()
 	{
         rescale();
+        
+        if (game.input.mousePointer.isDown) {
+            if (gTowerType != "") {
+                var mouse_x = game.input.mousePointer.x;
+                var mouse_y = game.input.mousePointer.y;
+                
+            if(mouse_x < 144 || 844 < mouse_x || mouse_y < 129 || mouse_y > 864)
+                cancelTowerClick(true, true);
+            }
+        }
+
 		
 		// destroy the checkmarks from the matchResults game state
 		if(checkone != undefined)
