@@ -273,7 +273,6 @@ var playMatchState =
             instructionButton.kill();
             instructionSheet.reset(0,0);
             closeInstructionButton.reset(865,800);
-            usernameText.kill();
         }, this, 0,1,2);
     
         var closeInstructionButton = game.add.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();

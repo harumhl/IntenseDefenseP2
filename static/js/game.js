@@ -130,14 +130,6 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 // zombie/Tower bankrupt images
 var bankruptImages = {};
 
-// variables used for the login game state
-var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890._"; // possible values for username
-var username = "";
-var keyboardInput = false;
-var usernameText;
-var textStyle = {font: "65px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"};
-var usernameClicked = false;
-
 var instructionSheet;
 
 var towerUpgrade;

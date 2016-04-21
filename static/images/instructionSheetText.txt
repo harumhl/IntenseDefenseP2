@@ -1,0 +1,11 @@
+Greetings, Ladies and Gentlemen, Welcome to Intense Defense game.
+- Your goal in this game is to overpower your opponent both in your attack and in your defense.
+* basic game layer setup: Intense Defense game title on top, four zombie buttons on the left side for attacker, four tower buttons on the right side for defender, map in the center (green grass to place towers, yellow lanes where zombie follows, zombie tomb on top where zombies spawn for defender or zombie path selection arrow on top for attacker, human base on bottom where defender wants to keep), and info box on the bottom (on left side: defender's base health, time left for the match, money left for each player, their role and and username; on right side: zombie or tower drawing and name, their detailed information, and possible upgrade).
+1. Log-in stage: Enter your username whatever you chooses to have, which can contain alphabet letters, numbers, dot and underscore and cannot be longer than 12 characters. Once you are ready to play the game, hit "Enter" in your keyboard or the button on screen.
+2-1. Attacker log-in: If you are the first person to be in the game, it will prompt a message "Please wait while we connect you with a player". It will persists until another player connects to the same game. Once that happens, colored buttons on the left side, greyed buttons on the right,a yellow and grey box on the bottom, and a black screen in the center that says "Defender is placing his/her towers, please wait for 30 seconds and the game will start"
+2-2. Defender log-in: If you are presented with grey buttons on the left sides, colored buttons on the right, a green and yellow map in center, and a yellow and grey box on the bottom as soon as you hit "Enter" from login stage, you are the defender in the match.
+3. Defender Tower Placement stage: When both players entered the game after logging in, the defender is given 30 seconds to place towers on the map. 
+4. Real Game: During the next 5 minutes, attacker can send zombie
+5. End of Match: 
+6. End of Round: 
+7. End of Game: 
