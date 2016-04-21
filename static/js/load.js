@@ -109,7 +109,7 @@ window.onload = function() {
     
   // Create a new WebSocket.
   socket = new WebSocket('ws://compute.cse.tamu.edu:11012', "echo-protocol");
-
+  var lockout = 0;
     
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
@@ -278,11 +278,17 @@ window.onload = function() {
 					damageBase(receivedArray[i]);
 			}
 			else{
-				if(receivedArray.length == zombieStatArray.length){
+				if(receivedArray.length == zombieStatArray.length || lockout > 5){
 						zombieStatArray = receivedArray;
+						lockout = 0;
 					for(var i = 0; i<zombieStatArray.length; i++) {
 						zombieArray[i].move(zombieStatArray[i].pos_x, zombieStatArray[i].pos_y, zombieStatArray[i].direction);        
 					}
+				}
+				else
+				{
+					console.log(lockout);
+					lockout++;
 				}
 			}
 		}
