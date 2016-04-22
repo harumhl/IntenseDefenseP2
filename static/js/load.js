@@ -109,7 +109,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11008', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11006', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
@@ -261,9 +261,9 @@ window.onload = function() {
                     if(towerArray[i].pos_y == posY){
                         if(towerArray[i].type == towerType)
                         {
-                            if(message.substring(8,16) == "fireRate")
+                            if(message.substring(8,17) == "fire rate")
                                 towerArray[i].upgradeFireRate();
-                            if(message.substring(8,14) == "damage")
+                            if(message.substring(8,19) == "damage rate")
                                 towerArray[i].upgradeDamage();
                         }
                     }
