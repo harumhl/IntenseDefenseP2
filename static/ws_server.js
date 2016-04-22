@@ -20,7 +20,7 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
-var portNum = 11016;
+var portNum = 11014;
 server.listen(portNum, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port '+portNum);
 });
@@ -69,6 +69,7 @@ wsServer.on('request', function(request) {
     */
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
+		//console.log("message: "+message.utf8Data);
         if (message.type === 'utf8') {
                
             if(message.utf8Data == 'logged in')
@@ -153,6 +154,7 @@ wsServer.on('request', function(request) {
 			else
 			{
 				//var zombieGroup = JSON.parse(message.utf8Data);
+				//console.log("elsese");
 				var obj = message.utf8Data;
 				var zombieStatArray = JSON.parse(obj);
 				var baseDamage = 0;
@@ -166,9 +168,11 @@ wsServer.on('request', function(request) {
 					if (zombieStatArray[i].lane == "center")
 					{
 						zombieStatArray[i].direction = "down";
-						if(zombieStatArray[i].pos_y < 775)
+						if(zombieStatArray[i].pos_y < 775) {
 							zombieStatArray[i].pos_y += zombieStatArray[i].speed;
-						else {
+						}
+						else 
+						{
 							if(cooldown == 0){
 								console.log(i+' '+zombieStatArray[i].damage);
 								baseDamage += zombieStatArray[i].damage;
@@ -195,9 +199,11 @@ wsServer.on('request', function(request) {
 							zombieStatArray[i].direction = "left";
 							zombieStatArray[i].pos_x -= zombieStatArray[i].speed;
 						}
-						else
+						else { // the last part to go down towards the base
 							zombieStatArray[i].lane = "center";
+							zombieStatArray[i].direction = "down";
 						}
+					}
 					else // left lane
 					{
 						if(zombieStatArray[i].pos_x > 218 && zombieStatArray[i].pos_y < 704)
@@ -215,9 +221,11 @@ wsServer.on('request', function(request) {
 							zombieStatArray[i].direction = "right";
 							zombieStatArray[i].pos_x+=zombieStatArray[i].speed
 						}
-						else
+						else { // the last part to go down towards the base
 							zombieStatArray[i].lane = "center";
+							zombieStatArray[i].direction = "down";
 						}
+					}
 				}
 		
 				for(var y = 0; y<connections.length; y++){

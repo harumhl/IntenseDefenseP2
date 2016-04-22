@@ -159,7 +159,7 @@ var attackerWon = false;
 
 var continueClicks = 0;
 var startEndRound = false;
- var continueButton;
+var continueButton;
 
 
 /*       Classes         */
@@ -258,19 +258,20 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 	
 	// this.pos_x|y is the zombies' topleft position. 
 	// this.x|y is adjusted with the x|y_offset, so we have their center positions
-	this.x = this.pos_x + x_offset;
-	this.y = this.pos_y + y_offset;
 	
 	// (x,y) coordinates for bullet-zombie overlap 
 	// - where zombie would be by the time the bullet is supposed to hit the zombie
 	if (this.direction == "down") {
-		this.y = this.y + 30*(bulletTravelTime/1000)*this.speed;
+		this.x = this.pos_x;
+		this.y = (this.pos_y + y_offset) + 27*(bulletTravelTime/1000)*this.speed;
 	}
 	else if (this.direction == "left") {
-		this.x = this.x - 50*(bulletTravelTime/1000)*this.speed;
+		this.x = this.pos_x - 65*(bulletTravelTime/1000)*this.speed;
+		this.y = (this.pos_y + y_offset);
 	}
 	else if (this.direction == "right") {
-		this.x = this.x + 50*(bulletTravelTime/1000)*this.speed;
+		this.x = this.pos_x + 60*(bulletTravelTime/1000)*this.speed;
+		this.y = (this.pos_y + y_offset);
 	}
 };
 Zombie.prototype.slow = function(amount, index){

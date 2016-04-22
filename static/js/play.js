@@ -1,15 +1,8 @@
 /* play.js */
-
-
-
-
 /*
 	- at end of match (i.e. endRound('attacker') ) we have to call the 'matchResults' game state
 			-> game.state.start('matchResults');
-
-
 */
-
 
 var onlyOnce = 0;
 var timeStamp;
@@ -28,7 +21,6 @@ var playMatchState =
 		for (var i=0; i < towerNames.length; i++) 
 			towerCount[ towerNames[i] ] = 0;
 			
-        
         matchOver = false;
         roleSwitched = false;
 		startRound = false;
@@ -38,7 +30,6 @@ var playMatchState =
         if (player.state == 'defender') player.money = 1000;
         timeStamp = game.time.now;
 
-		//load images on the background
 		game.stage.backgroundColor = "#e5e1db"; // gray background color
 		game.add.sprite(0,0,'title');
         //load images for bottom upgrade box
@@ -121,7 +112,7 @@ var playMatchState =
                                                      hoverOverButton('gumTower');});
         bankruptImages['bomb'].events.onInputOver.add(function(){
                                                       hoverOverButton('bombTower');});
-        
+	
 		if(player.state == 'attacker'){
 			//zombie path button (the red arrow on top of map)
 			zombiePathButton = game.add.button(472,160, 'zombiePathButton', changePath, this, 0, 1, 2);
@@ -133,7 +124,8 @@ var playMatchState =
 			// zombie tombstone image where zombies spawn
 			var zombieSpawn = game.add.image(470, spawn_y, 'zombieSpawn');
 			zombieSpawn.scale.setTo(0.1); 
-		}
+		}   
+                
         //load images for bottom upgrade box
         bottomUpgradeBox = game.add.sprite(144, 890, 'bottomUpgradeBox');
 		baseHealthBar = game.add.sprite(150, 900, 'baseHealth');
@@ -154,7 +146,6 @@ var playMatchState =
             baseHealthBar.animations.play('100 Health');
 		// text within the health bar to show the player the current base health
 		baseHealthText = game.add.text(153,937,"Health: 2000", baseHealthStyle);
-
 
 		//animations for the base (shows the base taking damage)
 		base = game.add.sprite(432,780,'base'); // 6 frames total 100%,80%,60%,40%,20%,0%
@@ -179,10 +170,7 @@ var playMatchState =
             moneyText =  game.add.text(230, 1010, "$1000", moneyTextStyle);
             playerText = game.add.text(153,1055,("Defender: " + player.username),infoTitleStyle);
         }
-        
-        //playerText = game.add.text(153,1055,("Username: " + player.username),infoTitleStyle);
-        
-        
+
 		//  The tower bullet groups
         bulletss['minigun'] = game.add.group();
         bulletss['shotgun'] = game.add.group();
@@ -197,7 +185,6 @@ var playMatchState =
             bulletss[ towerNames[i] ].setAll('anchor.y', 0.5); // center of the object - not topleft
             bulletss[ towerNames[i] ].setAll('scale.x', 0.5);  // reducing the size to half
             bulletss[ towerNames[i] ].setAll('scale.y', 0.5);  // reducing the size to half
-            
         }
         bulletss['minigun'].createMultiple(40, 'minigunBullet'); // creating 40 bullet
         bulletss['shotgun'].createMultiple(30, 'shotgunBullet'); // creating 30 bullet
@@ -228,8 +215,6 @@ var playMatchState =
         {
 			matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
 
-            console.log("plz gray out");
-            
             for (var i=0; i < zombieNames.length; i++)
             {
                 buttons[ zombieNames[i] ].kill();
@@ -240,7 +225,6 @@ var playMatchState =
         }
 		if (player.state == 'defender')
         {
-			//matchmakingCurtain = game.add.sprite(0,129,'matchmakingCurtain');
             // ???????????
             for (var i=0; i < towerNames.length; i++)
                 buttons[ towerNames[i] ].kill();
@@ -261,7 +245,7 @@ var playMatchState =
             }
             
 		}
-        console.log("make attack range");
+
         // pink image that shows the tower attack range when a tower clicked (on map or of a button)
         attackRange = game.add.sprite(0,0,'attackRange');
         attackRange.anchor.set(0.5);
@@ -280,7 +264,9 @@ var playMatchState =
         var instructionButton = game.add.button(865,800, 'instructionsButton', function(){
             instructionButton.kill();
             instructionSheet.reset(0,0);
+			instructionSheet.bringToTop();
             closeInstructionButton.reset(865,800);
+			closeInstructionButton.bringToTop();
         }, this, 0,1,2);
     
         var closeInstructionButton = game.add.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();
@@ -310,12 +296,9 @@ var playMatchState =
             }
         }
 
-		
 		// destroy the checkmarks from the matchResults game state
-		if(checkone != undefined)
-			checkone.destroy();
-		if(checktwo != undefined)
-			checktwo.destroy();
+		if(checkone != undefined) checkone.destroy();
+		if(checktwo != undefined) checktwo.destroy();
         
         if (matchOver){
             endTime = newTime;

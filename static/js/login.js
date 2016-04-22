@@ -125,14 +125,9 @@ function keyPressed(char) {
                 errorText.reset(239,690);
                 --charCount;
                 console.log("H "+charCount);
-                
             }
             else{
-                
-                
-                console.log(charCount);
                 username += char;
-                
             }
         }
     }
