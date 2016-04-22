@@ -80,11 +80,15 @@ var baseHealthStyle = {font: "20px Arial", fill: "#ffffff", align: "left" };
 
 var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
 var bottomBoxTowerNameStyle = {font: "30px Arial", fill: "#F5F5F5", align: "center"};
-var BottomInfoTower;
+var BottomInfoSprite;
 var BottomInfoTowerText;
+var bottomUpgradeText;
 var towerClicked = false;
 var fireRateText;
 var damageText;
+var zombieHealthText;
+var zombieSpeedText;
+var zombieDamageText;
 var upgradeFireRateButton;
 var upgradeDamageButton;
 
@@ -459,23 +463,33 @@ Tower.prototype.upgradeT = function(){
         else  
                 BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
 
-        BottomInfoTower = game.add.sprite(510, 920, this.type + 'Tower');
-        BottomInfoTower.scale.setTo(0.5);
+        BottomInfoSprite = game.add.sprite(510, 920, this.type + 'Tower');
+        BottomInfoSprite.scale.setTo(0.5);
         fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
 
         if (this.fireRateLevel == 4)
             upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
         else
-            upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
-            socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+            upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {
+				var hasMoney = this.checkBalance("fireRate");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeFireRateButton.kill();
+					socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 
         
         if (this.damageLevel == 4) 
             upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
         else
-            upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
-            socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+            upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {
+				var hasMoney = this.checkBalance("damage");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeDamageButton.kill();
+					socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 
         towerClicked = true;
     }
@@ -486,33 +500,126 @@ Tower.prototype.upgradeFireRate = function(){
     this.fireRate -= 100;
     if(player.state == 'defender'){
         fireRateText.setText("Fire Rate:  " + this.fireRate);
-        this.fireRateLevel += 1;
-    }
-    if (this.fireRateLevel == 4)
-        upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
-    else
-        upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
-        socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+        
+		if(this.fireRateLevel == 1){
+			player.money -= 50;
+		}
+		else if (this.fireRateLevel == 2){
+			player.money -= 75;
+		}
+		else if(this.fireRateLevel == 3){
+			player.money -= 100;
+		}
+		
+		this.fireRateLevel += 1;
+    
+		if (this.fireRateLevel == 4)
+			upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
+		else
+			upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {
+
+				var hasMoney = this.checkBalance("fireRate");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeFireRateButton.kill();
+					socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
+	}
 };
 
 Tower.prototype.upgradeDamage = function(){
     console.log("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type+":");
-
+	
     this.damage += 25;
     if(player.state == 'defender'){
         damageText.setText("Damage:   " + this.damage);
+		
+		if(this.damageLevel == 1){
+			player.money -= 50;
+		}
+		else if (this.damageLevel == 2){
+			player.money -= 75;
+		}
+		else if(this.damageLevel == 3){
+			player.money -= 100;
+		}
+		
+		
         this.damageLevel += 1;
-    }
-    if (this.damageLevel == 4) 
-        upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
-    else
-        upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
-        socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+		//this.damage += 25;
+		
+		if (this.damageLevel == 4) 
+			upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
+		else
+			upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {
+				var hasMoney = this.checkBalance("damage");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeDamageButton.kill();
+					socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
+	}
 };
+
+
+Tower.prototype.checkBalance = function(upgradeType){
+	console.log('checkB, damagelevel == ' +this.damageLevel);
+	console.log('checkB, fireRateLevl == ' +this.fireRateLevel);
+	if(upgradeType == 'damage'){
+		if(this.damageLevel == 1 ){
+			if(player.money >= 50) {
+				console.log("1 --");
+				return 1;
+			}
+			else console.log(' 1 NO MONEY');
+		}
+		else if (this.damageLevel == 2){
+			if(player.money >= 75){
+				console.log("2 --");
+				return 1;
+			}
+			else console.log(' 2 NO MONEY');
+		}
+		else if(this.damageLevel == 3){
+			if(player.money >= 100){
+				console.log("3 --");
+				return 1;
+			}
+			else console.log(' 3 NO MONEY');
+		}
+		else 
+			return 0;
+	}
+	else if(upgradeType == 'fireRate'){
+		if(this.fireRateLevel == 1){
+			if(player.money >= 50) {
+				console.log("1 --");
+				return 1;
+			}
+			else console.log(' 1 NO MONEY');
+		}
+		else if (this.fireRateLevel == 2){
+			if(player.money >= 75){
+				console.log("2 --");
+				return 1;
+			}
+			else console.log(' 2 NO MONEY');
+		}
+		else if(this.fireRateLevel == 3){
+			if(player.money >= 100){
+				console.log("3 --");
+				return 1;
+			}
+			else console.log(' 3 NO MONEY');
+		}
+		else 
+			return 0;
+	}
+}
 
 function ResetBottomBox(){
     if (BottomInfoTowerText != undefined)   BottomInfoTowerText.kill();
-    if (BottomInfoTower != undefined)       BottomInfoTower.kill();
+    if (BottomInfoSprite != undefined)       BottomInfoSprite.kill();
     if (fireRateText != undefined)          fireRateText.kill();
     if (damageText != undefined)            damageText.kill();
     if (upgradeFireRateButton != undefined) upgradeFireRateButton.kill();
@@ -932,8 +1039,8 @@ function hoverOverButton(type){
 
     if (BottomInfoTowerText != undefined)
         BottomInfoTowerText.kill();
-    if (BottomInfoTower != undefined)
-        BottomInfoTower.kill();
+    if (BottomInfoSprite != undefined)
+        BottomInfoSprite.kill();
     if (upgradeFireRateButton != undefined)
         upgradeFireRateButton.kill();
     if (upgradeDamageButton != undefined)
@@ -947,30 +1054,81 @@ function hoverOverButton(type){
     //damageText.kill();
 
     var typeFullName = "";
-    if      (type == 'standardZombie')    typeFullName = 'Standard Zombie';
-    else if (type == 'strongZombie')      typeFullName = 'Strong Zombie';
-    else if (type == 'healingZombie')     typeFullName = 'Healing Zombie';
-    else if (type == 'generationsZombie') typeFullName = 'Generations Zombie';
-    else if (type == 'minigunTower')      typeFullName = 'Minigun Tower';
-    else if (type == 'shotgunTower')      typeFullName = 'Shotgun Tower';
-    else if (type == 'gumTower')          typeFullName = 'Gum Tower';
-    else if (type == 'bombTower')         typeFullName = 'Bomb Tower';
-
-    BottomInfoTowerText = game.add.text(610, 920, typeFullName, {font: "30px Arial", fill: "#F5F5F5", align: "center"});
-
-    BottomInfoTower = game.add.sprite(510, 920, type);
-    BottomInfoTower.scale.setTo(0.5);
-    //fireRateText = game.add.text(550, 990, 'Fire Rate:  ' + this.fireRate, bottomBoxStyle);
-    //damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle); 
+    if      (type == 'standardZombie'){
+		typeFullName = 'Standard Zombie';
+		zombieHealthText = game.add.text(600, 970, 'Health: 200', bottomBoxStyle);
+		zombieSpeedText  = game.add.text(600, 1005, 'Speed: fast', bottomBoxStyle);
+		zombieDamageText = game.add.text(600, 1040, 'Damage: 100', bottomBoxStyle);
+	}
+    else if (type == 'strongZombie'){
+		typeFullName = 'Strong Zombie';
+		zombieHealthText = game.add.text(600, 970, 'Health: 300', bottomBoxStyle);
+		zombieSpeedText  = game.add.text(600, 1005, 'Speed: normal', bottomBoxStyle);
+		zombieDamageText = game.add.text(600, 1040, 'Damage: 200', bottomBoxStyle);
+	}
+    else if (type == 'healingZombie'){     
+		typeFullName = 'Healing Zombie';
+		zombieHealthText = game.add.text(600, 970, 'Health: 500', bottomBoxStyle);
+		zombieSpeedText  = game.add.text(600, 1005, 'Speed: fast', bottomBoxStyle);
+		zombieDamageText = game.add.text(600, 1040, 'Damage: 50', bottomBoxStyle);
+	}
+    else if (type == 'generationsZombie'){
+		typeFullName = 'Generations Zombie';
+		zombieHealthText = game.add.text(600, 970, 'Health: 600', bottomBoxStyle);
+		zombieSpeedText  = game.add.text(600, 1005, 'Speed: slow', bottomBoxStyle);
+		zombieDamageText = game.add.text(600, 1040, 'Damage: 300', bottomBoxStyle);
+	}
+    else if (type == 'minigunTower'){
+		fireRateText = game.add.text(600, 990, 'Fire Rate: 750', bottomBoxStyle);
+		damageText = game.add.text(600, 1035, 'Damage: 30', bottomBoxStyle);
+		typeFullName = 'Minigun Tower';
+	}      
+    else if (type == 'shotgunTower') {
+		fireRateText = game.add.text(600, 990, 'Fire Rate: 950', bottomBoxStyle);
+		damageText = game.add.text(600, 1035, 'Damage: 80', bottomBoxStyle);
+		typeFullName = 'Shotgun Tower';
+	}
+    else if (type == 'gumTower'){
+		fireRateText = game.add.text(600, 990, 'Fire Rate: 1000', bottomBoxStyle);
+		damageText = game.add.text(600, 1035, 'Damage: Slows Zombies', bottomBoxStyle);
+		typeFullName = 'Gum Tower';
+	}
+    else if (type == 'bombTower'){
+		fireRateText = game.add.text(600, 990, 'Fire Rate: 1000', bottomBoxStyle);
+		damageText = game.add.text(600, 1035, 'Damage: 150', bottomBoxStyle);
+		typeFullName = 'Bomb Tower';
+	}
+	
+	if(type == 'generationsZombie')
+		BottomInfoTowerText = game.add.text(575, 920, typeFullName, {font: "27px Arial", fill: "#F5F5F5", align: "center"});
+	else
+		BottomInfoTowerText = game.add.text(600, 920, typeFullName, {font: "27px Arial", fill: "#F5F5F5", align: "center"});
+	
+	if(type.indexOf('Z') == -1) // check if the type has the letter Z meaning its a zombie sprite
+		BottomInfoSprite = game.add.sprite(510, 920, type);
+	else	// here if it is a zombie sprite
+		BottomInfoSprite = game.add.sprite(510, 920, type, 9);
+		
+    BottomInfoSprite.scale.setTo(0.75);
 
 }
 
 function hoverOutButton(){
 
-    if (BottomInfoTowerText != undefined)
-        BottomInfoTowerText.kill();
-    if (BottomInfoTower != undefined)
-        BottomInfoTower.kill();
+    if (BottomInfoTowerText != undefined) 	BottomInfoTowerText.destroy();
+    if (BottomInfoSprite != undefined) 		BottomInfoSprite.destroy();
+	if (fireRateText != undefined)			fireRateText.destroy();
+	if (damageText != undefined)			damageText.destroy();
+	if (zombieHealthText != undefined) 		zombieHealthText.destroy();
+	if (zombieSpeedText != undefined)		zombieSpeedText.destroy();
+	if (zombieDamageText != undefined)		zombieDamageText.destroy();
+	
+	if(player.state == 'attacker'){ // here place the upgraded zombie options
+		
+	}
+	else if (player.state == 'defender'){
+		bottomUpgradeText = game.add.text(560,960,"Click on a tower on the\nmap to start upgrading", bottomBoxStyle);
+	}
 }
 
 function rescale() {
