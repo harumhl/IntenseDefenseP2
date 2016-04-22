@@ -55,6 +55,7 @@ var loadState =
 		game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
 		game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
 		game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
+        game.load.image('attackRange', 'images/Towers/attackRange.png');
 		
 		game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
 		game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
@@ -262,7 +263,7 @@ window.onload = function() {
                         {
                             if(message.substring(8,16) == "fireRate")
                                 towerArray[i].upgradeFireRate();
-                            if(messafe.substring(8,14) == "damage")
+                            if(message.substring(8,14) == "damage")
                                 towerArray[i].upgradeDamage();
                         }
                     }

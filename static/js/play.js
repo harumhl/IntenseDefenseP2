@@ -259,11 +259,19 @@ var playMatchState =
                 game.physics.arcade.enable(followMouse[ towerNames[i] ]);
                 followMouse[ towerNames[i] ].kill();
             }
+            
 		}
+        console.log("make attack range");
+        // pink image that shows the tower attack range when a tower clicked (on map or of a button)
+        attackRange = game.add.sprite(0,0,'attackRange');
+        attackRange.anchor.set(0.5);
+        //attackRange.scale.setTo(0.5);
+        game.physics.arcade.enable(attackRange);
+        attackRange.kill();
 
         // Hit ESC button to cancel tower selection from a tower button
         game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(function () {
-            cancelTowerClick(true);}, this);
+            cancelTowerClick(true, true);}, this);
         
         // Display instruction button (and one for cancelling it)
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
@@ -461,6 +469,8 @@ var playMatchState =
                     {
                         game.physics.arcade.moveToPointer(
                             followMouse[ towerNames[i] ], 300, game.input.activePointer, 10);
+                        game.physics.arcade.moveToPointer(
+                            attackRange, 300, game.input.activePointer, 10);
                     }
                     // rather close, bring it close slowly
                     if (game.physics.arcade.distanceToPointer(
@@ -468,6 +478,8 @@ var playMatchState =
                     {
                         game.physics.arcade.moveToPointer(
                             followMouse[ towerNames[i] ], 300, game.input.activePointer, 50);
+                        game.physics.arcade.moveToPointer(
+                            attackRange, 300, game.input.activePointer, 50);
                     }
                 }
             }

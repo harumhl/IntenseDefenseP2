@@ -60,6 +60,7 @@ var explosions;
 var zombiePathButton;
 // Tower image following the mouse cursor once a tower button is clicked
 var followMouse = [];
+var attackRange;
 
 var buttons = [];
 
@@ -414,20 +415,33 @@ var Tower = function(type, x, y, spriteName, bullets) {
 };
 
 Tower.prototype.upgradeT = function(){
+    
+    ResetBottomBox();
+    
     if(placingTower == true) {
         console.log("placingTower: " + placingTower.toString());
         return; // if player is currently trying to place a tower dont give them the option to try to upgrade
     }
-    if(player.state == 'defender'){
-        if(towerClicked == true){
-                towerClicked = false;
-                ResetBottomBox();
-        }
+    attackRange.reset(this.pos_x+20, this.pos_y+25);
 
-        if(this.type == 'minigun')     BottomInfoTowerText = game.add.text(610, 920, "Minigun Tower", bottomBoxTowerNameStyle);
-        else if(this.type == 'shotgun')         BottomInfoTowerText = game.add.text(610, 920,'Shotgun Tower', bottomBoxTowerNameStyle);
-        else if(this.type == 'gum')         BottomInfoTowerText = game.add.text(610, 920, 'Gum Tower', bottomBoxTowerNameStyle);
-        else  BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
+    if(player.state == 'defender'){
+        console.log("upgrade click");
+        /* I don't know what this does and this is not helping
+        if(towerClicked == true){
+            towerClicked = false;
+            ResetBottomBox();
+            console.log("tower click was true");
+            attackRange.kill();
+        }
+        */
+        if(this.type == 'minigun')     
+                BottomInfoTowerText = game.add.text(610, 920, "Minigun Tower", bottomBoxTowerNameStyle);
+        else if(this.type == 'shotgun')         
+                BottomInfoTowerText = game.add.text(610, 920,'Shotgun Tower', bottomBoxTowerNameStyle);
+        else if(this.type == 'gum')         
+                BottomInfoTowerText = game.add.text(610, 920, 'Gum Tower', bottomBoxTowerNameStyle);
+        else  
+                BottomInfoTowerText = game.add.text(610, 920,'Bomb Tower', bottomBoxTowerNameStyle);
 
         BottomInfoTower = game.add.sprite(510, 920, this.type + 'Tower');
         BottomInfoTower.scale.setTo(0.5);
@@ -435,36 +449,36 @@ Tower.prototype.upgradeT = function(){
         damageText = game.add.text(550, 1035, 'Damage:   ' + this.damage, bottomBoxStyle);
        // console.log("here asldkfjasldkfj" + this.fireRateLevel);
 
-        switch(this.fireRateLevel){
+        switch(this.fireRateLevel){ // kill is to kill the previous level upgrade button
             case 1:
-                 upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl1', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);  
+                 upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl1', function() {upgradeFireRateButton.kill(); this.sendUpgrade("fire rate"); }, this, 0,1,2);  
             break;
             case 2:
-                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);        
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {upgradeFireRateButton.kill(); this.sendUpgrade("fire rate"); }, this, 0,1,2);        
             break;
             case 3:
-                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {upgradeFireRateButton.kill(); this.sendUpgrade("fire rate"); }, this, 0,1,2);
             break;
             case 4:
-                upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+                upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {upgradeFireRateButton.kill(); this.voidUpdate(); }, this, 0,1,2);
             break;
         }
         
-        switch(this.damageLevel){
+        switch(this.damageLevel){ // kill is to kill the previous level upgrade button
             case 1:
-                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl1', function() {upgradeDamageButton.kill(); this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 2:
-                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {upgradeDamageButton.kill(); this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 3:
-                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {upgradeDamageButton.kill(); this.sendUpgrade("damage rate"); }, this, 0,1,2);
             break;
             case 4:
-                upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+                upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {upgradeDamageButton.kill(); this.voidUpdate(); }, this, 0,1,2);
             break;
                 //this.upgrade.....
-    }
+        }
         towerClicked = true;
     }
 };
@@ -479,13 +493,17 @@ Tower.prototype.upgradeFireRate = function(){
     
         switch(this.fireRateLevel){
         case 2:
-            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);        
+            upgradeFireRateButton.kill(); 
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl2', function() {upgradeFireRateButton.kill(); this.sendUpgrade("fire rate"); }, this, 0,1,2);        
         break;
         case 3:
-            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {this.sendUpgrade("fire rate"); }, this, 0,1,2);
+            upgradeFireRateButton.kill(); 
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeLvl3', function() {upgradeFireRateButton.kill(); this.sendUpgrade("fire rate"); }, this, 0,1,2);
         break;
         case 4:
-            upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+            upgradeFireRateButton.kill(); 
+            upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() 
+            {upgradeFireRateButton.kill(); this.voidUpdate(); }, this, 0,1,2);
         break;
         }
 };
@@ -498,13 +516,16 @@ Tower.prototype.upgradeDamage = function(){
     }
     switch(this.damageLevel){
         case 2:
-            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+            upgradeDamageButton.kill(); 
+            upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl2', function() {upgradeDamageButton.kill(); this.sendUpgrade("damage rate"); }, this, 0,1,2);
         break;
         case 3:
-            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {this.sendUpgrade("damage rate"); }, this, 0,1,2);
+            upgradeDamageButton.kill(); 
+            upgradeDamageButton = game.add.button(720, 1035, 'upgradeLvl3', function() {upgradeDamageButton.kill(); this.sendUpgrade("damage rate"); }, this, 0,1,2);
         break;
         case 4:
-            this.upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {this.voidUpdate(); }, this, 0,1,2);
+            upgradeDamageButton.kill(); 
+            upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {upgradeDamageButton.kill(); this.voidUpdate(); }, this, 0,1,2);
         break;
     }
 };
@@ -528,10 +549,12 @@ Tower.prototype.sendUpgrade = function(upgradeType){
 }
 
 function ResetBottomBox(){
-    BottomInfoTowerText.kill();
-    BottomInfoTower.kill();
-    fireRateText.kill();
-    damageText.kill();
+    if (BottomInfoTowerText != undefined)   BottomInfoTowerText.kill();
+    if (BottomInfoTower != undefined)       BottomInfoTower.kill();
+    if (fireRateText != undefined)          fireRateText.kill();
+    if (damageText != undefined)            damageText.kill();
+    if (upgradeFireRateButton != undefined) upgradeFireRateButton.kill();
+    if (upgradeDamageButton != undefined)   upgradeDamageButton.kill();
 };
 
 Tower.prototype.attack = function(underAttack) {
@@ -849,19 +872,31 @@ function buyTower(type) {
     if(player.state == 'defender')
 		map.play('towerPlacement');
     
+    for (var i=0; i < towerNames.length; i++) {
+        if (gTowerType == towerNames[i]) {
+            followMouse[ towerNames[i] ].reset(870,160*(i+1));
+            attackRange.reset(870,160*(i+1));
+            break;
+        }
+    }
+    /*
     if      (gTowerType == 'minigun')   followMouse['minigun'].reset(870,160);
     else if (gTowerType == 'shotgun')   followMouse['shotgun'].reset(870,320);
     else if (gTowerType == 'gum')       followMouse['gum'].reset(870,480);
     else if (gTowerType == 'bomb')      followMouse['bomb'].reset(870,640);
     
+    attackRange.reset(870,);
+    */
     placingTower = true;
     
 }
 function mouseClick(item) {
 	var notOnLane = false;
 	var canBuy = false;
+    ResetBottomBox();
+    attackRange.kill();
 
-	if(player.state == 'defender'){
+	if(player.state == 'defender' && gTowerType != ""){
 		
 		// game.input.mousePointer.x|y: mouse cursor position.
 		var mouse_x = game.input.mousePointer.x;
@@ -911,7 +946,8 @@ function mouseClick(item) {
             player.money -= price[gTowerType];
             moneyText.setText( "$" + player.money);
 
-            cancelTowerClick(true);
+            cancelTowerClick(true, true);
+            attackRange.kill();
             
             placingTower = false;
 		}
