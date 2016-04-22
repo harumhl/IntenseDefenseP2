@@ -41,6 +41,7 @@ var playMatchState =
 		map.play('plainMap');
 		map.inputEnabled = true;
 		map.events.onInputDown.add(mouseClick, this);
+		//map.events.onInputDown.add(showMousePosition, this);
 		
 		/*Creating each button*/
 		// Zombie Buttons
