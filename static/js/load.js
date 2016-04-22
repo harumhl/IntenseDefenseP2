@@ -13,7 +13,7 @@ var loadState =
 		
 		
 		game.load.image('title','images/Title.png');
-		game.load.spritesheet('map','images/mapSpriteSheet.png', 700,735);
+		game.load.spritesheet('map','images/NEWmapSpriteSheet.png', 700,735);
 		game.load.spritesheet('base','images/BottomInfoBox/baseSpt.png',110,83);
 		game.load.image('bottomUpgradeBox', 'images/BottomInfoBox/bottomBoxnew.png')
 		
@@ -51,7 +51,7 @@ var loadState =
 		
 		/* images for the actual objects on the map */
 		//towers
-		game.load.spritesheet('minigunTower', 'images/Towers/towerStandard.png');
+		game.load.spritesheet('minigunTower', 'images/Towers/towerMinigun.png');
 		game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
 		game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
 		game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
@@ -70,7 +70,7 @@ var loadState =
         game.load.spritesheet('explosion', 'images/explosion.png');
 		
 		//curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain2.png');
+		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
 		//curtain for both players, When first loggin in will be presented this image hiding the map 
 		game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
 		
