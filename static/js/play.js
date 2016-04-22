@@ -361,7 +361,10 @@ var playMatchState =
                 baseHealthBar.play('0 health');
             }
             else
-            {   // simply controls which flashing health bar image to display
+            {   
+                base.play(roundToTenDigit+" health");
+                
+                // simply controls which flashing health bar image to display
                 if(baseHealthUp < 20 && baseHealthDown == 0)
                 {
                     baseHealthBar.play(roundToTenDigit+" health up");
