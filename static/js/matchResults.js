@@ -94,36 +94,67 @@ matchResultsState =
             game.add.image(495, 800, "winner");
         }
 		
+		
+		
         // Store who won the game like player.win = 1; in server
         //player.wins += 1;
+		
+		
 		
 		console.log("matchNum: "+roundMatchNum['match']);
 		
 		if (roundMatchNum['match'] == 1){
             socket.send('switchRoles');
             console.log("switch Roles");
+			
+			// button to click when user is ready to continue to next match/round
+			if(player.state == 'defender'){ // at this point this is the NEW DEFENDER (attacker on the screen)
+				continueButton = game.add.button(405,975, 'continueButton',function(){
+					console.log("BEFORE");
+					if(player.state == 'attacker'){
+						socket.send('addCheckAtt');
+						console.log('check 1');
+					}
+					else if(player.state == 'defender'){
+						socket.send('addCheckDef');
+						console.log('check 2');
+					}
+					
+					continueClicked = true;
+		
+				}, this, 0, 1, 2);
+				
+			}
         }
 		
         if (roundMatchNum['match'] == 2) {
-            matchNum = 0;
-		}
+			//socket.send('switchRoles');
+            //console.log("switch Roles");
 			
-		// button to click when user is ready to continue to next match/round
-        if(player.state == 'defender'){
-			game.add.button(405,975, 'continueButton',function(){
-				console.log("BEFORE");
-				if(player.state == 'attacker')
-					socket.send('addCheckAtt');
-				else if(player.state == 'defender')
-					socket.send('addCheckDef');
-				
-				continueClicked = true;
-				
-				socket.send("continueClicked");
+			// this did not fix it
+			
+			// button to click when user is ready to continue to next match/round
+			//if(player.state == 'defender'){ // at this point this is the CURRENT DEFENDER
+				continueButton = game.add.button(405,975, 'continueButton',function(){
+					console.log("BEFORE");
+					if(player.state == 'attacker'){
+						socket.send('addCheckAtt');
+						console.log('check 1');
+					}
+					else if(player.state == 'defender'){
+						socket.send('addCheckDef');
+						console.log('check 2');
+					}
+					
+					continueClicked = true;
+					
+					console.log("send clicks");
+					socket.send("incrementClicks");
 
-				
+					
 
-			}, this, 0, 1, 2);
+				}, this, 0, 1, 2);
+			//}
 		}
 
 	},
@@ -132,14 +163,28 @@ matchResultsState =
 	{
         rescale();
         
-		if (roundMatchNum['match'] == 1) {
+	if (roundMatchNum['match'] == 1) {
             
-            if (roleSwitched && continueClicked /*&& continueClicks == 2*/) {
+            if (roleSwitched && continueClicked) {
                 socket.send('logged in');
-                continueClicks = 0;
+				continueClicked = false;
+
                 game.state.start('playMatch');
              }
         }
+
+		if(startEndRound){
+				console.log(" WHY THE FUCK ARE");
+				//socket.send('logged in');
+				continueClicked = false;
+				startEndRound = false;
+				roundMatchNum['match'] = 0;
+				game.state.start('endRound');
+				
+				
+				console.log(" WHY THE FUCK ARE YOU NOT STARTING EVERYTHING ELSE SHOULD WORK");
+			}
+
 
 	}
 };
