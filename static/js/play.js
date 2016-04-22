@@ -28,7 +28,7 @@ var playMatchState =
 		for (var i=0; i < towerNames.length; i++) 
 			towerCount[ towerNames[i] ] = 0;
 			
-        roundMatchNum['match'] += 1;
+        
         matchOver = false;
         roleSwitched = false;
 		startRound = false;

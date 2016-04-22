@@ -12,6 +12,7 @@ var attackerLoggedIn = false; // these variables control when the timer for plac
 var defenderLoggedIn = false;
 var roleChangedToNumber = 0;
 var cooldown = 0;
+var continueButtonClicks = 0;
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
@@ -19,7 +20,7 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
-var portNum = 11006;
+var portNum = 11016;
 server.listen(portNum, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port '+portNum);
 });
@@ -94,6 +95,7 @@ wsServer.on('request', function(request) {
                 {
                      for(var i = 0; i<connections.length; i++){
                         connections[i].sendUTF('defenderPlaceTowers');
+                        connections[i].sendUTF('incrementMatch');
                      }
                     attackerLoggedIn = false;
                     defenderLoggedIn = false;
@@ -116,6 +118,19 @@ wsServer.on('request', function(request) {
                 // if both players are logged in then start the pre-match timer
                 */
             }
+            else if(message.utf8Data == 'incrementClicks'){
+				
+				continueButtonClicks++;
+				console.log("clicks = " + continueButtonClicks);
+				if(continueButtonClicks == 2){
+					console.log("YES clicks = " + continueButtonClicks);
+					continueButtonClicks = 0;
+					for(var i = 0; i<connections.length; i++){
+						connections[i].sendUTF('startEndRound');
+						connections[i].sendUTF('incrementMatch');
+					}
+				}
+	    }
             else if(message.utf8Data == 'switchRoles')
             {
                 roleChangedToNumber++;

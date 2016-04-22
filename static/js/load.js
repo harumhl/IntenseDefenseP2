@@ -109,14 +109,14 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11006', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11016', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
   socket.onmessage = function(event) {
 	  var message = event.data;
 	 // var type = 'string';
-      console.log("M@" + new Date() + ": " + message);
+      //console.log("M@" + new Date() + ": " + message);
 		if(message == 'attacker' || message == 'defender'){
 			state = message;
 			console.log(state);
@@ -177,27 +177,49 @@ window.onload = function() {
             console.log("switchRole: "+player.state);
             roleSwitched = true;
         }
-		else if (message == 'continueClicked') {
-            continueClicks += 1;
+		else if (message == 'incrementMatch') {
+            roundMatchNum['match'] += 1;
         }
+        else if(message == "startEndRound"){
+			startEndRound = true;
+			if(startEndRound) console.log("SET TO TRUEEEEE");
+	}
         else if (message == 'addCheckDef') {
-            checkone = game.add.image(165,975, 'checkmark');
-            checkone.scale.setTo(0.5);
+            if(roundMatchNum['match'] == 1){
+						checkone = game.add.image(165,975, 'checkmark');
+						checkone.scale.setTo(0.5);
+			}
+			else{
+						//if(continueButton != undefined) continueButton.destroy();
+						//continueClicks++;
+						//socket.send("incrementClicks");
+						checktwo = game.add.image(650,975, 'checkmark');
+						checktwo.scale.setTo(0.5);
+			}
         }
         else if (message == 'addCheckAtt') {
-            checktwo = game.add.image(650,975, 'checkmark');
-            checktwo.scale.setTo(0.5);
-			game.add.button(405,975, 'continueButton',function(){
-				console.log("BEFORE");
-				if(player.state == 'attacker')
-					socket.send('addCheckAtt');
-				else if(player.state == 'defender')
-					socket.send('addCheckDef');
-				
-				continueClicked = true;
-				
-				socket.send("continueClicked");
-            }, this, 0, 1, 2);
+      		if (roundMatchNum['match'] == 1){
+						checktwo = game.add.image(650,975, 'checkmark');
+						checktwo.scale.setTo(0.5);
+					
+						continueButton = game.add.button(405,975, 'continueButton',function(){
+							console.log("BEFORE");
+							if(player.state == 'attacker')
+								socket.send('addCheckAtt');
+							else if(player.state == 'defender')
+								socket.send('addCheckDef');
+							
+							continueClicked = true;
+							
+						}, this, 0, 1, 2);
+			}
+			else{
+						//if(continueButton != undefined) continueButton.destroy();
+						//continueClicks++;
+						//socket.send("incrementClicks");
+						checkone = game.add.image(165,975, 'checkmark');
+						checkone.scale.setTo(0.5);
+			}
         }
         else if(message == "startRound")
         {

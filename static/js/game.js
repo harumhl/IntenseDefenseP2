@@ -158,6 +158,8 @@ var current_minutes;
 var attackerWon = false;
 
 var continueClicks = 0;
+var startEndRound = false;
+ var continueButton;
 
 
 /*       Classes         */
@@ -631,7 +633,6 @@ function countdown(minutes) { // function for the timer for each round
 		}
         if( seconds > 0 ) {
             if(attackerWon){
-					console.log("RIGHT FUCKING HERE");
 					current_minutes = 0;
 					seconds = 0;
 					clearTimeout(timeout);
