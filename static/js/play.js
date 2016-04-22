@@ -265,7 +265,7 @@ var playMatchState =
         // pink image that shows the tower attack range when a tower clicked (on map or of a button)
         attackRange = game.add.sprite(0,0,'attackRange');
         attackRange.anchor.set(0.5);
-        //attackRange.scale.setTo(0.5);
+        attackRange.scale.setTo(0.65);
         game.physics.arcade.enable(attackRange);
         attackRange.kill();
 
