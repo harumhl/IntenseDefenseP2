@@ -407,6 +407,19 @@ var Tower = function(type, x, y, spriteName, bullets) {
         this.damageLevel = 1;
 	}
     
+	// middle lane advantage
+	if (358 <= x && x <= 626.25) {
+		var lefttop_y  = x * -0.71359767 + 536.11;
+		var righttop_y = x * 0.756740706 - 196.14;
+		var leftbot_y  = x * 0.822783351 + 298.91;
+		var rightbot_y = x * -0.82268849 + 1106.49335;
+
+		if (lefttop_y < y && righttop_y < y && y < leftbot_y && y < rightbot_y) 
+		{
+			this.damage *= 2;
+		}
+	}
+	
     this.image = game.add.sprite(this.pos_x, this.pos_y, type+'Tower');
     this.image.scale.setTo(0.5); // half of its original image size (110x110)->(55,55)
     this.image.inputEnabled = true;
@@ -1135,7 +1148,9 @@ function rescale() {
     game.scale.setUserScale(scaleAxis, scaleAxis, 0, 0); 
 }
 
-
+function showMousePosition() {
+	console.log("x: "+game.input.mousePointer.x+"\ny:"+game.input.mousePointer.y);
+}
 
 
 
