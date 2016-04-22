@@ -422,7 +422,10 @@ var Tower = function(type, x, y, spriteName, bullets) {
 };
 
 Tower.prototype.upgradeT = function(){
-    
+	
+    if (bottomUpgradeText != undefined)
+		bottomUpgradeText.kill();
+	
     ResetBottomBox();
     
     if(placingTower == true) {
@@ -611,6 +614,9 @@ function ResetBottomBox(){
     if (damageText != undefined)            damageText.kill();
     if (upgradeFireRateButton != undefined) upgradeFireRateButton.kill();
     if (upgradeDamageButton != undefined)   upgradeDamageButton.kill();
+	
+	//bottomUpgradeText = game.add.text(560,960,"Click on a tower on the\nmap to start upgrading", bottomBoxStyle);
+		
 };
 
 Tower.prototype.attack = function(underAttack) {
@@ -1036,6 +1042,8 @@ function hoverOverButton(type){
         fireRateText.kill();
     if (damageText != undefined)
         damageText.kill();
+	if (bottomUpgradeText != undefined)
+		bottomUpgradeText.kill();
 
     //fireRateText.kill();
     //damageText.kill();
