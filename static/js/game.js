@@ -473,12 +473,13 @@ Tower.prototype.upgradeFireRate = function(){
     if(player.state == 'defender'){
         fireRateText.setText("Fire Rate:  " + this.fireRate);
         this.fireRateLevel += 1;
-    }
-    if (this.fireRateLevel == 4)
-        upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
-    else
-        upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
-        socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+    
+		if (this.fireRateLevel == 4)
+			upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
+		else
+			upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
+			socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+	}
 };
 
 Tower.prototype.upgradeDamage = function(){
@@ -488,12 +489,13 @@ Tower.prototype.upgradeDamage = function(){
     if(player.state == 'defender'){
         damageText.setText("Damage:   " + this.damage);
         this.damageLevel += 1;
-    }
-    if (this.damageLevel == 4) 
-        upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
-    else
-        upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
-        socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+    
+		if (this.damageLevel == 4) 
+			upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
+		else
+			upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
+			socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+	}
 };
 
 function ResetBottomBox(){
