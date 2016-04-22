@@ -453,15 +453,25 @@ Tower.prototype.upgradeT = function(){
         if (this.fireRateLevel == 4)
             upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
         else
-            upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
-            socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+            upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {
+				var hasMoney = this.checkBalance("fireRate");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeFireRateButton.kill();
+					socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 
         
         if (this.damageLevel == 4) 
             upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
         else
-            upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
-            socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+            upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {
+				var hasMoney = this.checkBalance("damage");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeDamageButton.kill();
+					socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 
         towerClicked = true;
     }
@@ -472,31 +482,122 @@ Tower.prototype.upgradeFireRate = function(){
     this.fireRate -= 100;
     if(player.state == 'defender'){
         fireRateText.setText("Fire Rate:  " + this.fireRate);
-        this.fireRateLevel += 1;
+        
+		if(this.fireRateLevel == 1){
+			player.money -= 50;
+		}
+		else if (this.fireRateLevel == 2){
+			player.money -= 75;
+		}
+		else if(this.fireRateLevel == 3){
+			player.money -= 100;
+		}
+		
+		this.fireRateLevel += 1;
     
 		if (this.fireRateLevel == 4)
 			upgradeFireRateButton = game.add.button(720, 990, 'upgradeMax', function() {}, this, 0,1,2);
 		else
-			upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {upgradeFireRateButton.kill(); 
-			socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+			upgradeFireRateButton = game.add.button(720, 990, "upgradeLvl"+this.fireRateLevel, function() {
+
+				var hasMoney = this.checkBalance("fireRate");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeFireRateButton.kill();
+					socket.send("upgrade fire rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 	}
 };
 
 Tower.prototype.upgradeDamage = function(){
     console.log("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type+":");
-
+	
     this.damage += 25;
     if(player.state == 'defender'){
         damageText.setText("Damage:   " + this.damage);
+		
+		if(this.damageLevel == 1){
+			player.money -= 50;
+		}
+		else if (this.damageLevel == 2){
+			player.money -= 75;
+		}
+		else if(this.damageLevel == 3){
+			player.money -= 100;
+		}
+		
+		
         this.damageLevel += 1;
-    
+		//this.damage += 25;
+		
 		if (this.damageLevel == 4) 
 			upgradeDamageButton = game.add.button(720, 1035, 'upgradeMax', function() {}, this, 0,1,2);
 		else
-			upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {upgradeDamageButton.kill(); 
-			socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); }, this, 0,1,2);  
+			upgradeDamageButton = game.add.button(720, 1035, "upgradeLvl"+this.damageLevel, function() {
+				var hasMoney = this.checkBalance("damage");
+				if(hasMoney){ // checks to make sure player has enough money
+					upgradeDamageButton.kill();
+					socket.send("upgrade damage rate" + ":"+this.pos_x+":"+this.pos_y+":"+this.type); 
+				}
+			}, this, 0,1,2);  
 	}
 };
+
+
+Tower.prototype.checkBalance = function(upgradeType){
+	console.log('checkB, damagelevel == ' +this.damageLevel);
+	console.log('checkB, fireRateLevl == ' +this.fireRateLevel);
+	if(upgradeType == 'damage'){
+		if(this.damageLevel == 1 ){
+			if(player.money >= 50) {
+				console.log("1 --");
+				return 1;
+			}
+			else console.log(' 1 NO MONEY');
+		}
+		else if (this.damageLevel == 2){
+			if(player.money >= 75){
+				console.log("2 --");
+				return 1;
+			}
+			else console.log(' 2 NO MONEY');
+		}
+		else if(this.damageLevel == 3){
+			if(player.money >= 100){
+				console.log("3 --");
+				return 1;
+			}
+			else console.log(' 3 NO MONEY');
+		}
+		else 
+			return 0;
+	}
+	else if(upgradeType == 'fireRate'){
+		if(this.fireRateLevel == 1){
+			if(player.money >= 50) {
+				console.log("1 --");
+				return 1;
+			}
+			else console.log(' 1 NO MONEY');
+		}
+		else if (this.fireRateLevel == 2){
+			if(player.money >= 75){
+				console.log("2 --");
+				return 1;
+			}
+			else console.log(' 2 NO MONEY');
+		}
+		else if(this.fireRateLevel == 3){
+			if(player.money >= 100){
+				console.log("3 --");
+				return 1;
+			}
+			else console.log(' 3 NO MONEY');
+		}
+		else 
+			return 0;
+	}
+}
 
 function ResetBottomBox(){
     if (BottomInfoTowerText != undefined)   BottomInfoTowerText.kill();

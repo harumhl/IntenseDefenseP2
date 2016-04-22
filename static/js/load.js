@@ -276,7 +276,7 @@ window.onload = function() {
             var posY = submessage[2];
             var towerType = submessage[3];
             //console.log(submessage);
-            //console.log("X: "+posX+" Y:"+posY+" type:" +towerType);
+            console.log("X: "+posX+" Y:"+posY+" type:" +towerType);
 
             for(i = 0; i <towerArray.length; i++){
                 if(towerArray[i].pos_x == posX){

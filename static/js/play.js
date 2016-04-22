@@ -392,12 +392,13 @@ var playMatchState =
                     moneyText.setText( "$" + player.money);
                 }
             }
-            else if(player.state == 'defender'){ // defender
-                moneyText.setText( "$" + player.money);
-                // document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-            }
             moneyTimer = 0;
         }
+		//update the defenders money contantly
+		if(player.state == 'defender'){
+            moneyText.setText( "$" + player.money);
+        }
+		
         for(var i = 0; i<zombieArray.length; i++){
             if(zombieArray[i].countdown != 0){
                 if(zombieArray[i].countdown == 1){
