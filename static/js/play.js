@@ -271,7 +271,7 @@ var playMatchState =
 
         // Hit ESC button to cancel tower selection from a tower button
         game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(function () {
-            cancelTowerClick(true, true);}, this);
+            cancelTowerClick(true, true); attackRange.kill(); }, this);
         
         // Display instruction button (and one for cancelling it)
         instructionSheet = game.add.sprite(0,0,'instructionSheet');
