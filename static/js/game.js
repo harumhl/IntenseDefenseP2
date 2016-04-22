@@ -891,62 +891,25 @@ function mouseClick(item) {
 		}
 		else {
 			notOnLane = true;
+            console.log("not on lane");
 		}
 		
 		// Check if the player has enough money for the zombie
-		if (gTowerType == "minigun") {
-			if(player.money < price['minigun']){
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			}
-			else{
-				canBuy = true;
-				player.money -= price['minigun'];
-                
-                
-                moneyText.setText( "$" + player.money);
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			}
-		}
-		else if (gTowerType == "shotgun") {
-			if(player.money < price['shotgun']){
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			}
-			else{
-				canBuy = true;
-				player.money -= price['shotgun'];
-                
-                moneyText.setText( "$" + player.money);
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			}
-		}
-		else if (gTowerType == "gum") {
-			if(player.money < price['gum']){
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			}
-			else{
-				canBuy = true;
-				player.money -= price['gum'];
-                
-                moneyText.setText( "$" + player.money);
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			}
-		}
-		else if (gTowerType == "bomb") {
-			if(player.money < price['bomb']){
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money + " - Not enough money";
-			}
-			else{
-				canBuy = true;
-				player.money -= price['bomb'];
-                
-                moneyText.setText( "$" + player.money);
-				//document.getElementById("defender-money").innerHTML = "Money: $" + player.money;
-			}
-		}
-		
+        for (var i=0; i < towerNames[i].length; i++) {
+            if (gTowerType == towerNames[i]) {
+                if (player.money >= price[ towerNames[i] ]) {
+                    canBuy = true;
+                    break;
+                }
+            }
+        }
+        
 		if(notOnLane && canBuy) {
 			//document.getElementById("Tower-Placement-Error").innerHTML = "";
 			socket.send('addTower,'+gTowerType+','+mouse_x+','+mouse_y);
+
+            player.money -= price[gTowerType];
+            moneyText.setText( "$" + player.money);
 
             cancelTowerClick(true);
             

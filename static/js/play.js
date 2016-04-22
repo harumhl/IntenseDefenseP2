@@ -291,6 +291,7 @@ var playMatchState =
 	{
         rescale();
         
+        // After a tower button click, if anywhere other than the map is clicked, cancel the selection
         if (game.input.mousePointer.isDown) {
             if (gTowerType != "") {
                 var mouse_x = game.input.mousePointer.x;
