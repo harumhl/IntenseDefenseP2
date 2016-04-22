@@ -158,6 +158,8 @@ var current_minutes;
 var attackerWon = false;
 
 var continueClicks = 0;
+var startEndRound = false;
+ var continueButton;
 
 
 /*       Classes         */
