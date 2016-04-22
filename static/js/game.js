@@ -82,6 +82,7 @@ var bottomBoxStyle = {font: "20px Arial", fill: "#F5F5F5", align: "center"};
 var bottomBoxTowerNameStyle = {font: "30px Arial", fill: "#F5F5F5", align: "center"};
 var BottomInfoSprite;
 var BottomInfoTowerText;
+var bottomUpgradeText;
 var towerClicked = false;
 var fireRateText;
 var damageText;
@@ -1107,6 +1108,13 @@ function hoverOutButton(){
 	if (zombieHealthText != undefined) 		zombieHealthText.destroy();
 	if (zombieSpeedText != undefined)		zombieSpeedText.destroy();
 	if (zombieDamageText != undefined)		zombieDamageText.destroy();
+	
+	if(player.state == 'attacker'){ // here place the upgraded zombie options
+		
+	}
+	else if (player.state == 'defender'){
+		bottomUpgradeText = game.add.text(560,960,"Click on a tower on the\nmap to start upgrading", bottomBoxStyle);
+	}
 }
 
 function rescale() {
