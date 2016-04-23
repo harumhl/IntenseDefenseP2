@@ -43,6 +43,9 @@ var playMatchState =
 		map.events.onInputDown.add(mouseClick, this);
 		//map.events.onInputDown.add(showMousePosition, this);
 		
+		var roundTextStyle =  { font: "20px Arial", fill: "#003300"};
+		roundMatchText = game.add.text(150, 835, "Round " + roundMatchNum['round'] + " Match " + roundMatchNum['match'], roundTextStyle);
+		
 		/*Creating each button*/
 		// Zombie Buttons
         buttons['standard'] = game.add.button(40, 160, 'standardZombieButton', function(){
@@ -303,11 +306,12 @@ var playMatchState =
 	update: function()
 	{
         rescale();
+		
+		roundMatchText.setText("Round " + roundMatchNum['round'] + " Match " + roundMatchNum['match']);
         
+		// this will keep the instruction sheets on the top layer even while the game is being played by either player
 		if(instructionSheet.exists){
-			console.log(">>>>EXISTS");
 			instructionSheet.bringToTop();
-			
 			closeInstructionButton.bringToTop();
 			attackerInstructions.bringToTop();
 			defenderInstructions.bringToTop();

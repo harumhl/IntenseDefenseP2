@@ -155,6 +155,7 @@ var towerCount = {minigun:0,    shotgun:0,    gum:0,        bomb:0};
 var endTime; // what was the timer at when match ended
 var endHealth; // what frame was the health bar at when match ended
 var roundMatchNum = {round:1, match:0};
+var roundMatchText; // this is used in playState on the map
 var playerNames = {attacker:"", defender:""};
 
 var checkone;//images for the green checkmarks

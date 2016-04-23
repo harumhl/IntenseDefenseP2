@@ -181,6 +181,7 @@ window.onload = function() {
             roleSwitched = true;
         }
 		else if (message == 'incrementMatch') {
+			console.log("++++++++++++ MATCH");
             roundMatchNum['match'] += 1;
         }
         else if(message == "startEndRound"){
