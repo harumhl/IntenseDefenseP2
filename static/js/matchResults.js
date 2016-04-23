@@ -40,7 +40,7 @@ matchResultsState =
 
         //display how much time was left when match ended
         //game.add.text(150, 750, "Time left: 8:88", {font: "30px Arial", fill: "#000000", align: "left" });
-        game.add.text(125, 750, "Time left: " + endTime, {font: "30px Arial", fill: "#000000", align: "left" });
+        
             
         
         
