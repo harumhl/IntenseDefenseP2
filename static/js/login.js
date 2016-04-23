@@ -60,6 +60,8 @@ var loginState =
             instructionButton.kill();
             instructionSheet.reset(0,0);// = game.add.sprite(0,0,'instructionSheet');
             closeInstructionButton.reset(775,1000);
+			attackerInstructions.reset(250, 1000);
+			defenderInstructions.reset(500,1000);
             usernameText.kill();
         }, this, 0,1,2);
         
@@ -67,10 +69,24 @@ var loginState =
             instructionSheet.kill(); 
             closeInstructionButton.kill(); 
             instructionButton.reset(775,1000);
+			attackerInstructions.kill();
+			defenderInstructions.kill();
             usernameText.reset(45, 600);
         }, this, 0, 1, 2);
         
         closeInstructionButton.kill();
+		
+		attackerInstructions = game.add.button(250, 1000, 'attackerInstructionButton', function(){}, this, 0,1);
+		attackerInstructions.onInputOver.add(attackerInstructionsHover,this);
+		attackerInstructions.onInputOut.add(instructionsHoverOut,this);
+		attackerInstructions.inputEnabled = true;
+		attackerInstructions.kill();
+		
+		defenderInstructions = game.add.button(500, 1000, 'defenderInstructionButton', function(){}, this, 0,1);
+		defenderInstructions.onInputOver.add(defenderInstructionsHover,this);
+		defenderInstructions.onInputOut.add(instructionsHoverOut,this);
+		defenderInstructions.inputEnabled = true;
+		defenderInstructions.kill();
    },
     update: function()
     {
@@ -101,10 +117,14 @@ var loginState =
             enterHitOnce = 2;
         }
         if (username != "" && state != undefined) {
-            if(state == 'attacker')
+            if(state == 'attacker'){
                 player = new Player(username, state, 2000);
-            if(state == 'defender')
+				socket.send('attackerName ' + username);
+			}
+            if(state == 'defender'){
                 player = new Player(username, state, 1000);
+				socket.send('defenderName ' + username);
+			}
 
             console.log('login: '+player.username + ' ' + player.state);
             game.state.start('matchmaking');
@@ -124,13 +144,13 @@ function keyPressed(char) {
             if(charCount > 12){
                 errorText.reset(239,690);
                 --charCount;
-                console.log("H "+charCount);
+                //console.log("H "+charCount);
                 
             }
             else{
                 
                 
-                console.log(charCount);
+                //console.log(charCount);
                 username += char;
                 
             }

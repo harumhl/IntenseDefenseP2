@@ -20,7 +20,10 @@ var loadState =
         /*stuff for login state*/
         game.load.spritesheet('instructionsButton', 'images/generalButtons/instructionsButton.png',200,100);
         game.load.spritesheet('closeInstructionsButton', 'images/generalButtons/closeInstructionsButton.png',200,100);
-        game.load.image('instructionSheet', 'images/instructionSheet.png');
+		game.load.spritesheet('attackerInstructionButton', 'images/generalButtons/attackerInstructionButton.png',200,100);
+		game.load.spritesheet('defenderInstructionButton', 'images/generalButtons/defenderInstructionButton.png',200,100);
+        //game.load.image('instructionSheet', 'images/instructionSheet.png');
+		game.load.spritesheet('instructionSheet', 'images/instructionSheetSpt.png',1000,1136);
         game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
 		game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
         
@@ -237,6 +240,7 @@ window.onload = function() {
         }
         else if(message.substring(0,12) == 'attackerName')
         {
+			console.log("HERE");
             attackerName = message.substring(13, message.length);
 			playerNames['attacker'] = attackerName;
             //document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
@@ -244,7 +248,10 @@ window.onload = function() {
         else if(message.substring(0,12) == 'defenderName')
         {
             defenderName = message.substring(13, message.length);
+			console.log('LOAD def name: ' + defenderName );
 			playerNames['defender'] = defenderName;
+			console.log('LOAD def name: ' + playerNames['defender'] );
+
             //document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
         }
         else if(message == "defenderPlaceTowers")
@@ -293,7 +300,7 @@ window.onload = function() {
             }
         }
 		else if(message.substring(0,10) == 'baseDamage'){
-			console.log('damaging base '+message.substring(10, message.length));
+			//console.log('damaging base '+message.substring(10, message.length));
 			damageBase(message.substring(10, message.length))
 		}
 		else

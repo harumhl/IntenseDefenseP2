@@ -274,20 +274,36 @@ var playMatchState =
             cancelTowerClick(true, true);}, this);
         
         // Display instruction button (and one for cancelling it)
-        instructionSheet = game.add.sprite(0,0,'instructionSheet');
-        instructionSheet.kill();
-
-        var instructionButton = game.add.button(865,800, 'instructionsButton', function(){
+        instructionSheet = game.add.sprite(0,0,'instructionSheet', 0);
+        instructionSheet.kill();	
+		
+        var instructionButton = game.add.button(865,1000, 'instructionsButton', function(){
             instructionButton.kill();
             instructionSheet.reset(0,0);
-            closeInstructionButton.reset(865,800);
+            closeInstructionButton.reset(865,1000);
+			attackerInstructions.reset(250, 1000);
+			defenderInstructions.reset(500,1000);
         }, this, 0,1,2);
     
-        var closeInstructionButton = game.add.button(865,800, 'closeInstructionsButton', function(){ instructionSheet.kill();
+        var closeInstructionButton = game.add.button(865,1000, 'closeInstructionsButton', function(){ instructionSheet.kill();
             closeInstructionButton.kill();
-            instructionButton.reset(865,800);
+            instructionButton.reset(865,1000);
+			attackerInstructions.kill();
+			defenderInstructions.kill();
         }, this, 0, 1, 2);
         closeInstructionButton.kill();
+		
+		attackerInstructions = game.add.button(250, 1000, 'attackerInstructionButton', function(){}, this, 0,1);
+		attackerInstructions.onInputOver.add(attackerInstructionsHover,this);
+		attackerInstructions.onInputOut.add(instructionsHoverOut,this);
+		attackerInstructions.inputEnabled = true;
+		attackerInstructions.kill();
+		
+		defenderInstructions = game.add.button(500, 1000, 'defenderInstructionButton', function(){}, this, 0,1);
+		defenderInstructions.onInputOver.add(defenderInstructionsHover,this);
+		defenderInstructions.onInputOut.add(instructionsHoverOut,this);
+		defenderInstructions.inputEnabled = true;
+		defenderInstructions.kill();
         
         instructionButton.scale.setTo(0.5);
         closeInstructionButton.scale.setTo(0.5);

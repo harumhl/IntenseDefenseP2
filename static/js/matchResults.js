@@ -45,7 +45,7 @@ matchResultsState =
         
         
         /* defender stats (right side) */
-        
+        console.log("defenders name: " + playerNames['defender']);
         var attName = game.add.text(0, 0, /*player.username*/playerNames['defender'], { font: "bold 40px Arial", fill: "#595959", boundsAlignH: "center", boundsAlignV: "middle" });
         attName.setTextBounds(680, 300, 120, 50);
         var attackertext = game.add.text(0, 0, "Defender", { font: "35px Arial", fill: "#595959"});
