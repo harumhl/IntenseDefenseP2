@@ -772,7 +772,6 @@ function countdown(minutes) { // function for the timer for each round
             if(mins > 1){
  
                 if(attackerWon){
-					console.log("RIGHT FUCKING HERE");
 					current_minutes = 0;
 					seconds = 0;
 					clearTimeout(timeout);
