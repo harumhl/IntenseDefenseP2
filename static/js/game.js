@@ -136,6 +136,9 @@ var gTowerType = ""; // flag && global variable for tower placement - g for glob
 var bankruptImages = {};
 
 var instructionSheet;
+var attackerInstructions;
+var defenderInstructions;
+var closeInstructionButton;
 
 var towerUpgrade;
 var towerDamageUpgrade;
@@ -831,7 +834,7 @@ function damageBase(amount) {
         console.log("UNDEFINED zombieArray[" + index + "], zombieArray.length: " + zombieArray.length);
         return;
     }*/
-	console.log('CALLING DAMAGE BASE'+amount);
+	//console.log('CALLING DAMAGE BASE'+amount);
 	baseHealth -= amount;
     //document.getElementById("health").innerHTML = " Health: " + baseHealth; 
 	
@@ -1136,6 +1139,18 @@ function hoverOutButton(){
 	else if (player.state == 'defender'){
 		bottomUpgradeText = game.add.text(560,960,"Click on a tower on the\nmap to start upgrading", bottomBoxStyle);
 	}
+}
+
+function attackerInstructionsHover(){
+	instructionSheet.frame = 1;
+}
+
+function defenderInstructionsHover(){
+	instructionSheet.frame = 2;
+}
+
+function instructionsHoverOut(){
+	instructionSheet.frame = 0;
 }
 
 function rescale() {
