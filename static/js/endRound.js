@@ -1,5 +1,21 @@
 /* endRound.js */
 
+
+
+
+
+
+
+
+
+
+// bug with endmatch end of match 2 one clinet can clikc continue button twice and it goes to end round state
+
+
+
+
+
+
 endRoundState = 
 {
 	preload: function()
@@ -65,9 +81,46 @@ endRoundState =
         else
             winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
         */
+		
+		if(Math.abs(endGame) >= 2){
+			if(endGame > 0){
+				if(player.ID > 0)
+					console.log('You win');
+				else
+					console.log('Opponent Wins');
+			}				
+			else{
+				if(player.ID < 0)
+					console.log('You win');
+				else
+					console.log('Opponent Wins');
+			}
+		}
+		else{
+			console.log('Start a new round');
+			if(player.state == 'attacker'){
+				startNewMatch();
+			}
+			else{
+				
+				console.log('WAITTTTTTTT');
+				setTimeout(startNewMatch(), 2000);
+			}
+			
+		}
+		
+		
 	},
 	update: function()
 	{
         rescale();
 	}  
 };
+
+function startNewMatch(){
+	console.log('start new match');
+	if(player.state == 'defender'){
+		socket.send('startNewRound');
+	}
+	game.state.start('playMatch');
+}

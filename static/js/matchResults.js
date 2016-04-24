@@ -189,7 +189,17 @@ matchResultsState =
 				//socket.send('logged in');
 				continueClicked = false;
 				startEndRound = false;
+				if(matchWinner['matchOne'] == matchWinner['matchTwo']){
+					console.log('winner = '+matchWinner['matchOne']);
+					if(matchWinner['matchOne'] == player.name)
+						endGame += player.ID;
+					else
+						endGame -= player.ID;
+				}
+				else
+					console.log('tie');
 				roundMatchNum['match'] = 0;
+				//roundMatchNum['round'] += 1;
 				game.state.start('endRound');
 				
 			}

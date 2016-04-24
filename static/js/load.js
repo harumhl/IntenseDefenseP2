@@ -184,6 +184,10 @@ window.onload = function() {
 			console.log("++++++++++++ MATCH");
             roundMatchNum['match'] += 1;
         }
+		else if (message == 'incrementRound'){
+			console.log("++++++++++++ Round");
+			roundMatchNum['round'] += 1;
+		}
         else if(message == "startEndRound"){
 			startEndRound = true;
 			if(startEndRound) console.log("SET TO TRUEEEEE");
@@ -240,7 +244,7 @@ window.onload = function() {
 				
 				console.log("recieved start round");
 				startRound = true;
-				countdown(5);
+				countdown(1);
 			}
         }
         else if(message.substring(0,12) == 'attackerName')

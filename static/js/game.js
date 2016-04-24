@@ -105,8 +105,10 @@ var infoTitleStyle = {font: "20px Arial", fill: "#000000", align: "left" };
 var infoTextStyle = {font: "30px Arial", fill: "#000000", align: "left" };
 var moneyTextStyle = {font: "30px Arial", fill: "#004d00", align: "left" };
 
-//Prices for zombies/towers
+var endGame = 0;
 var matchWinner = {matchOne:"", matchTwo:""};
+
+//Prices for zombies/towers
 var price = {
     standard:100,   strong:200,     healing:300,    generations:400,
 	minigun:100,    shotgun:200,    gum:300,        bomb:400};
@@ -173,14 +175,16 @@ var startEndRound = false;
 var continueButton;
 
 
+
 /*       Classes         */
 
 // Player Class
-Player = function(username, state, money) {
+Player = function(username, state, money, id) {
     this.username = username;
     this.state = state;
 	this.money = money;
 	this.wins = 0;
+	this.ID = id;
 }
 // Zombie Class
 Zombie = function(type, lane, inX, inY) {
@@ -799,6 +803,7 @@ function countdown(minutes) { // function for the timer for each round
             }
         }
     }
+	console.log('TICK');
     tick();
 }
 
@@ -856,17 +861,25 @@ function damageBase(amount) {
 	return true;
 }
 function endRound(winner) {
-    if(winner == "attacker")//		window.alert("Attacker Wins!");
+    if(winner == "attacker"){//		window.alert("Attacker Wins!");
         console.log("Attacker Wins!");
-    else                    //		window.alert("Defender Wins!");
+		if(roundMatchNum['match'] == 1)
+			matchWinner['matchOne'] = playerNames['attacker'];
+		else
+			matchWinner['matchTwo'] = playerNames['attacker'];
+	}
+    else{                   //		window.alert("Defender Wins!");
         console.log("Defender Wins!");
-    
+		if(roundMatchNum['match'] == 1)
+			matchWinner['matchOne'] = playerNames['defender'];
+		else
+			matchWinner['matchTwo'] = playerNames['defender'];
+	}
 	clearTimeout(timeout);
     startRound = false;
     matchOver = true;
     newRound();
 }
-
 function sendAddZombie(zombieType){ 
     // check if the player has enough money for the zombie
     var canBuy = false;

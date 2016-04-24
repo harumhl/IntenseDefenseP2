@@ -119,6 +119,15 @@ wsServer.on('request', function(request) {
                 // if both players are logged in then start the pre-match timer
                 */
             }
+			else if(message.utf8Data == 'startNewRound'){
+				console.log('RIGHT FUCKING HERE');
+				for(var i = 0; i<connections.length; i++){
+                        connections[i].sendUTF('defenderPlaceTowers');
+                        connections[i].sendUTF('incrementMatch');
+                        
+                }
+				connections[0].sendUTF('incrementRound');
+			}
             else if(message.utf8Data == 'incrementClicks'){
 				
 				continueButtonClicks++;
