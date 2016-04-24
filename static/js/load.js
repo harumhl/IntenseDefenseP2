@@ -240,7 +240,7 @@ window.onload = function() {
 				
 				console.log("recieved start round");
 				startRound = true;
-				countdown(5);
+				countdown(1);
 			}
         }
         else if(message.substring(0,12) == 'attackerName')

@@ -118,15 +118,15 @@ var loginState =
         }
         if (username != "" && state != undefined) {
             if(state == 'attacker'){
-                player = new Player(username, state, 2000);
+                player = new Player(username, state, 2000, 1);
 				socket.send('attackerName ' + username);
 			}
             if(state == 'defender'){
-                player = new Player(username, state, 1000);
+                player = new Player(username, state, 1000, -1);
 				socket.send('defenderName ' + username);
 			}
 
-            console.log('login: '+player.username + ' ' + player.state);
+            console.log('login: '+player.username + ' ' + player.state+' '+player.ID);
             game.state.start('matchmaking');
         }
     }
