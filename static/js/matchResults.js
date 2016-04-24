@@ -70,11 +70,23 @@ matchResultsState =
         //display health bar
 		if(winner == "attacker")
 		{
+			//store the winners name
+			if(roundMatchNum['match'] == 1)
+				matchWinner['matchOne'] = playerNames['attacker'];
+			else
+				matchWinner['matchTwo'] = playerNames['attacker'];
+			
             game.add.sprite(605, 740, "baseHealth", 13);
             game.add.text(608,777,"Health: 0", baseHealthStyle);
 			game.add.text(125, 750, "Time left: " + endTime, {font: "30px Arial", fill: "#000000", align: "left" });
         }
         else{
+			//store the winners name
+			if(roundMatchNum['match'] == 1)
+				matchWinner['matchOne'] = playerNames['defender'];
+			else
+				matchWinner['matchTwo'] = playerNames['defender'];
+			
             game.add.sprite(605, 740, "baseHealth", endHealth);
             game.add.text(608,777,"Health: "+baseHealth, baseHealthStyle);
 			game.add.text(125, 750, "Time left: 0:00", {font: "30px Arial", fill: "#000000", align: "left" });
@@ -97,7 +109,7 @@ matchResultsState =
 		
 		
         // Store who won the game like player.win = 1; in server
-        //player.wins += 1;
+        //player.matchWin += 1;
 		
 		
 		
@@ -174,15 +186,12 @@ matchResultsState =
         }
 
 		if(startEndRound){
-				console.log(" WHY THE FUCK ARE");
 				//socket.send('logged in');
 				continueClicked = false;
 				startEndRound = false;
 				roundMatchNum['match'] = 0;
 				game.state.start('endRound');
 				
-				
-				console.log(" WHY THE FUCK ARE YOU NOT STARTING EVERYTHING ELSE SHOULD WORK");
 			}
 
 

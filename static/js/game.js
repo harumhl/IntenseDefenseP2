@@ -106,6 +106,7 @@ var infoTextStyle = {font: "30px Arial", fill: "#000000", align: "left" };
 var moneyTextStyle = {font: "30px Arial", fill: "#004d00", align: "left" };
 
 //Prices for zombies/towers
+var matchWinner = {matchOne:"", matchTwo:""};
 var price = {
     standard:100,   strong:200,     healing:300,    generations:400,
 	minigun:100,    shotgun:200,    gum:300,        bomb:400};
