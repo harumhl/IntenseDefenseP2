@@ -32,6 +32,8 @@ game.state.start('boot');
 
 
 /*    Global Variables     */
+var alreadyStarted = false;
+
 var map;
 var player;
 
@@ -690,6 +692,8 @@ function newRound() {
 	zombieStatArray = [];
 	towerArray = [];
 	
+	alreadyStarted = false;
+	
 	/* if (player.state == 'attacker')
 		{
 			player.state = 'defender';
@@ -727,7 +731,6 @@ function countdown(minutes) { // function for the timer for each round
         //counter = document.getElementById("timer");
     }
     function tick() {
-        
         //var counter = document.getElementById("timer");
         //counter = document.getElementById("gameStartTimer");
         current_minutes;
@@ -782,13 +785,13 @@ function countdown(minutes) { // function for the timer for each round
 					return;
 				}
 				else{
-					if(attackerWon){
+					/*if(attackerWon){
 						current_minutes = 0;
 						seconds = 0;
 						
 						//tick();
-					}
-					else
+					}*/
+					//else
 						timeout = setTimeout(function () { countdown(mins - 1); }, 1000);
 						// countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
 				}
@@ -857,6 +860,7 @@ function endRound(winner) {
     else                    //		window.alert("Defender Wins!");
         console.log("Defender Wins!");
     
+	clearTimeout(timeout);
     startRound = false;
     matchOver = true;
     newRound();

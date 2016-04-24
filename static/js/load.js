@@ -112,7 +112,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11088', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
@@ -227,17 +227,21 @@ window.onload = function() {
         }
         else if(message == "startRound")
         {
-            // destroy the curatin and bring the tower sprites to the front so the attacker can see them now
-            if(player.state == 'attacker'){
-                 if(attackerCurtain != undefined)
-					attackerCurtain.destroy();
-                for (var i=0; i< towerArray.length; i++)
-                    towerArray[i].image.bringToTop();
-            }
-            
-            console.log("recieved start round");
-            startRound = true;
-            countdown(5);
+		
+			if(!alreadyStarted){
+				alreadyStarted = true;
+				// destroy the curatin and bring the tower sprites to the front so the attacker can see them now
+				if(player.state == 'attacker'){
+					 if(attackerCurtain != undefined)
+						attackerCurtain.destroy();
+					for (var i=0; i< towerArray.length; i++)
+						towerArray[i].image.bringToTop();
+				}
+				
+				console.log("recieved start round");
+				startRound = true;
+				countdown(5);
+			}
         }
         else if(message.substring(0,12) == 'attackerName')
         {
