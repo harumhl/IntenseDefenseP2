@@ -82,18 +82,7 @@ endRoundState =
             winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
         */
 		if(Math.abs(endGame) >= 2){
-			if(endGame > 0){
-				if(player.ID > 0)
-					console.log('You win');
-				else
-					console.log('Opponent Wins');
-			}				
-			else{
-				if(player.ID < 0)
-					console.log('You win');
-				else
-					console.log('Opponent Wins');
-			}
+			game.state.start('endGame');
 		}
 		else{
 			console.log('Start a new round');	
