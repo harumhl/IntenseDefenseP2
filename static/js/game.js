@@ -754,8 +754,10 @@ function countdown(minutes) { // function for the timer for each round
 					clearTimeout(timeout);
 					return;
 			}
-			else
+			else{
+				clearTimeout(timeout);
 				timeout = setTimeout(tick, 1000);
+			}
         } else {
  
             if(mins > 1){
@@ -774,6 +776,7 @@ function countdown(minutes) { // function for the timer for each round
 						//tick();
 					}*/
 					//else
+						clearTimeout(timeout);
 						timeout = setTimeout(function () { countdown(mins - 1); }, 1000);
 						// countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
 				}
