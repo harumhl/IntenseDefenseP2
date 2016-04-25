@@ -119,7 +119,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11098', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
@@ -259,7 +259,7 @@ window.onload = function() {
 				
 				console.log("recieved start round");
 				startRound = true;
-				countdown(1);
+				countdown(5);
 			}
         }
         else if(message.substring(0,12) == 'attackerName')
@@ -296,7 +296,7 @@ window.onload = function() {
 
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
-                countdown(0.06); // extra second for login time
+                countdown(0.30); // extra second for login time
             
         }
         else if(message.substring(0,7) == "upgrade")
