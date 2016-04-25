@@ -10,7 +10,7 @@ var loadState =
 	preload: function()
 	{
 		console.log('STATE: load');
-		
+
 		
 		game.load.image('title','images/Title.png');
 		game.load.spritesheet('map','images/NEWmapSpriteSheet.png', 700,735);
@@ -92,6 +92,12 @@ var loadState =
         game.load.image('loser', 'images/endMatch/loser.png');
         game.load.spritesheet('continueButton', 'images/endMatch/continue.png', 200, 100);
         game.load.image('checkmark', 'images/endMatch/checkmark.png');
+
+        // aduio
+		game.load.audio('gameMusic', 'audio/bensound-epic.mp3');
+
+		//mute button
+		game.load.spritesheet('mute', 'images/generalButtons/musicButton.png', 50,50);
 		
 	},
 	
@@ -112,7 +118,7 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11098', "echo-protocol");
+  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
