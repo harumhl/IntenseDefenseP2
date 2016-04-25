@@ -43,7 +43,7 @@ endRoundState =
 		
 		var endRoundTitleStyle = { font: "bold 60px Arial", fill: "#595959"};
 		var endRoundTitle = game.add.text(320,135,"Round Results", endRoundTitleStyle);
-		
+		var clickedAlready = false;
 		var roundMatchStyle = { font: "25px Arial", fill: "#595959"};
 		game.add.text(445,215,"Round " + roundMatchNum['round'], roundMatchStyle);
 		
@@ -81,7 +81,6 @@ endRoundState =
         else
             winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
         */
-		console.log(player.ID+' '+endGame);
 		if(Math.abs(endGame) >= 2){
 			if(endGame > 0){
 				if(player.ID > 0)
@@ -114,7 +113,10 @@ endRoundState =
 				continueClicked = true;
 				defenderPlaceTowers = false;
 				console.log("send clicks");
-				socket.send("incrementClicksRound");
+				if(!clickedAlready){
+					socket.send("incrementClicksRound");
+					clickedAlready = true;
+				}
 
 						
 

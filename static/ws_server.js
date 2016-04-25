@@ -13,6 +13,7 @@ var defenderLoggedIn = false;
 var roleChangedToNumber = 0;
 var cooldown = 0;
 var continueButtonClicks = 0;
+var roundContinueButtonClicks = 0;
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
@@ -120,13 +121,12 @@ wsServer.on('request', function(request) {
                 */
             }
 			else if(message.utf8Data == 'startNewRound'){
-				console.log('RIGHT FUCKING HERE');
 				for(var i = 0; i<connections.length; i++){
                         connections[i].sendUTF('defenderPlaceTowers');
                         connections[i].sendUTF('incrementMatch');
-                        
+                        connections[i].sendUTF('incrementRound');
                 }
-				connections[0].sendUTF('incrementRound');
+				
 			}
             else if(message.utf8Data == 'incrementClicks'){
 				
@@ -143,11 +143,11 @@ wsServer.on('request', function(request) {
 			}
 			else if(message.utf8Data == 'incrementClicksRound'){
 				
-				continueButtonClicks++;
-				console.log("clicks = " + continueButtonClicks);
-				if(continueButtonClicks == 2){
-					console.log("YES clicks = " + continueButtonClicks);
-					continueButtonClicks = 0;
+				roundContinueButtonClicks++;
+				console.log("Roundclicks = " + roundContinueButtonClicks);
+				if(roundContinueButtonClicks == 2){
+					console.log("YES clicks = " + roundContinueButtonClicks);
+					roundContinueButtonClicks = 0;
 					for(var i = 0; i<connections.length; i++){
 						connections[i].sendUTF('sendNewRound');
 					}
