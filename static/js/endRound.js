@@ -24,20 +24,6 @@ endRoundState =
 	},
 	create: function()
 	{
-		/*
-			- present relative information about previous 2 matches
-				-> who won which round
-				-> whatever stats we feel need to be presented
-
-           - if a player won both matches
-                game.state.start('endGame');
-         
-              else 
-                socket.send('switchRoles');
-                // clean up current game
-                game.state.start('play');
-		*/
-		
 		
 		game.add.sprite(0,0,'title');
 		
@@ -71,16 +57,8 @@ endRoundState =
 		game.add.text(705, 440, matchWinner['matchTwo'], { font: "25px Arial", fill: "#595959"});
 		
 		
+
 		
-		//=====================================================================
-		/*
-        console.log('STATE: endRound');
-        var winnerText;
-        if(winner == "attacker")
-            winnerText = game.add.text(45, 600, "A round ended.\nAttacker Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-        else
-            winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-        */
 		console.log(player.ID+' '+endGame);
 		if(Math.abs(endGame) >= 2){
 			if(endGame > 0){
