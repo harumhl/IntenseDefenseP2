@@ -302,6 +302,7 @@ var playMatchState =
         closeInstructionButton.scale.setTo(0.5);
 
         //audio
+        // source: http://www.bensound.com
         music = game.add.audio('gameMusic');
         if(!muted)
 			music.play();

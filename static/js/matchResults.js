@@ -9,7 +9,8 @@ matchResultsState =
 	},
 	create: function()
 	{
-	defenderPlaceTowers = false;
+		music.stop();
+		defenderPlaceTowers = false;
         game.add.sprite(0,0,'title');
         var endMatchTitleStyle = { font: "bold 60px Arial", fill: "#595959"};//boundsAlignH: "center", boundsAlignV: "middle" };
         var roundMatchStyle = { font: "25px Arial", fill: "#595959"};//, boundsAlignH: "center", boundsAlignV: "middle" };

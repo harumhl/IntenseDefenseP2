@@ -24,20 +24,6 @@ endRoundState =
 	},
 	create: function()
 	{
-		/*
-			- present relative information about previous 2 matches
-				-> who won which round
-				-> whatever stats we feel need to be presented
-
-           - if a player won both matches
-                game.state.start('endGame');
-         
-              else 
-                socket.send('switchRoles');
-                // clean up current game
-                game.state.start('play');
-		*/
-		
 		
 		game.add.sprite(0,0,'title');
 		
@@ -70,17 +56,23 @@ endRoundState =
 		// display winner of round two
 		game.add.text(705, 440, matchWinner['matchTwo'], { font: "25px Arial", fill: "#595959"});
 		
-		
-		
-		//=====================================================================
-		/*
-        console.log('STATE: endRound');
-        var winnerText;
-        if(winner == "attacker")
-            winnerText = game.add.text(45, 600, "A round ended.\nAttacker Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-        else
-            winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
-        */
+		//display random images just because why not
+		var tempSprite = game.add.sprite(400, 600,'standardZombie',9);
+		tempSprite.scale.setTo(1.5);
+		var tempSprite2 = game.add.sprite(525, 575, 'minigunTower');
+		tempSprite2.scale.setTo(1.5);
+
+
+		// displa who won the round or tie
+		if(matchWinner['matchOne'] == matchWinner['matchTwo']){
+			game.add.image(250, 800, "winner");
+		}
+		else{
+			game.add.image(240, 800, "tie");	
+		}
+
+
+
 		if(Math.abs(endGame) >= 2){
 			game.state.start('endGame');
 		}
@@ -110,7 +102,6 @@ endRoundState =
 						
 
 					}, this, 0, 1, 2);
-				//
 		}
 			
 		
