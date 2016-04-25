@@ -122,6 +122,7 @@ var regenTime = 100;
 var bulletTravelTime = 450;
 var baseHealth = 2000;
 var spawn_x = 482, spawn_y = 160;
+var muted = false;
 
 //curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
 var attackerCurtain;
@@ -1072,10 +1073,13 @@ function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
 function muteMusic(){
 	if(music.mute == false){
 		music.mute = true;
+		muted = true;
 		muteButton.setFrames(1);
 	}
 	else{
 		music.mute = false;
+		muted = false;
+		music.play();
 		muteButton.setFrames(0);	
 	}
 

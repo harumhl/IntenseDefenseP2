@@ -303,7 +303,8 @@ var playMatchState =
 
         //audio
         music = game.add.audio('gameMusic');
-        music.play();
+        if(!muted)
+			music.play();
 
         //mute button
         muteButton = game.add.button(40,1000,'mute', muteMusic, this, 0);
