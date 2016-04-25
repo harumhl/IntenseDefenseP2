@@ -90,6 +90,7 @@ var loadState =
 		/* stuff for matchResults state */
         game.load.image('winner', 'images/endMatch/winner.png');
         game.load.image('loser', 'images/endMatch/loser.png');
+        game.load.image('tie', 'images/endMatch/tie.png');
         game.load.spritesheet('continueButton', 'images/endMatch/continue.png', 200, 100);
         game.load.image('checkmark', 'images/endMatch/checkmark.png');
 

@@ -9,7 +9,8 @@ matchResultsState =
 	},
 	create: function()
 	{
-	defenderPlaceTowers = false;
+		music.stop();
+		defenderPlaceTowers = false;
         game.add.sprite(0,0,'title');
         var endMatchTitleStyle = { font: "bold 60px Arial", fill: "#595959"};//boundsAlignH: "center", boundsAlignV: "middle" };
         var roundMatchStyle = { font: "25px Arial", fill: "#595959"};//, boundsAlignH: "center", boundsAlignV: "middle" };
@@ -50,7 +51,7 @@ matchResultsState =
         attName.setTextBounds(680, 300, 120, 50);
         var attackertext = game.add.text(0, 0, "Defender", { font: "35px Arial", fill: "#595959"});
         attackertext.setTextBounds(670,340, 120, 50);
-        
+		
         var minigunTower = game.add.sprite(600,450,"minigunTower");
         minigunTower.scale.setTo(0.75);
         game.add.text(680,475, "X " + towerCount['minigun'], { font: "25px Arial", fill: "#595959"});
@@ -114,6 +115,7 @@ matchResultsState =
 		
 		
 		console.log("matchNum: "+roundMatchNum['match']);
+		var clickedAlready = false;
 		
 		if (roundMatchNum['match'] == 1){
             socket.send('switchRoles');
@@ -123,16 +125,20 @@ matchResultsState =
 			if(player.state == 'defender'){ // at this point this is the NEW DEFENDER (attacker on the screen)
 				continueButton = game.add.button(405,975, 'continueButton',function(){
 					console.log("BEFORE");
-					if(player.state == 'attacker'){
+					if(player.state == 'attacker' && !clickedAlready){
 						socket.send('addCheckAtt');
 						console.log('check 1');
+						clickedAlready = true;
+						continueClicked = true;
 					}
-					else if(player.state == 'defender'){
+					else if(player.state == 'defender' && !clickedAlready){
 						socket.send('addCheckDef');
 						console.log('check 2');
+						clickedAlready = true;
+						continueClicked = true;
 					}
 					
-					continueClicked = true;
+					
 		
 				}, this, 0, 1, 2);
 				

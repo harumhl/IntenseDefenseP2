@@ -29,7 +29,7 @@ endRoundState =
 		
 		var endRoundTitleStyle = { font: "bold 60px Arial", fill: "#595959"};
 		var endRoundTitle = game.add.text(320,135,"Round Results", endRoundTitleStyle);
-		
+		var clickedAlready = false;
 		var roundMatchStyle = { font: "25px Arial", fill: "#595959"};
 		game.add.text(445,215,"Round " + roundMatchNum['round'], roundMatchStyle);
 		
@@ -56,10 +56,23 @@ endRoundState =
 		// display winner of round two
 		game.add.text(705, 440, matchWinner['matchTwo'], { font: "25px Arial", fill: "#595959"});
 		
-		
+		//display random images just because why not
+		var tempSprite = game.add.sprite(400, 600,'standardZombie',9);
+		tempSprite.scale.setTo(1.5);
+		var tempSprite2 = game.add.sprite(525, 575, 'minigunTower');
+		tempSprite2.scale.setTo(1.5);
 
-		
-		console.log(player.ID+' '+endGame);
+
+		// displa who won the round or tie
+		if(matchWinner['matchOne'] == matchWinner['matchTwo']){
+			game.add.image(250, 800, "winner");
+		}
+		else{
+			game.add.image(240, 800, "tie");	
+		}
+
+
+
 		if(Math.abs(endGame) >= 2){
 			if(endGame > 0){
 				if(player.ID > 0)
@@ -92,12 +105,14 @@ endRoundState =
 				continueClicked = true;
 				defenderPlaceTowers = false;
 				console.log("send clicks");
-				socket.send("incrementClicksRound");
+				if(!clickedAlready){
+					socket.send("incrementClicksRound");
+					clickedAlready = true;
+				}
 
 						
 
 					}, this, 0, 1, 2);
-				//
 		}
 			
 		
