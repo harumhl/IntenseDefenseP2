@@ -133,8 +133,16 @@ window.onload = function() {
 			buyZombie(zombieType);
 			zombieCount[zombieType] += 1;
 		}
-		else if(message == 'incoming')
-			incoming = true;
+		else if(message == 'sendNewRound'){
+			if(player.state == 'attacker'){
+				startNewMatch();
+			}
+			else{
+				
+				console.log('WAITTTTTTTT');
+				setTimeout(startNewMatch(), 2000);
+			}
+		}
 		else if(message.substring(0,13) == 'defenderMoney'){
 			if(state == 'defender')
 				player.money+=parseInt(message.substring(14,message.length));

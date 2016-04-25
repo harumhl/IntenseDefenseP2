@@ -81,7 +81,7 @@ endRoundState =
         else
             winnerText = game.add.text(45, 600, "A round ended.\nDefender Wins!", {font: "40px Arial", fill: "#595959", align: "center", boundsAlignH: "left", boundsAlignV: "middle"});
         */
-		
+		console.log(player.ID+' '+endGame);
 		if(Math.abs(endGame) >= 2){
 			if(endGame > 0){
 				if(player.ID > 0)
@@ -97,17 +97,29 @@ endRoundState =
 			}
 		}
 		else{
-			console.log('Start a new round');
-			if(player.state == 'attacker'){
-				startNewMatch();
-			}
-			else{
+			console.log('Start a new round');	
+			continueButton = game.add.button(405,975, 'continueButton',function(){
+				console.log("BEFORE");
+				if(player.state == 'attacker'){
+					socket.send('addCheckAtt');
+					console.log('check 1');
+				}
+				else if(player.state == 'defender'){
+					socket.send('addCheckDef');
+					console.log('check 2');
+				}
 				
-				console.log('WAITTTTTTTT');
-				setTimeout(startNewMatch(), 2000);
-			}
-			
+				continueClicked = true;
+				defenderPlaceTowers = false;
+				console.log("send clicks");
+				socket.send("incrementClicksRound");
+
+						
+
+					}, this, 0, 1, 2);
+				//
 		}
+			
 		
 		
 	},

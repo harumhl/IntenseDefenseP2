@@ -191,7 +191,9 @@ matchResultsState =
 				startEndRound = false;
 				if(matchWinner['matchOne'] == matchWinner['matchTwo']){
 					console.log('winner = '+matchWinner['matchOne']);
-					if(matchWinner['matchOne'] == player.name)
+					console.log('>'+player.username+'<');
+					console.log('>'+matchWinner['matchOne']+'<');
+					if(matchWinner['matchOne'] == player.username)
 						endGame += player.ID;
 					else
 						endGame -= player.ID;

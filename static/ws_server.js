@@ -140,7 +140,19 @@ wsServer.on('request', function(request) {
 						connections[i].sendUTF('incrementMatch');
 					}
 				}
-	    }
+			}
+			else if(message.utf8Data == 'incrementClicksRound'){
+				
+				continueButtonClicks++;
+				console.log("clicks = " + continueButtonClicks);
+				if(continueButtonClicks == 2){
+					console.log("YES clicks = " + continueButtonClicks);
+					continueButtonClicks = 0;
+					for(var i = 0; i<connections.length; i++){
+						connections[i].sendUTF('sendNewRound');
+					}
+				}
+			}
             else if(message.utf8Data == 'switchRoles')
             {
                 roleChangedToNumber++;
