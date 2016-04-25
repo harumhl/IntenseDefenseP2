@@ -164,10 +164,14 @@ matchResultsState =
 						console.log('check 2');
 					}
 					
-					continueClicked = true;
+					
 					
 					console.log("send clicks");
-					socket.send("incrementClicks");
+					if(!clickedAlready){
+						continueClicked = true;
+						socket.send("incrementClicks");
+						clickedAlready = true;
+					}
 
 					
 
@@ -197,8 +201,6 @@ matchResultsState =
 				startEndRound = false;
 				if(matchWinner['matchOne'] == matchWinner['matchTwo']){
 					console.log('winner = '+matchWinner['matchOne']);
-					console.log('>'+player.username+'<');
-					console.log('>'+matchWinner['matchOne']+'<');
 					if(matchWinner['matchOne'] == player.username)
 						endGame += player.ID;
 					else
