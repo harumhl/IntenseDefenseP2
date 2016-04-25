@@ -331,7 +331,8 @@ var playMatchState =
 		// destroy the checkmarks from the matchResults game state
 		if(checkone != undefined) checkone.destroy();
 		if(checktwo != undefined) checktwo.destroy();
-        
+		if(continueButton != undefined) continueButton.destroy();
+
         if (matchOver){
             endTime = newTime;
             endHealth = endHealthFrame;

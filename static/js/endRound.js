@@ -108,7 +108,9 @@ endRoundState =
 					socket.send('addCheckDef');
 					console.log('check 2');
 				}
-				
+				startRound = false;
+				matchOver = true;
+				alreadyStarted = false;
 				continueClicked = true;
 				defenderPlaceTowers = false;
 				console.log("send clicks");

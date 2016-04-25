@@ -687,32 +687,7 @@ function zombieStat(_lane, _pos_x, _pos_y, _speed, _damage) {
 	this.damage = _damage;
 }
 
-function newRound() {
-	for(var i = 0; i<zombieArray.length; i++)
-		zombieArray[i].image.kill();
-	for(var j = 0; j<towerArray.length; j++)
-		towerArray[j].image.kill();
-	
-	zombieArray = [];
-	zombieStatArray = [];
-	towerArray = [];
-	
-	alreadyStarted = false;
-	
-	/* if (player.state == 'attacker')
-		{
-			player.state = 'defender';
-			// send socket message for player name
-		}
-		else
-		{
-			player.state = 'attacker';
-			// send socket message for player name
-		}
-		
-		// restart timers
-	*/
-}
+
 
 
 
@@ -766,7 +741,9 @@ function countdown(minutes) { // function for the timer for each round
         else{
             if(seconds <= 0 && current_minutes == 0 && !attackerWon){
                 winner = 'defender';
-                endRound('defender');         
+				clearTimeout(timeout);
+                endRound('defender');   
+				return;
                 //end of match: defender wins
             }
 		}
@@ -859,6 +836,32 @@ function damageBase(amount) {
 	// inside the countdown(), endRound('defender') will be called accordingly
 	
 	return true;
+}
+function newRound() {
+	for(var i = 0; i<zombieArray.length; i++)
+		zombieArray[i].image.kill();
+	for(var j = 0; j<towerArray.length; j++)
+		towerArray[j].image.kill();
+	
+	zombieArray = [];
+	zombieStatArray = [];
+	towerArray = [];
+	
+	alreadyStarted = false;
+	
+	/* if (player.state == 'attacker')
+		{
+			player.state = 'defender';
+			// send socket message for player name
+		}
+		else
+		{
+			player.state = 'attacker';
+			// send socket message for player name
+		}
+		
+		// restart timers
+	*/
 }
 function endRound(winner) {
     if(winner == "attacker"){//		window.alert("Attacker Wins!");
