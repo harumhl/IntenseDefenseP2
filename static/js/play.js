@@ -10,9 +10,10 @@ var endHealthFrame = 0;
 
 var playMatchState = 
 {
+
 	create: function()
 	{
-		
+
 		console.log('STATE:Play');
         rescale();
         //reset the zombie/Tower Count
@@ -299,6 +300,13 @@ var playMatchState =
         
         instructionButton.scale.setTo(0.5);
         closeInstructionButton.scale.setTo(0.5);
+
+        //audio
+        music = game.add.audio('gameMusic');
+        music.play();
+
+        //mute button
+        muteButton = game.add.button(40,1000,'mute', muteMusic, this, 0);
         
 	},
 	

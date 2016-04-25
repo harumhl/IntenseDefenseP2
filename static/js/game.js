@@ -174,6 +174,9 @@ var continueClicks = 0;
 var startEndRound = false;
 var continueButton;
 
+var music;
+var muteButton;
+
 
 
 /*       Classes         */
@@ -1065,6 +1068,19 @@ function cancelTowerClick(killTowerPlacementMap, emptyGTowerType) {
     
     if(emptyGTowerType) gTowerType = "";
 }
+
+function muteMusic(){
+	if(music.mute == false){
+		music.mute = true;
+		muteButton.setFrames(1);
+	}
+	else{
+		music.mute = false;
+		muteButton.setFrames(0);	
+	}
+
+}
+
 function hoverOverButton(type){
     //console.log("hover over: "+type+type.text+type.toString());
     //console.log("FR button: "+upgradeFireRateButton);
