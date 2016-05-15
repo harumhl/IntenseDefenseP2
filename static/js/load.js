@@ -12,93 +12,93 @@ var loadState =
 		console.log('STATE: load');
 
 		
-		game.load.image('title','images/Title.png');
-		game.load.spritesheet('map','images/NEWmapSpriteSheet.png', 700,735);
-		game.load.spritesheet('base','images/BottomInfoBox/baseSpt.png',110,83);
-		game.load.image('bottomUpgradeBox', 'images/BottomInfoBox/bottomBoxnew.png')
+		game.load.image('title','static/images/Title.png');
+		game.load.spritesheet('map','static/images/NEWmapSpriteSheet.png', 700,735);
+		game.load.spritesheet('base','static/images/BottomInfoBox/baseSpt.png',110,83);
+		game.load.image('bottomUpgradeBox', 'static/images/BottomInfoBox/bottomBoxnew.png')
 		
         /*stuff for login state*/
-        game.load.spritesheet('instructionsButton', 'images/generalButtons/instructionsButton.png',200,100);
-        game.load.spritesheet('closeInstructionsButton', 'images/generalButtons/closeInstructionsButton.png',200,100);
-		game.load.spritesheet('attackerInstructionButton', 'images/generalButtons/attackerInstructionButton.png',200,100);
-		game.load.spritesheet('defenderInstructionButton', 'images/generalButtons/defenderInstructionButton.png',200,100);
-        //game.load.image('instructionSheet', 'images/instructionSheet.png');
-		game.load.spritesheet('instructionSheet', 'images/instructionSheetSpt.png',1000,1136);
-        game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
-		game.load.spritesheet('loginButton', 'images/loginButton.png',200,100);
+        game.load.spritesheet('instructionsButton', 'static/images/generalButtons/instructionsButton.png',200,100);
+        game.load.spritesheet('closeInstructionsButton', 'static/images/generalButtons/closeInstructionsButton.png',200,100);
+		game.load.spritesheet('attackerInstructionButton', 'static/images/generalButtons/attackerInstructionButton.png',200,100);
+		game.load.spritesheet('defenderInstructionButton', 'static/images/generalButtons/defenderInstructionButton.png',200,100);
+        //game.load.image('instructionSheet', 'static/images/instructionSheet.png');
+		game.load.spritesheet('instructionSheet', 'static/images/instructionSheetSpt.png',1000,1136);
+        game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
+		game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
         
         
         
 		/* images for buttons */
 		//zombie path button
-		game.load.spritesheet('zombiePathButton', 'images/generalButtons/zombiePathButton.png', 50,50);
+		game.load.spritesheet('zombiePathButton', 'static/images/generalButtons/zombiePathButton.png', 50,50);
 		//zombies
-		game.load.spritesheet('standardZombieButton', 'images/Zombies/zombieStandardButtonSpt.png', 70, 70);
-		game.load.spritesheet('strongZombieButton', 'images/Zombies/zombieStrongButtonSpt.png', 70,70);
-		game.load.spritesheet('healingZombieButton', 'images/Zombies/zombieHealingButtonSpt.png', 70,70);
-		game.load.spritesheet('generationsZombieButton', 'images/Zombies/zombieGenerationsButtonSpt.png', 70,70);
+		game.load.spritesheet('standardZombieButton', 'static/images/Zombies/zombieStandardButtonSpt.png', 70, 70);
+		game.load.spritesheet('strongZombieButton', 'static/images/Zombies/zombieStrongButtonSpt.png', 70,70);
+		game.load.spritesheet('healingZombieButton', 'static/images/Zombies/zombieHealingButtonSpt.png', 70,70);
+		game.load.spritesheet('generationsZombieButton', 'static/images/Zombies/zombieGenerationsButtonSpt.png', 70,70);
 		// image displayed instead of button if player cant afford it
-		game.load.image('zombieBankrupt', 'images/Zombies/zombieBankrupt.png');
+		game.load.image('zombieBankrupt', 'static/images/Zombies/zombieBankrupt.png');
 		
 		//tower buttons
-		game.load.spritesheet('minigunTowerButton', 'images/Towers/towerMinigunButtonSpt.png', 70, 70);
-		game.load.spritesheet('shotgunTowerButton', 'images/Towers/towerShotgunButtonSpt.png', 70, 70);
-		game.load.spritesheet('gumTowerButton', 'images/Towers/towerGumButtonSpt.png', 70, 70);
-		game.load.spritesheet('bombTowerButton', 'images/Towers/towerBombButtonSpt.png', 70, 70);
+		game.load.spritesheet('minigunTowerButton', 'static/images/Towers/towerMinigunButtonSpt.png', 70, 70);
+		game.load.spritesheet('shotgunTowerButton', 'static/images/Towers/towerShotgunButtonSpt.png', 70, 70);
+		game.load.spritesheet('gumTowerButton', 'static/images/Towers/towerGumButtonSpt.png', 70, 70);
+		game.load.spritesheet('bombTowerButton', 'static/images/Towers/towerBombButtonSpt.png', 70, 70);
 		// image displayed instead of button if player cant afford it
-		game.load.image('minigunBankrupt', 'images/Towers/minigunBankrupt.png');
-		game.load.image('shotgunBankrupt', 'images/Towers/shotgunBankrupt.png');
-		game.load.image('gumBankrupt', 'images/Towers/gumBankrupt.png');
-		game.load.image('bombBankrupt', 'images/Towers/bombBankrupt.png');
+		game.load.image('minigunBankrupt', 'static/images/Towers/minigunBankrupt.png');
+		game.load.image('shotgunBankrupt', 'static/images/Towers/shotgunBankrupt.png');
+		game.load.image('gumBankrupt', 'static/images/Towers/gumBankrupt.png');
+		game.load.image('bombBankrupt', 'static/images/Towers/bombBankrupt.png');
 		
 		
 		/* images for the actual objects on the map */
 		//towers
-		game.load.spritesheet('minigunTower', 'images/Towers/towerMinigun.png');
-		game.load.spritesheet('shotgunTower', 'images/Towers/towerShotgun.png');
-		game.load.spritesheet('gumTower', 'images/Towers/towerGum.png');
-		game.load.spritesheet('bombTower', 'images/Towers/towerBomb.png');
-        game.load.image('attackRange', 'images/Towers/attackRange.png');
+		game.load.spritesheet('minigunTower', 'static/images/Towers/towerMinigun.png');
+		game.load.spritesheet('shotgunTower', 'static/images/Towers/towerShotgun.png');
+		game.load.spritesheet('gumTower', 'static/images/Towers/towerGum.png');
+		game.load.spritesheet('bombTower', 'static/images/Towers/towerBomb.png');
+        game.load.image('attackRange', 'static/images/Towers/attackRange.png');
 		
-		game.load.spritesheet('standardZombie', 'images/Zombies/zombieStandard.png', 57,75);
-		game.load.spritesheet('strongZombie', 'images/Zombies/zombieStrong.png', 57, 75);
-		game.load.spritesheet('healingZombie', 'images/Zombies/zombieHealing.png', 57, 75);
-		game.load.spritesheet('generationsZombie', 'images/Zombies/zombieGenerations.png', 57, 75);
+		game.load.spritesheet('standardZombie', 'static/images/Zombies/zombieStandard.png', 57,75);
+		game.load.spritesheet('strongZombie', 'static/images/Zombies/zombieStrong.png', 57, 75);
+		game.load.spritesheet('healingZombie', 'static/images/Zombies/zombieHealing.png', 57, 75);
+		game.load.spritesheet('generationsZombie', 'static/images/Zombies/zombieGenerations.png', 57, 75);
 		
 		// bullet used for now to shoot from the towers, image will be changed later
-		game.load.image('minigunBullet', 'images/minigunBullet.png');
-        game.load.image('shotgunBullet', 'images/shotgunBullet.png');
-        game.load.image('gumBullet', 'images/gumBullet.png');
-        game.load.image('bombBullet', 'images/bombBullet.png');
-        game.load.spritesheet('explosion', 'images/explosion.png');
+		game.load.image('minigunBullet', 'static/images/minigunBullet.png');
+        game.load.image('shotgunBullet', 'static/images/shotgunBullet.png');
+        game.load.image('gumBullet', 'static/images/gumBullet.png');
+        game.load.image('bombBullet', 'static/images/bombBullet.png');
+        game.load.spritesheet('explosion', 'static/images/explosion.png');
 		
 		//curtain for the attacker, so attacker wont see where defender is placing towers for 30 seconds
-		game.load.spritesheet('attckerCurtain', 'images/attackerCurtain.png');
+		game.load.spritesheet('attckerCurtain', 'static/images/attackerCurtain.png');
 		//curtain for both players, When first loggin in will be presented this image hiding the map 
-		game.load.spritesheet('matchmakingCurtain', 'images/matchmaking.png');
+		game.load.spritesheet('matchmakingCurtain', 'static/images/matchmaking.png');
 		
-		game.load.image('zombieSpawn', 'images/zombieSpawn.png');
+		game.load.image('zombieSpawn', 'static/images/zombieSpawn.png');
         
         /*   Bottom infor box spritesheets   */  
         // Spritesheets for upgrading a zombie
-        game.load.spritesheet('upgradeLvl1', 'images/BottomInfoBox/upgradeLvl1.png', 90, 25);
-        game.load.spritesheet('upgradeLvl2', 'images/BottomInfoBox/upgradeLvl2.png', 90, 25);
-        game.load.spritesheet('upgradeLvl3', 'images/BottomInfoBox/upgradeLvl3.png', 90, 25);
-        game.load.image('upgradeMax', 'images/BottomInfoBox/upgradeMax.png');
-        game.load.spritesheet('baseHealth', 'images/BottomInfoBox/baseHealth.png', 297,63); // Total 14 frames
+        game.load.spritesheet('upgradeLvl1', 'static/images/BottomInfoBox/upgradeLvl1.png', 90, 25);
+        game.load.spritesheet('upgradeLvl2', 'static/images/BottomInfoBox/upgradeLvl2.png', 90, 25);
+        game.load.spritesheet('upgradeLvl3', 'static/images/BottomInfoBox/upgradeLvl3.png', 90, 25);
+        game.load.image('upgradeMax', 'static/images/BottomInfoBox/upgradeMax.png');
+        game.load.spritesheet('baseHealth', 'static/images/BottomInfoBox/baseHealth.png', 297,63); // Total 14 frames
 		
 		/* stuff for matchResults state */
-        game.load.image('winner', 'images/endMatch/winner.png');
-        game.load.image('loser', 'images/endMatch/loser.png');
-        game.load.image('tie', 'images/endMatch/tie.png');
-        game.load.spritesheet('continueButton', 'images/endMatch/continue.png', 200, 100);
-        game.load.image('checkmark', 'images/endMatch/checkmark.png');
+        game.load.image('winner', 'static/images/endMatch/winner.png');
+        game.load.image('loser', 'static/images/endMatch/loser.png');
+        game.load.image('tie', 'static/images/endMatch/tie.png');
+        game.load.spritesheet('continueButton', 'static/images/endMatch/continue.png', 200, 100);
+        game.load.image('checkmark', 'static/images/endMatch/checkmark.png');
 
         // aduio
 		game.load.audio('gameMusic', 'audio/bensound-epic.mp3');
 
 		//mute button
-		game.load.spritesheet('mute', 'images/generalButtons/musicButton.png', 50,50);
+		game.load.spritesheet('mute', 'static/images/generalButtons/musicButton.png', 50,50);
 		
 	},
 	
