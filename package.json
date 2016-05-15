@@ -8,7 +8,8 @@
   },
   "main": "/static/index.html",
   "scripts": {
-    "start": "node web_server.js || node /static/ws_server.js"
+    "start": "node ./node_modules/concurrently/src/main.js --kill-others \"node web_server.js\" \"node /static/ws_server.js\""
+
   },
   "dependencies": {
     "ejs": "2.4.1",
