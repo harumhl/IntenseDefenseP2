@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "express": "4.13.3"
-    "ws": "0.4.x"
+    "websocket": "0.4.x"
   },
   "repository": {
     "type": "git",
