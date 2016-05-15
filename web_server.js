@@ -45,7 +45,7 @@ var server = http.createServer(
 process.on('SIGTERM', server.close.bind(server))
 
 server.listen(port, function() {
-    console.log((new Date()) + 'Intese Defense Server is listening on port '+portNum);
+    console.log((new Date()) + 'Intese Defense Server is listening on port '+port);
 });
 
 wsServer = new WebSocketServer({
