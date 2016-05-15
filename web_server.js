@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
 });
 
 app.listen(port+1, function(){
-    console.log('Example app listening on port '+(port+1));
+    console.log('Example app listening on port '+(parseInt(port)+parseInt(1)));
 });
 
 
