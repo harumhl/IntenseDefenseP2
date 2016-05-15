@@ -20,11 +20,6 @@ app.listen(portNum, function(){
 });*/
 
 
-
-
-
-
-#!/usr/bin/env node
 var connections = [];
 var killIndexes = [];
 var numConnected = 0;
