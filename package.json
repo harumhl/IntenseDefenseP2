@@ -8,7 +8,7 @@
   },
   "main": "/static/index.html",
   "scripts": {
-    "start": "node web_server.js | node /static/ws_server.js"
+    "start": "node /static/ws_server.js & node web_server.js"
   },
   "dependencies": {
     "ejs": "2.4.1",
