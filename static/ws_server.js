@@ -21,15 +21,10 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
-var server_port = process.env.YOUR_PORT || process.env.PORT || 80;
-var server_host = process.env.YOUR_HOST || '0.0.0.0';
-server.listen(server_port, server_host, function() {
-    console.log('Listening on port %d', server_port);
-});
 process.on('SIGTERM', server.close.bind(server))
 
 var portNum = 11099;
-server.listen(portNum, function() {
+server.listen(process.env.PORT || portNum, function() {
     console.log((new Date()) + 'Intese Defense Server is listening on port '+portNum);
 });
 
