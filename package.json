@@ -1,0 +1,26 @@
+{
+  "name": "IntenseDefenseP2",
+  "version": "0.2.5",
+  "description": "Tower Defense game where one player tries to destroy another player's base where the other player tries to defend one's base.",
+  "engines": {
+    "node": "5.9.1"
+  },
+  "main": "/static/index.html",
+  "scripts": {
+    "start": "node /static/ws_server.js", "node web_server.js"
+  },
+  "dependencies": {
+    "ejs": "2.4.1",
+    "express": "4.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.tamu.edu/haru-mhl/IntenseDefense"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "TAMU"
+}
