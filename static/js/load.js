@@ -119,7 +119,9 @@ var loadState =
 window.onload = function() {
     
   // Create a new WebSocket.
-  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
+  var host = location.origin.replace(/^http/, 'ws');
+  socket = new WebSocket('host);
+//  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
   // Handle messages sent by the server.
