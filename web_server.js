@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/static/index.html');
 });
 
-app.listen(port+1, function(){
+app.listen((parseInt(port)+parseInt(1)), function(){
     console.log('Example app listening on port '+(parseInt(port)+parseInt(1)));
 });
 
