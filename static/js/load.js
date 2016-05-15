@@ -95,7 +95,7 @@ var loadState =
         game.load.image('checkmark', 'static/images/endMatch/checkmark.png');
 
         // aduio
-		game.load.audio('gameMusic', 'audio/bensound-epic.mp3');
+		game.load.audio('gameMusic', 'static/audio/bensound-epic.mp3');
 
 		//mute button
 		game.load.spritesheet('mute', 'static/images/generalButtons/musicButton.png', 50,50);
