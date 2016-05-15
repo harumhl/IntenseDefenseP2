@@ -1,4 +1,4 @@
-var WebSocketServer = require('ws').server;
+var WebSocketServer = require('websocket').server;
 var http = require('http');
 var express = require('express');
 var app = express();
