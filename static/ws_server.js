@@ -20,6 +20,7 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
+process.on('SIGTERM', server.close.bind(server))
 
 var portNum = 11099;
 server.listen(portNum, function() {
