@@ -4,7 +4,8 @@ app.use('/static', express.static('static'));
 var path = require('path');
 
 // viewed at http://localhost:8080
-app.get(':13011/', function(req, res) {
+app.get('/', function(req, res) {
+	alert('sending file '+__dirname+'/static/withPhaser.html');
 	console.log('sending file '+__dirname+'/withPhaser.html');
     res.sendFile(__dirname + '/static/withPhaser.html');
 });
