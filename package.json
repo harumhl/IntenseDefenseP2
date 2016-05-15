@@ -11,12 +11,11 @@
     "start": "node static/ws_server.js & node web_server.js"
   },
   "dependencies": {
-    "ejs": "2.4.1",
     "express": "4.13.3"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.tamu.edu/haru-mhl/IntenseDefense"
+    "url": "https://github.com/harumhl/IntenseDefenseP2"
   },
   "keywords": [
     "node",
