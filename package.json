@@ -8,7 +8,7 @@
   },
   "main": "static/js/boot.js",
   "scripts": {
-    "start": "node static/ws_server.js & node web_server.js"
+    "start": "node web_server.js"
   },
   "dependencies": {
     "express": "4.13.3"
