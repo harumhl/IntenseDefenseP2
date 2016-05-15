@@ -6,7 +6,7 @@
   "engines": {
     "node": "5.9.1"
   },
-  "main": "/static/index.html",
+  "main": ":13011/static/index.html",
   "scripts": {
     "start": "node static/ws_server.js & node web_server.js"
   },
