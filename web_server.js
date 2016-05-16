@@ -40,12 +40,12 @@ var server = http.createServer(
     response.end();
 }*/app);
 
-process.on('SIGTERM', server.close.bind(server))
 
 server.listen(port, function() {
     console.log(new Date());
     console.log('Intese Defense Server is listening on port '+port);
 });
+process.on('SIGTERM', server.close.bind(server))
 
 wsServer = new WebSocketServer({
     httpServer: server,
