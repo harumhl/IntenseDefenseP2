@@ -123,7 +123,7 @@ window.onload = function() {
   console.log(location.host);
   console.log(location.hostname);
 
-  socket = new WebSocket(host +':' +8080); // server.listen port number
+  socket = new WebSocket(host); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
