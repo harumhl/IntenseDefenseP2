@@ -5,6 +5,8 @@ var app = express();
 var path = require('path');
 var port = process.env.PORT || 8080;
 
+document.getElementByID("hdn1").value = port;
+
 app.use(express.static(__dirname + '/'));
 
 
