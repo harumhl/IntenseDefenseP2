@@ -16,12 +16,12 @@ var loadState =
 		game.load.spritesheet('base','static/images/BottomInfoBox/baseSpt.png',110,83);
 		game.load.image('bottomUpgradeBox', 'static/images/BottomInfoBox/bottomBoxnew.png')
 		
-        /*stuff for login state*/
-        game.load.spritesheet('instructionsButton', 'static/images/generalButtons/instructionsButton.png',200,100);
-        game.load.spritesheet('closeInstructionsButton', 'static/images/generalButtons/closeInstructionsButton.png',200,100);
+        	/*stuff for login state*/
+        	game.load.spritesheet('instructionsButton', 'static/images/generalButtons/instructionsButton.png',200,100);
+        	game.load.spritesheet('closeInstructionsButton', 'static/images/generalButtons/closeInstructionsButton.png',200,100);
 		game.load.spritesheet('attackerInstructionButton', 'static/images/generalButtons/attackerInstructionButton.png',200,100);
 		game.load.spritesheet('defenderInstructionButton', 'static/images/generalButtons/defenderInstructionButton.png',200,100);
-        //game.load.image('instructionSheet', 'static/images/instructionSheet.png');
+        	//game.load.image('instructionSheet', 'static/images/instructionSheet.png');
 		game.load.spritesheet('instructionSheet', 'static/images/instructionSheetSpt.png',1000,1136);
         game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
 		game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
