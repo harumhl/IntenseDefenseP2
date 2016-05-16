@@ -121,8 +121,8 @@ window.onload = function() {
   // Create a new WebSocket.
   var host = location.origin.replace(/^http/, 'ws');
 
-  console.log("port num is: "+port);
-  socket = new WebSocket(host +':'+port); // server.listen port number
+  //console.log("port num is: "+port);
+  socket = new WebSocket(host); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
