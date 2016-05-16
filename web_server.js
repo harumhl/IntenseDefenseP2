@@ -5,6 +5,9 @@ var app = express();
 var path = require('path');
 var port = process.env.PORT || 1357;
 
+global.portNum = port;
+console.log("global port num web: "+global.portNum);
+
 app.use(express.static(__dirname + '/'));
 
 // viewed at http://localhost:8080
