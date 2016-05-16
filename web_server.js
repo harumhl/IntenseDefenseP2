@@ -5,7 +5,6 @@ var app = express();
 var path = require('path');
 var port = process.env.PORT || 1357;
 
-
 app.use(express.static(__dirname + '/'));
 
 // viewed at http://localhost:8080
