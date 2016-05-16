@@ -3,7 +3,7 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var path = require('path');
-var port = process.env.PORT || 12312;
+var port = 1357 || process.env.PORT;
 
 app.use(express.static(__dirname + '/'));
 
