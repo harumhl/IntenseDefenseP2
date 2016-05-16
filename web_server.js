@@ -4,7 +4,6 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var port = process.env.PORT || 12312;
-gPort = process.env.PORT || 12312;
 
 app.use(express.static(__dirname + '/'));
 
@@ -18,6 +17,14 @@ app.get('/', function(req, res) {
 app.listen((parseInt(port)+parseInt(1)), function(){
     console.log('Example app listening on port '+(parseInt(port)+parseInt(1)));
 });
+
+app.set('port', port);
+app.portNumber = port;
+
+exports = module.exports = {
+  portNumber : port
+}
+
 
 
 var connections = [];
