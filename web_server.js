@@ -45,7 +45,6 @@ process.on('SIGTERM', server.close.bind(server))
 server.listen(port, function() {
     console.log(new Date());
     console.log('Intese Defense Server is listening on port '+port);
-    console.log("HOST->"+location.origin);
 });
 
 wsServer = new WebSocketServer({
