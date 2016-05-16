@@ -46,7 +46,7 @@ process.on('SIGTERM', server.close.bind(server))
 
 server.listen(gPort, function() {
     console.log(new Date());
-    console.log(Intese Defense Server is listening on port '+gPort);
+    console.log('Intese Defense Server is listening on port '+gPort);
 });
 
 wsServer = new WebSocketServer({
