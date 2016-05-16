@@ -3,9 +3,7 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var path = require('path');
-var port = process.env.PORT || 8080;
-
-document.getElementByID("hdn1").value = port;
+var port = 8080 || process.env.PORT;
 
 app.use(express.static(__dirname + '/'));
 
