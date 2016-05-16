@@ -5,8 +5,9 @@ var app = express();
 var path = require('path');
 var port = process.env.PORT || 1357;
 
-global.portNum = port;
-console.log("global port num web: "+global.portNum);
+console.log("gPort prev: "+gPort);
+gPort = port;
+console.log("gPort next: "+gPort);
 
 app.use(express.static(__dirname + '/'));
 
