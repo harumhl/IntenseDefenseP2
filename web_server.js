@@ -3,7 +3,7 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var path = require('path');
-var port = 1232;
+var port = process.env.PORT || 12312;
 gPort = process.env.PORT || 12312;
 
 app.use(express.static(__dirname + '/'));
@@ -44,8 +44,9 @@ var server = http.createServer(
 
 process.on('SIGTERM', server.close.bind(server))
 
-server.listen(port, function() {
-    console.log((new Date()) + 'Intese Defense Server is listening on port '+port);
+server.listen(gPort, function() {
+    console.log(new Date());
+    console.log(Intese Defense Server is listening on port '+gPort);
 });
 
 wsServer = new WebSocketServer({
