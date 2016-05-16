@@ -120,7 +120,7 @@ window.onload = function() {
   var host = location.origin.replace(/^http/, 'ws');
   console.log("HOST:::" +window.location.port);
 
-  socket = new WebSocket(host); // server.listen port number
+  socket = new WebSocket(host+":8976"); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
