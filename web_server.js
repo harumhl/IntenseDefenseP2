@@ -3,8 +3,8 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var path = require('path');
-gPort = process.env.PORT || 12312;
 var port = 1232;
+gPort = process.env.PORT || 12312;
 
 app.use(express.static(__dirname + '/'));
 
