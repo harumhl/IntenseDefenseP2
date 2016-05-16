@@ -11,7 +11,6 @@ var loadState =
 	{
 		console.log('STATE: load');
 
-		
 		game.load.image('title','static/images/Title.png');
 		game.load.spritesheet('map','static/images/NEWmapSpriteSheet.png', 700,735);
 		game.load.spritesheet('base','static/images/BottomInfoBox/baseSpt.png',110,83);
@@ -120,9 +119,9 @@ window.onload = function() {
     
   // Create a new WebSocket.
   var host = location.origin.replace(/^http/, 'ws');
-  console.log("HOST:::" +host);
+  console.log("HOST:::" +window.location.port);
 
-  socket = new WebSocket(host +':' +80); // server.listen port number
+  socket = new WebSocket(host +':' +8080); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
