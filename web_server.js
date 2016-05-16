@@ -8,7 +8,7 @@ var port = process.env.PORT || 1357;
 app.use(express.static(__dirname + '/'));
 
 // viewed at http://localhost:8080
-/*
+
 app.get('/', function(req, res) {
     console.log('sending file '+__dirname+'/static/index.html');
     res.sendFile(__dirname + '/static/index.html');
@@ -16,7 +16,7 @@ app.get('/', function(req, res) {
 
 app.listen((parseInt(port)+parseInt(1000)), function(){
     console.log('Example app listening on port '+(parseInt(port)+parseInt(1)));
-});*/
+});
 
 
 var connections = [];
