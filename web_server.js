@@ -48,7 +48,6 @@ var server = http.createServer(
 server.listen(port, function() {
     console.log(new Date());
     console.log('Intese Defense Server is listening on port '+port);
-    window.location.port = port;
 });
 process.on('SIGTERM', server.close.bind(server))
 
