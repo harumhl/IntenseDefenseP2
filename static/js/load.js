@@ -120,10 +120,8 @@ window.onload = function() {
     
   // Create a new WebSocket.
   var host = location.origin.replace(/^http/, 'ws');
-  var app = require('../app');
-  console.log("port::: "+ app.portNumber);
 
-  socket = new WebSocket(host +':' +app.portNumber); // server.listen port number
+  socket = new WebSocket(host +':' +1357); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
     
