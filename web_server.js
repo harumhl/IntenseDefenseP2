@@ -8,6 +8,7 @@ var port = process.env.PORT || 1357;
 app.use(express.static(__dirname + '/'));
 
 // viewed at http://localhost:8080
+/*
 app.get('/', function(req, res) {
     console.log('sending file '+__dirname+'/static/index.html');
     res.sendFile(__dirname + '/static/index.html');
@@ -15,7 +16,7 @@ app.get('/', function(req, res) {
 
 app.listen((parseInt(port)+parseInt(1000)), function(){
     console.log('Example app listening on port '+(parseInt(port)+parseInt(1)));
-});
+});*/
 
 
 var connections = [];
@@ -48,20 +49,22 @@ server.listen(port, function() {
 process.on('SIGTERM', server.close.bind(server))
 
 wsServer = new WebSocketServer({
+	server: server
+/*
     httpServer: server,
     // You should not use autoAcceptConnections for production
     // applications, as it defeats all standard cross-origin protection
     // facilities built into the protocol and the browser.  You should
     // *always* verify the connection's origin and decide whether or not
     // to accept it.
-    autoAcceptConnections: false
+    autoAcceptConnections: false*/
 });
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
   return true;
 }
 
-wsServer.on('request', function(request) {
+wsServer.on('connection', function(request) { // instead of 'request'
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
