@@ -49,7 +49,6 @@ server.listen(port, function() {
 process.on('SIGTERM', server.close.bind(server))
 
 wsServer = new WebSocketServer({
-	server: server,
     httpServer: server,
     // You should not use autoAcceptConnections for production
     // applications, as it defeats all standard cross-origin protection
