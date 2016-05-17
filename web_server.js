@@ -62,7 +62,7 @@ function originIsAllowed(origin) {
   return true;
 }
 
-wsServer.on('connection', function(request) { // instead of 'request'
+wsServer.on('request', function(request) { // instead of 'request'
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
