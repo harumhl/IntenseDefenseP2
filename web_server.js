@@ -1,3 +1,9 @@
+// intensedefense.heroku.com - can be awake up to 18 hours every 24 hours 
+// (after 30 mins inactivity, it goes to sleep. accessing it awakes the program)
+
+// git pull && git push heroku master && heroku ps:scale web=1 && heroku open
+// heroku ps -a intensedefense - to check quota of awake time
+
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var express = require('express');
