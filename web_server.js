@@ -8,6 +8,15 @@
 //	heroku open for running it
 // heroku ps -a intensedefense - to check quota of awake time
 
+// To block people from accessing it, 
+//	1. heroku ps:scale web=0
+//	or 2. heroku maintenance:on (it does same thing as #3)
+//	or 3. turn on maintenance mode @ https://dashboard.heroku.com/apps/intensedefense/settings
+// To undo it,
+//	1. heroku ps:scale web=1
+//	2. heroku maintenance:off
+//	3. turn off maintenance mode
+
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var express = require('express');
