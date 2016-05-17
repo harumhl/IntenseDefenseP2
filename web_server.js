@@ -2,6 +2,10 @@
 // (after 30 mins inactivity, it goes to sleep. accessing it awakes the program)
  
 // git pull && git push heroku master && heroku ps:scale web=1 && heroku open
+//	git pull from github.com/harumhl/IntenseDefenseP2
+//	git push heroku master is pushing it to github.heroku.com
+//	heroku ps:scale web=1 making one website available - making it 0 leads to "error" page
+//	heroku open for running it
 // heroku ps -a intensedefense - to check quota of awake time
 
 var WebSocketServer = require('websocket').server;
