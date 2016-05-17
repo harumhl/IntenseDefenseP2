@@ -23,7 +23,7 @@ var loadState =
 		game.load.spritesheet('defenderInstructionButton', 'static/images/generalButtons/defenderInstructionButton.png',200,100);
         	//game.load.image('instructionSheet', 'static/images/instructionSheet.png');
 		game.load.spritesheet('instructionSheet', 'static/images/instructionSheetSpt.png',1000,1136);
-        game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
+        	game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
 		game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
         
         
@@ -118,8 +118,6 @@ window.onload = function() {
     
   // Create a new WebSocket.
   var host = location.origin.replace(/^http/, 'ws');
-  console.log("HOST:::" +window.location.origin);
-
   socket = new WebSocket(host, "echo-protocol"); // server.listen port number
 //  socket = new WebSocket('ws://compute.cse.tamu.edu:11099', "echo-protocol");
   var lockout = 0;
