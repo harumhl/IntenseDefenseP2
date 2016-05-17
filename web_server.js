@@ -3,12 +3,11 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var path = require('path');
-var port = process.env.PORT || 1357;
+var port = process.env.PORT || 1357; 
 
 app.use(express.static(__dirname + '/'));
 
 // viewed at http://localhost:8080
-
 app.get('/', function(req, res) {
     console.log('sending file '+__dirname+'/static/index.html');
     res.sendFile(__dirname + '/static/index.html');
