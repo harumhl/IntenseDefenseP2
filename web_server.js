@@ -1,7 +1,7 @@
 // intensedefense.heroku.com - can be awake up to 18 hours every 24 hours 
 // (after 30 mins inactivity, it goes to sleep. accessing it awakes the program)
  
-// git pull && git push heroku master && heroku ps:scale web=1 && heroku open
+// git pull && git push heroku master && heroku ps:scale web=1 && heroku open (on Terminal)
 //	git pull from github.com/harumhl/IntenseDefenseP2
 //	git push heroku master is pushing it to github.heroku.com
 //	heroku ps:scale web=1 making one website available - making it 0 leads to "error" page
@@ -9,13 +9,13 @@
 // heroku ps -a intensedefense - to check quota of awake time
 
 // To block people from accessing it, 
-//	1. heroku ps:scale web=0
-//	or 2. heroku maintenance:on (it does same thing as #3)
-//	or 3. turn on maintenance mode @ https://dashboard.heroku.com/apps/intensedefense/settings
+//	1. heroku ps:scale web=0 (on Terminal)
+//	or 2. heroku maintenance:on (on Terminal) (it does same thing as #3)
+//	or 3. turn on maintenance mode @https://dashboard.heroku.com/apps/intensedefense/settings
 // To undo it,
-//	1. heroku ps:scale web=1
-//	2. heroku maintenance:off
-//	3. turn off maintenance mode
+//	1. heroku ps:scale web=1 (on Terminal)
+//	2. heroku maintenance:off (on Terminal)
+//	3. turn off maintenance mode @https://dashboard.heroku.com/apps/intensedefense/settings
 
 var WebSocketServer = require('websocket').server;
 var http = require('http');
