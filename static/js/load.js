@@ -296,7 +296,7 @@ window.onload = function() {
 
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
-                countdown(0.05); // extra second for login time
+                countdown(0.30); // extra second for login time
             
         }
         else if(message.substring(0,7) == "upgrade")
