@@ -542,7 +542,7 @@ var playMatchState =
 		
 	   // Change settings for every zombie elements
         if (timeStamp + 100 < game.time.now) { // slowing down the speed of calling this part as per 0.1 sec max
-        	console.log("current time for zombie move: "+game.time.now)''
+        	console.log("current time for zombie move: "+game.time.now);
 		if(state == 'attacker' && zombieStatArray.length > 0){
 			if(zombieStatArray.length == (zombieArray.length-1)){
 				zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 100, 1))
