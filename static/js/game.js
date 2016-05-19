@@ -322,16 +322,16 @@ Zombie.prototype.hurt = function(damage, index) { // I SHOULD NOT NEED THE 2ND A
 		if(zombieArray[index].type == 'generations'){
 			for(var i = 0; i<2; i++) { 
 				if(zombieArray[index].direction == 'left'){
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x+i*20, zombieArray[index].pos_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 				}
 				else if(zombieArray[index].direction == 'right'){
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x-i*20, zombieArray[index].pos_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 				}
 				else{
-					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, 1, 100));
 					zombieArray.push(new Zombie('standard', zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20));
+					zombieStatArray.push(new zombieStat(zombieArray[index].lane, zombieArray[index].pos_x, zombieArray[index].pos_y-i*20, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 				}
 			}
 		}
