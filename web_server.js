@@ -3,7 +3,7 @@
  
 // git pull && git push heroku master && heroku ps:scale web=1 && heroku open (on Terminal)
 //	git pull from github.com/harumhl/IntenseDefenseP2
-//	git push heroku master is pushing it to github.heroku.com
+//	git push heroku master is pushing it to github.heroku.com (this part actually changes and updates the website)
 //	heroku ps:scale web=1 making one website available - making it 0 leads to "error" page
 //	heroku open for running it
 // heroku ps -a intensedefense - to check quota of awake time
