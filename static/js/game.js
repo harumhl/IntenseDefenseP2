@@ -951,20 +951,20 @@ function buyZombie(type) {
 	   by the caller of this function, "sendAddZombie" */
 	
     if (type == "standard"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1, 100));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 	}
     else if (type == "strong"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.6, 200));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 	}
 	else if (type == "healing"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 1, 50));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 	}
     else if (type == "generations"){
-		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, 0.3, 200));
 		zombieArray.push(new Zombie(type, lane, spawn_x, spawn_y));
+		zombieStatArray.push(new zombieStat(lane, spawn_x, spawn_y, zombieArray[zombieArray.length-1].speed, zombieArray[zombieArray.length-1].damage));
 	}
 }
 function buyTower(type) {
