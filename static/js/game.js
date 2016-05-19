@@ -393,14 +393,14 @@ var Tower = function(type, x, y, spriteName, bullets) {
     
 	if(type == 'minigun'){
         this.bullets = bulletss['minigun'];
-		this.fireRate = 750;
+		this.fireRate = 1000;
 		this.damage = 30;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
 	}
 	else if(type == 'shotgun'){
         this.bullets = bulletss['shotgun'];
-		this.fireRate = 950;
+		this.fireRate = 1300;
 		this.damage = 80;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
@@ -408,7 +408,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 	}
 	else if(type == 'gum') {
         this.bullets = bulletss['gum'];
-		this.fireRate = 1000;
+		this.fireRate = 1350;
 		this.damage = -2;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
@@ -416,7 +416,7 @@ var Tower = function(type, x, y, spriteName, bullets) {
 	}
 	else { // bomb
         this.bullets = bulletss['bomb'];
-		this.fireRate = 1000;
+		this.fireRate = 1350;
 		this.damage = 150;
         this.fireRateLevel = 1;
         this.damageLevel = 1;
