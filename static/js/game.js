@@ -206,25 +206,25 @@ Zombie = function(type, lane, inX, inY) {
 	{
 		this.damage = 100;
 		this.health = 200;
-		this.speed = 1;
+		this.speed = 2;
 	}
 	else if(type == 'strong')
 	{
 		this.damage = 200;
 		this.health = 300;
-		this.speed = 0.6;
+		this.speed = 1.2;
 	}
 	else if(type == 'healing')
 	{
 		this.damage = 50;
 		this.health = 500;
-		this.speed = 1;
+		this.speed = 2;
 	}
 	else
 	{
 		this.damage = 300;
 		this.health = 600;
-		this.speed = 0.4
+		this.speed = 0.8;
 	}
 	
 	// positions calculated for bullet targeting
