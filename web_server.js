@@ -287,10 +287,11 @@ wsServer.on('request', function(request) { // instead of 'request'
 							zombieStatArray[i].direction = "down";
 						}
 					}
+					console.log("move @"+i+" moving by "+zombieStatArray[i].speed);
 				}
 		
 				for(var y = 0; y<connections.length; y++){
-				connections[y].sendUTF(JSON.stringify(zombieStatArray));
+					connections[y].sendUTF(JSON.stringify(zombieStatArray));
 				}
 				//if(killIndexes.length >0)
 					//console.log(killIndexes.length);
