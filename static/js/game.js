@@ -282,14 +282,14 @@ Zombie.prototype.move = function(newPos_x, newPos_y, newDirection) {
 	// - where zombie would be by the time the bullet is supposed to hit the zombie
 	if (this.direction == "down") {
 		this.x = this.pos_x;
-		this.y = (this.pos_y + y_offset) + 27*(bulletTravelTime/1000)*this.speed;
+		this.y = (this.pos_y + y_offset) + (bulletTravelTime/1000)*this.speed;
 	}
 	else if (this.direction == "left") {
-		this.x = this.pos_x - 65*(bulletTravelTime/1000)*this.speed;
+		this.x = this.pos_x - (bulletTravelTime/1000)*this.speed;
 		this.y = (this.pos_y + y_offset);
 	}
 	else if (this.direction == "right") {
-		this.x = this.pos_x + 60*(bulletTravelTime/1000)*this.speed;
+		this.x = this.pos_x + (bulletTravelTime/1000)*this.speed;
 		this.y = (this.pos_y + y_offset);
 	}
 };
