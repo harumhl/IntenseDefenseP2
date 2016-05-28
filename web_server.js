@@ -99,7 +99,8 @@ wsServer.on('request', function(request) { // instead of 'request'
         // The last game has one player --> add this new player to that game
         connections[connections.length-1].push(connection);
     }
-    console.log()
+    for (var i=0; i < connections.length; i++)
+        console.log("connection @"+i +": size of "+connections[i].length);
     
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
@@ -367,14 +368,12 @@ wsServer.on('request', function(request) { // instead of 'request'
         // also sending a message to verify whether the server should connect the player with another
         gameIndex = findGameByPlayer(connection);
 
-        if (connections[gameIndex][0] == connection) {
-            connections[gameIndex].splice(0,1);
-        }
-        else if (connections[gameIndex][1] == connection) {
-            connections[gameIndex].splice(1,1);
-        }
-        
         for (var i=0; i < connections[gameIndex].length; i++) {
+            if (connections[gameIndex][i] == connection) {
+                connections[gameIndex].splice(i,1);
+                continue;
+            }
+            
             connections[gameIndex][i].sendUTF('AnotherPlayerLeft');            
         }
     });
