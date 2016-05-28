@@ -230,6 +230,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                     connections[gameIndex][i].sendUTF('switchRoles');
                   }
                 }
+            }
             else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
 				//console.log('Received Message: ' + message.utf8Data);
