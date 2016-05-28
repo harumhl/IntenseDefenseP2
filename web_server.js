@@ -99,7 +99,7 @@ wsServer.on('request', function(request) { // instead of 'request'
         // The last game has one player --> add this new player to that game
         connections[connections.length-1].push(connection);
     }
-
+    console.log()
     
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
@@ -368,12 +368,14 @@ wsServer.on('request', function(request) { // instead of 'request'
         gameIndex = findGameByPlayer(connection);
 
         if (connections[gameIndex][0] == connection) {
-            connections[gameIndex][1].sendUTF('AnotherPlayerLeft');
             connections[gameIndex].splice(0,1);
         }
         else if (connections[gameIndex][1] == connection) {
-            connections[gameIndex][0].sendUTF('AnotherPlayerLeft');
             connections[gameIndex].splice(1,1);
+        }
+        
+        for (var i=0; i < connections[gameIndex].length; i++) {
+            connections[gameIndex][i].sendUTF('AnotherPlayerLeft');            
         }
     });
 });
