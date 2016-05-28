@@ -368,6 +368,9 @@ wsServer.on('request', function(request) { // instead of 'request'
         // also sending a message to verify whether the server should connect the player with another
         gameIndex = findGameByPlayer(connection);
 
+        if (connections == undefined || connections[gameIndex] == undefined) 
+            return;
+        
         for (var i=0; i < connections[gameIndex].length; i++) {
             if (connections[gameIndex][i] == connection) {
                 connections[gameIndex].splice(i,1);
