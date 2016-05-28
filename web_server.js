@@ -368,12 +368,12 @@ wsServer.on('request', function(request) { // instead of 'request'
         gameIndex = findGameByPlayer(connection);
 
         if (connections[gameIndex][0] == connection) {
-            connections[gameIndex].splice(0,1);
             connections[gameIndex][1].sendUTF('AnotherPlayerLeft');
+            connections[gameIndex].splice(0,1);
         }
         else if (connections[gameIndex][1] == connection) {
-            connections[gameIndex].splice(1,1);
             connections[gameIndex][0].sendUTF('AnotherPlayerLeft');
+            connections[gameIndex].splice(1,1);
         }
     });
 });
