@@ -38,6 +38,7 @@ app.listen((parseInt(port)+parseInt(1000)), function(){
 
 
 var connections = [];
+var gameIndex = -1;
 var killIndexes = [];
 var numConnected = 0;
 var binaryModifier = 0;
@@ -89,25 +90,17 @@ wsServer.on('request', function(request) { // instead of 'request'
     }
 
     var connection = request.accept('echo-protocol', request.origin);
-    connections.push(connection);/*
-	if(attackerAvailable)
-	{
-		connection.sendUTF('attacker');
-		attackerAvailable = false;
-		connection.role = 0;
-	}
-	else if(defenderAvailable)
-	{
-		connection.sendUTF('defender');
-		defenderAvailable = false;
-		connection.role = 1;
-	}
-	else
-	{
-		connection.sendUTF('observer');
-		connection.role = 2;
-	}
-    */
+    
+    if (connections.length == 0 || connections[connections.length-1].length == 2) {
+        // Nobody playing the game or even number of players so far --> create a new game
+        connections.push([connection]);
+    }
+    else if (connections[connections.length-1] == 1) { 
+        // The last game has one player --> add this new player to that game
+        connections[connections.length-1].push(connection);
+    }
+
+    
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
 		//console.log("message: "+message.utf8Data);
@@ -135,9 +128,11 @@ wsServer.on('request', function(request) { // instead of 'request'
 
                 if(attackerLoggedIn && defenderLoggedIn)
                 {
-                     for(var i = 0; i<connections.length; i++){
-                        connections[i].sendUTF('defenderPlaceTowers');
-                        connections[i].sendUTF('incrementMatch');
+                    gameIndex = findGameByPlayer(connection);
+                    
+                     for(var i = 0; i < connections[gameIndex].length; i++){
+                        connections[gameIndex][i].sendUTF('defenderPlaceTowers');
+                        connections[gameIndex][i].sendUTF('incrementMatch');
                      }
                     attackerLoggedIn = false;
                     defenderLoggedIn = false;
@@ -160,11 +155,33 @@ wsServer.on('request', function(request) { // instead of 'request'
                 // if both players are logged in then start the pre-match timer
                 */
             }
+            else if(message.utf8Data == 'matchNeededAgain') {
+                gameIndex = findGameByPlayer(connection);
+                
+                if (connections[connections.length-1].length == 1) {
+                    // If there's another player waiting, then connect those two
+                    connection.role = 1;
+                    connections[connections.length-1].push(connection);
+                    connections.splice(gameIndex,1);
+                    
+                    for(var i=0; i < connections[connections.length-1].length; i++){                    
+                        connections[connections.length-1][i].sendUTF('defenderPlaceTowers');
+                    }
+                }
+                else {
+                    // If there isn't another player waiting, then make the player wait
+                    connection.role = 0;
+                    connections.push([connection]);
+                    connections.splice(gameIndex,1);
+                }
+            }
 			else if(message.utf8Data == 'startNewRound'){
-				for(var i = 0; i<connections.length; i++){
-                        connections[i].sendUTF('defenderPlaceTowers');
-                        connections[i].sendUTF('incrementMatch');
-                        connections[i].sendUTF('incrementRound');
+                gameIndex = findGameByPlayer(connection);
+                    
+                for(var i=0; i < connections[gameIndex].length; i++){
+                        connections[gameIndex][i].sendUTF('defenderPlaceTowers');
+                        connections[gameIndex][i].sendUTF('incrementMatch');
+                        connections[gameIndex][i].sendUTF('incrementRound');
                 }
 				
 			}
@@ -175,9 +192,12 @@ wsServer.on('request', function(request) { // instead of 'request'
 				if(continueButtonClicks == 2){
 					console.log("YES clicks = " + continueButtonClicks);
 					continueButtonClicks = 0;
-					for(var i = 0; i<connections.length; i++){
-						connections[i].sendUTF('startEndRound');
-						connections[i].sendUTF('incrementMatch');
+                    
+                    gameIndex = findGameByPlayer(connection);
+
+                    for(var i=0; i < connections[gameIndex].length; i++){
+						connections[gameIndex][i].sendUTF('startEndRound');
+						connections[gameIndex][i].sendUTF('incrementMatch');
 					}
 				}
 			}
@@ -188,8 +208,11 @@ wsServer.on('request', function(request) { // instead of 'request'
 				if(roundContinueButtonClicks == 2){
 					console.log("YES clicks = " + roundContinueButtonClicks);
 					roundContinueButtonClicks = 0;
-					for(var i = 0; i<connections.length; i++){
-						connections[i].sendUTF('sendNewRound');
+
+                    gameIndex = findGameByPlayer(connection);
+
+                    for(var i=0; i < connections[gameIndex].length; i++){                    
+						connections[gameIndex][i].sendUTF('sendNewRound');
 					}
 				}
 			}
@@ -201,15 +224,19 @@ wsServer.on('request', function(request) { // instead of 'request'
                 if (roleChangedToNumber == 2) {
                   roleChangedToNumber = 0;
                 
-                  for(var i = 0; i<connections.length; i++)
-                    connections[i].sendUTF('switchRoles');
+                gameIndex = findGameByPlayer(connection);
+
+                for(var i=0; i < connections[gameIndex].length; i++){
+                    connections[gameIndex][i].sendUTF('switchRoles');
                   }
                 }
             else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
 				//console.log('Received Message: ' + message.utf8Data);
-				for(var i = 0; i<connections.length; i++){
-					connections[i].sendUTF(message.utf8Data);
+                gameIndex = findGameByPlayer(connection);
+
+                for(var i=0; i < connections[gameIndex].length; i++){
+					connections[gameIndex][i].sendUTF(message.utf8Data);
 				}
 			}
 			else
@@ -287,19 +314,23 @@ wsServer.on('request', function(request) { // instead of 'request'
 							zombieStatArray[i].direction = "down";
 						}
 					}
-					console.log("move @"+i+" moving by "+zombieStatArray[i].speed);
+					//console.log("move @"+i+" moving by "+zombieStatArray[i].speed);
 				}
 		
-				for(var y = 0; y<connections.length; y++){
-					connections[y].sendUTF(JSON.stringify(zombieStatArray));
+                gameIndex = findGameByPlayer(connection);
+
+                for(var i=0; i < connections[gameIndex].length; i++){
+					connections[gameIndex][i].sendUTF(JSON.stringify(zombieStatArray));
 				}
 				//if(killIndexes.length >0)
 					//console.log(killIndexes.length);
 				if(killIndexes.length > 0)
 				{
-					for(var y = 0; y<connections.length; y++){
-						connections[y].sendUTF(JSON.stringify(killIndexes));
-						connections[y].sendUTF('baseDamage'+baseDamage);
+                    gameIndex = findGameByPlayer(connection);
+
+                    for(var i=0; i < connections[gameIndex].length; i++){
+						connections[gameIndex][i].sendUTF(JSON.stringify(killIndexes));
+						connections[gameIndex][i].sendUTF('baseDamage'+baseDamage);
 					}
 					baseDamage = 0;
 					cooldown = 10;
@@ -311,9 +342,11 @@ wsServer.on('request', function(request) { // instead of 'request'
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-	    for(var i = 0; i<connections.length; i++){
-	    connections[i].sendBytes(message.binaryData);
-	    }
+            gameIndex = findGameByPlayer(connection);
+
+            for(var i=0; i < connections[gameIndex].length; i++){
+                connections[gameIndex][i].sendBytes(message.binaryData);
+	       }
         }
     });
     connection.on('close', function(reasonCode, description) {
@@ -328,6 +361,27 @@ wsServer.on('request', function(request) { // instead of 'request'
 			defenderAvailable = true;
             defenderLoggedIn = false;
         }
+        
+        // taking the 'connection' off of 'connections' array
+        // also sending a message to verify whether the server should connect the player with another
+        gameIndex = findGameByPlayer(connection);
+
+        if (connections[gameIndex][0] == connection) {
+            connections[gameIndex].splice(0,1);
+            connections[gameIndex][1].sendUTF('AnotherPlayerLeft');
+        }
+        else if (connections[gameIndex][1] == connection) {
+            connections[gameIndex].splice(1,1);
+            connections[gameIndex][0].sendUTF('AnotherPlayerLeft');
+        }
     });
 });
 
+function findGameByPlayer(player) {
+    for (var i=0; i < connections.length; i++) {
+        // if the player is a player (either attacker or defender) of the game, then return game index
+        if (connections[i][0] == player || connections[i][1] == player)
+            return i;
+    }
+    return -1;
+}

@@ -16,15 +16,15 @@ var loadState =
 		game.load.spritesheet('base','static/images/BottomInfoBox/baseSpt.png',110,83);
 		game.load.image('bottomUpgradeBox', 'static/images/BottomInfoBox/bottomBoxnew.png')
 		
-        	/*stuff for login state*/
-        	game.load.spritesheet('instructionsButton', 'static/images/generalButtons/instructionsButton.png',200,100);
-        	game.load.spritesheet('closeInstructionsButton', 'static/images/generalButtons/closeInstructionsButton.png',200,100);
-		game.load.spritesheet('attackerInstructionButton', 'static/images/generalButtons/attackerInstructionButton.png',200,100);
-		game.load.spritesheet('defenderInstructionButton', 'static/images/generalButtons/defenderInstructionButton.png',200,100);
-        	//game.load.image('instructionSheet', 'static/images/instructionSheet.png');
-		game.load.spritesheet('instructionSheet', 'static/images/instructionSheetSpt.png',1000,1136);
-        	game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
-		game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
+        /*stuff for login state*/
+        game.load.spritesheet('instructionsButton', 'static/images/generalButtons/instructionsButton.png',200,100);
+        game.load.spritesheet('closeInstructionsButton', 'static/images/generalButtons/closeInstructionsButton.png',200,100);
+        game.load.spritesheet('attackerInstructionButton', 'static/images/generalButtons/attackerInstructionButton.png',200,100);
+        game.load.spritesheet('defenderInstructionButton', 'static/images/generalButtons/defenderInstructionButton.png',200,100);
+        //game.load.image('instructionSheet', 'static/images/instructionSheet.png');
+        game.load.spritesheet('instructionSheet', 'static/images/instructionSheetSpt.png',1000,1136);
+        game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
+        game.load.spritesheet('loginButton', 'static/images/loginButton.png',200,100);
         
         
         
@@ -145,7 +145,6 @@ window.onload = function() {
 				startNewMatch();
 			}
 			else{
-				
 				console.log('WAITTTTTTTT');
 				setTimeout(startNewMatch(), 2000);
 			}
@@ -154,6 +153,11 @@ window.onload = function() {
 			if(state == 'defender')
 				player.money+=parseInt(message.substring(14,message.length));
 		}
+        else if(message == 'AnotherPlayerLeft') {
+            if (!alreadyStarted) {
+                socket.send('matchNeededAgain');                
+            }
+        }
 		else if(message.length > 8 && message.substring(0,8) == 'addTower')
 		{
 			var commaCounter = 0;
@@ -206,7 +210,7 @@ window.onload = function() {
         else if(message == "startEndRound"){
 			startEndRound = true;
 			if(startEndRound) console.log("SET TO TRUEEEEE");
-	}
+	   }
         else if (message == 'addCheckDef') {
             if(roundMatchNum['match'] == 1){
 				checkone = game.add.image(165,975, 'checkmark');
