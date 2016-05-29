@@ -257,6 +257,12 @@ wsServer.on('request', function(request) { // instead of 'request'
                     if (connections.length == 0) {
                         successfullyAdded = true;
                         connections.push([connection]);
+                        
+                        if (connection.role == 0)
+                            attackerInfo = message.utf8Data;
+                        else if (connection.role == 1)
+                            defenderInfo = message.utf8Data;
+                        
                         console.log("new game"+connections[connections.length-1].length);
                     }
                     if (attackerLoggedIn) console.log("attacker loggedin");
