@@ -216,7 +216,9 @@ wsServer.on('request', function(request) { // instead of 'request'
             }
             else if(message.utf8Data == 'startRound' ||
                     message.utf8Data.substring(0,9) == 'addZombie' ||
-                    message.utf8Data.substring(0,8) == 'addTower') {
+                    message.utf8Data.substring(0,8) == 'addTower' ||
+                    message.utf8Data.substring(0,8) == 'addCheck') {
+                
                 gameIndex = findGameByPlayer(connection);
 
                 for(var i=0; i < connections[gameIndex].length; i++){
