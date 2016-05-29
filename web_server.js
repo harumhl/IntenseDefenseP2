@@ -105,7 +105,7 @@ wsServer.on('request', function(request) { // instead of 'request'
         console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
     }
     for (var i=0; i < connections.length; i++)
-        console.log("\n\n\nconnection @"+i +": size of "+connections[i].length+"\n\n");
+        console.log("\n\n\nconnection @"+i +": size of "+connections[i].length+"\n\n\n");
     
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
