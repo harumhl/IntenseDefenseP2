@@ -188,6 +188,7 @@ matchResultsState =
 	if (roundMatchNum['match'] == 1) {
             
             if (roleSwitched && continueClicked) {
+                console.log("logged in again..");
                 socket.send('logged in');
 				continueClicked = false;
 

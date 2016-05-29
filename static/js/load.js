@@ -281,9 +281,8 @@ window.onload = function() {
 
             //document.getElementById("defender-name").innerHTML = "Defender: " + defenderName;
         }
-        else if(message == "defenderPlaceTowers" || roleSwitched == true)
+        else if(message == "defenderPlaceTowers")
         {
-            roleSwitched = false;
             console.log("defenderplacetowers");
             defenderPlaceTowers = true;
 			attackerWon = false;
