@@ -91,22 +91,6 @@ wsServer.on('request', function(request) { // instead of 'request'
 
     var connection = request.accept('echo-protocol', request.origin);
     
-    if (connections.length == 0 || connections[connections.length-1].length == 2) {
-        // Nobody playing the game or even number of players so far --> create a new game
-        connections.push([connection]);
-        console.log("new game"+connections[connections.length-1].length);
-    }
-    else if (connections[connections.length-1].length == 1) { 
-        // The last game has one player --> add this new player to that game
-        connections[connections.length-1].push(connection);
-        console.log("added to current game"); 
-    }
-    else {
-        console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
-    }
-    for (var i=0; i < connections.length; i++)
-        console.log("\n\n\nconnection @"+i +": size of "+connections[i].length +"\n\n\n");
-    
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
 		//console.log("message: "+message.utf8Data);
@@ -134,6 +118,22 @@ wsServer.on('request', function(request) { // instead of 'request'
 
                 if(attackerLoggedIn && defenderLoggedIn)
                 {
+                    if (connections.length == 0 || connections[connections.length-1].length == 2) {
+                        // Nobody playing the game or even number of players so far --> create a new game
+                        connections.push([connection]);
+                        console.log("new game"+connections[connections.length-1].length);
+                    }
+                    else if (connections[connections.length-1].length == 1) { 
+                        // The last game has one player --> add this new player to that game
+                        connections[connections.length-1].push(connection);
+                        console.log("added to current game"); 
+                    }
+                    else {
+                        console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
+                    }
+                    for (var i=0; i < connections.length; i++)
+                        console.log("\n\n\nconnection @"+i +": size of "+connections[i].length +"\n\n\n");
+
                     gameIndex = findGameByPlayer(connection);
                     
                      for(var i = 0; i < connections[gameIndex].length; i++){
@@ -172,6 +172,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                     
                     for(var i=0; i < connections[connections.length-1].length; i++){                    
                         connections[connections.length-1][i].sendUTF('defenderPlaceTowers');
+                        connections[gameIndex][i].sendUTF('incrementMatch');
                     }
                 }
                 else {
