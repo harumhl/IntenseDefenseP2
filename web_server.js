@@ -239,7 +239,9 @@ wsServer.on('request', function(request) { // instead of 'request'
                     connectedPlayers.push(connection);
                     
                     for (var i=0; i < connections.length; i++) {
+                        console.log("\n\n\n");
                         console.log(connections[i][0].role + connection.role);
+                        console.log("\n\n\n");
                         if (connections[i].length == 1 &&
                            (connections[i][0].role + connection.role) == 1) { // opposite player
                             successfullyAdded = true;
@@ -250,6 +252,12 @@ wsServer.on('request', function(request) { // instead of 'request'
                             else if (connection.role == 1)
                                 defenderInfo = message.utf8Data;
                         }
+                    }
+                    
+                    if (connections.length == 0) {
+                        successfullyAdded = true;
+                        connections.push([connection]);
+                        console.log("new game"+connections[connections.length-1].length);
                     }
                     /*
                     if (connections.length == 0 || connections[connections.length-1].length == 2) {
