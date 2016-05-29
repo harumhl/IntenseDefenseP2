@@ -263,6 +263,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                     if (defenderLoggedIn) console.log("defender loggedin");
                     console.log("attackerInfo: "+attackerInfo);
                     console.log("defenderInfo: "+defenderInfo);
+                    
                     /*
                     if (connections.length == 0 || connections[connections.length-1].length == 2) {
                         // Nobody playing the game or even number of players so far --> create a new game
