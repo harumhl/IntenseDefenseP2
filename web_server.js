@@ -38,6 +38,7 @@ app.listen((parseInt(port)+parseInt(1000)), function(){
 
 
 var connections = [];
+var connectedPlayers = [];
 var gameIndex = -1;
 var killIndexes = [];
 var numConnected = 0;
@@ -226,40 +227,65 @@ wsServer.on('request', function(request) { // instead of 'request'
 			{
 				console.log('Received Message: ' + message.utf8Data);
                 
-                if (message.utf8Data.substring(0,12) == 'attackerName') {
-                    if (attackerInfo != message.utf8Data) {
-                        connections.push([connection]);
-                        attackerInfo = message.utf8Data;
-                        console.log("new game"+connections[connections.length-1].length);
+                var alreadyBeenHere = false;
+                var successfullyAdded = false;
+                
+                for (var i=0; i < connectedPlayers.length; i++) {
+                    if (connectedPlayers[i] == connection)
+                        alreadyBeenHere = true;
                     }
                 }
-                else if (message.utf8Data.substring(0,12) == 'defenderName') {
-                    if (defenderInfo != message.utf8Data) {
-                        for (var i=0; i < connections.length; i++) {
-                            if (connections[i].length == 1) {
-                                connections[i].push(connection);
+            
+                if (alreadyBeenHere == false) {
+                    connectedPlayers.push(connection);
+                    
+                    for (var i=0; i < connections.length; i++) {
+                        console.log(connections[i][0].role + connection.role);
+                        if (connections[i].length == 1 &&
+                           (connections[i][0].role + connection.role) == 1) { // opposite player
+                            successfullyAdded = true;
+                            connections[i].push(connection);
+                            
+                            if (connection.role == 0)
+                                attackerInfo = message.utf8Data;
+                            else if (connection.role == 1)
                                 defenderInfo = message.utf8Data;
-                                console.log("added to current game"); 
-                            }
                         }
                     }
+                    /*
+                    if (connections.length == 0 || connections[connections.length-1].length == 2) {
+                        // Nobody playing the game or even number of players so far --> create a new game
+                        connections.push([connection]);
+                        console.log("new game"+connections[connections.length-1].length);
+                    }
+                    else if (connections[connections.length-1].length == 1) { 
+                        // The last game has one player --> add this new player to that game
+                        connections[connections.length-1].push(connection);
+                        console.log("added to current game"); 
+                    }
+                    else {
+                        console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
+                    }
+
+                    if (message.utf8Data.substring(0,12) == 'attackerName') {
+                        if (attackerInfo != message.utf8Data) {
+                            connections.push([connection]);
+                            attackerInfo = message.utf8Data;
+                            console.log("new game"+connections[connections.length-1].length);
+                        }
+                    }
+                    else if (message.utf8Data.substring(0,12) == 'defenderName') {
+                        if (defenderInfo != message.utf8Data) {
+                            for (var i=0; i < connections.length; i++) {
+                                if (connections[i].length == 1) {
+                                    connections[i].push(connection);
+                                    defenderInfo = message.utf8Data;
+                                    console.log("added to current game"+i); 
+                                }
+                            }
+                        }
+                    }  */                  
                 }
-                /*
-                if (connections.length == 0 || connections[connections.length-1].length == 2) {
-                    // Nobody playing the game or even number of players so far --> create a new game
-                    connections.push([connection]);
-                    attackerInfo = message.utf8Data;
-                    console.log("new game"+connections[connections.length-1].length);
-                }
-                else if (connections[connections.length-1].length == 1) { 
-                    // The last game has one player --> add this new player to that game
-                    connections[connections.length-1].push(connection);
-                    defenderInfo = message.utf8Data;
-                    console.log("added to current game"); 
-                }
-                else {
-                    console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
-                }*/
 
 			}
 			else
@@ -375,22 +401,6 @@ wsServer.on('request', function(request) { // instead of 'request'
         if(attackerLoggedIn && defenderLoggedIn && attackerInfo != "" && defenderInfo != "" &&
           (attackerConnection == connection || defenderConnection == connection))
         {
-            // ALL DONE WHEN ATTACKER and DEFENDER NAMES ARE ASSIGNED
-            /*
-            if (connections.length == 0 || connections[connections.length-1].length == 2) {
-                // Nobody playing the game or even number of players so far --> create a new game
-                connections.push([connection]);
-                console.log("new game"+connections[connections.length-1].length);
-            }
-            else if (connections[connections.length-1].length == 1) { 
-                // The last game has one player --> add this new player to that game
-                connections[connections.length-1].push(connection);
-                console.log("added to current game"); 
-            }
-            else {
-                console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
-            }
-            */
             for (var i=0; i < connections.length; i++)
                 console.log("\n\n\nconnection @"+i +": size of "+connections[i].length +"\n\n\n");
 
@@ -437,6 +447,10 @@ wsServer.on('request', function(request) { // instead of 'request'
             }
             
             connections[gameIndex][i].sendUTF('AnotherPlayerLeft');            
+        }
+        for (var i=0; i < connectedPlayers.length; i++) {
+            if (connectedPlayers[i] == connection)
+                connectedPlayers.splice(i,1);
         }
     });
 });
