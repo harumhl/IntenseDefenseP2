@@ -205,13 +205,14 @@ wsServer.on('request', function(request) { // instead of 'request'
                 console.log("roleChangedToNumber: "+roleChangedToNumber);
                   
                 if (roleChangedToNumber == 2) {
-                  roleChangedToNumber = 0;
+                    roleChangedToNumber = 0;
                 
-                gameIndex = findGameByPlayer(connection);
+                    gameIndex = findGameByPlayer(connection);
 
-                for(var i=0; i < connections[gameIndex].length; i++){
-                    connections[gameIndex][i].sendUTF('switchRoles');
-                  }
+                    console.log("make two players switch roles");
+                    for(var i=0; i < connections[gameIndex].length; i++){
+                        connections[gameIndex][i].sendUTF('switchRoles');
+                    }
                 }
             }
             else if(message.utf8Data == 'startRound' ||
