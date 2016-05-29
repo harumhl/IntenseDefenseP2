@@ -128,6 +128,8 @@ wsServer.on('request', function(request) { // instead of 'request'
                  }
                 attackerLoggedIn = false;
                 defenderLoggedIn = false;
+                attackerInfo = "";
+                defenderInfo = "";
             }
 
             if(message.utf8Data == 'logged in')
