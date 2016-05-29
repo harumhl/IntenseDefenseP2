@@ -233,7 +233,6 @@ wsServer.on('request', function(request) { // instead of 'request'
                 for (var i=0; i < connectedPlayers.length; i++) {
                     if (connectedPlayers[i] == connection)
                         alreadyBeenHere = true;
-                    }
                 }
             
                 if (alreadyBeenHere == false) {
