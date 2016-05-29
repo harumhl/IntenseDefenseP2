@@ -227,20 +227,20 @@ wsServer.on('request', function(request) { // instead of 'request'
 				console.log('Received Message: ' + message.utf8Data);
                 
                 if (message.utf8Data.substring(0,12) == 'attackerName') {
-                    if (attackerInfo == message.utf8Data) break;
-                    
-                    connections.push([connection]);
-                    attackerInfo = message.utf8Data;
-                    console.log("new game"+connections[connections.length-1].length);
+                    if (attackerInfo != message.utf8Data) {
+                        connections.push([connection]);
+                        attackerInfo = message.utf8Data;
+                        console.log("new game"+connections[connections.length-1].length);
+                    }
                 }
                 else if (message.utf8Data.substring(0,12) == 'defenderName') {
-                    if (defenderInfo == message.utf8Data) break;
-                    
-                    for (var i=0; i < connections.length; i++) {
-                        if (connections[i].length == 1) {
-                            connections[i].push(connection);
-                            defenderInfo = message.utf8Data;
-                            console.log("added to current game"); 
+                    if (defenderInfo != message.utf8Data) {
+                        for (var i=0; i < connections.length; i++) {
+                            if (connections[i].length == 1) {
+                                connections[i].push(connection);
+                                defenderInfo = message.utf8Data;
+                                console.log("added to current game"); 
+                            }
                         }
                     }
                 }
