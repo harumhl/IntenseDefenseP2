@@ -200,11 +200,9 @@ window.onload = function() {
             roleSwitched = true;
         }
 		else if (message == 'incrementMatch') {
-			console.log("++++++++++++ MATCH");
             roundMatchNum['match'] += 1;
         }
 		else if (message == 'incrementRound'){
-			console.log("++++++++++++ Round");
 			roundMatchNum['round'] += 1;
 		}
         else if(message == "startEndRound"){
@@ -268,7 +266,7 @@ window.onload = function() {
         }
         else if(message.substring(0,12) == 'attackerName')
         {
-			console.log("HERE");
+			console.log(message);
             attackerName = message.substring(13, message.length);
 			playerNames['attacker'] = attackerName;
             //document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
