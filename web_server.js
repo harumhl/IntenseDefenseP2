@@ -139,6 +139,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                     gameIndex = findGameByPlayer(connection);
                     
                      for(var i = 0; i < connections[gameIndex].length; i++){
+                         console.log(connection +"__"+connections[gameIndex][i].role);
                          if (connections[gameIndex][i].role == 0)
                             connections[gameIndex][i].sendUTF(defenderInfo);
                          else if (connections[gameIndex][i].role == 1)

@@ -269,6 +269,7 @@ window.onload = function() {
 			console.log(message);
             attackerName = message.substring(13, message.length);
 			playerNames['attacker'] = attackerName;
+			console.log('LOAD att name: ' + playerNames['attacker'] );
             //document.getElementById("attacker-name").innerHTML = "Attacker: " + attackerName;
         }
         else if(message.substring(0,12) == 'defenderName')
