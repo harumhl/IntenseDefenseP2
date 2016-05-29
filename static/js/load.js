@@ -263,7 +263,7 @@ window.onload = function() {
 				
 				console.log("recieved start round");
 				startRound = true;
-				countdown(5);
+				countdown(0.20);
 			}
         }
         else if(message.substring(0,12) == 'attackerName')
@@ -300,7 +300,7 @@ window.onload = function() {
 
                 socket.send(player.state + 'Name ' + player.username);
                 console.log("Defender start placing towers!");
-                countdown(0.30); // extra second for login time - should I
+                countdown(0.05); // extra second for login time - should I
             
         }
         else if(message.substring(0,7) == "upgrade")
