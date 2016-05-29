@@ -8,7 +8,7 @@
 
 
 var usernamePossible = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890._"; // possible values for username
-var username = ""; // entered username
+var username = "_"; // entered username
 var usernameText;  // displays the username on screen
 var charCount = 0;
 var errorText;
