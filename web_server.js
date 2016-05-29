@@ -99,41 +99,6 @@ wsServer.on('request', function(request) { // instead of 'request'
     connection.on('message', function(message) {
 		//console.log("message: "+message.utf8Data);
         if (message.type === 'utf8') {
-               
-            if(attackerLoggedIn && defenderLoggedIn && attackerInfo != "" && defenderInfo != "" &&
-              (attackerConnection == connection || defenderConnection == connection))
-            {
-                if (connections.length == 0 || connections[connections.length-1].length == 2) {
-                    // Nobody playing the game or even number of players so far --> create a new game
-                    connections.push([connection]);
-                    console.log("new game"+connections[connections.length-1].length);
-                }
-                else if (connections[connections.length-1].length == 1) { 
-                    // The last game has one player --> add this new player to that game
-                    connections[connections.length-1].push(connection);
-                    console.log("added to current game"); 
-                }
-                else {
-                    console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
-                }
-                for (var i=0; i < connections.length; i++)
-                    console.log("\n\n\nconnection @"+i +": size of "+connections[i].length +"\n\n\n");
-
-                gameIndex = findGameByPlayer(connection);
-
-                 for(var i = 0; i < connections[gameIndex].length; i++){
-                     console.log(attackerInfo +"___"+defenderInfo);
-                     connections[gameIndex][i].sendUTF(attackerInfo);
-                     connections[gameIndex][i].sendUTF(defenderInfo);
-
-                     connections[gameIndex][i].sendUTF('defenderPlaceTowers');
-                     connections[gameIndex][i].sendUTF('incrementMatch');                         
-                 }
-                attackerLoggedIn = false;
-                defenderLoggedIn = false;
-                attackerInfo = "";
-                defenderInfo = "";
-            }
 
             if(message.utf8Data == 'logged in')
             {
@@ -378,6 +343,41 @@ wsServer.on('request', function(request) { // instead of 'request'
                 connections[gameIndex][i].sendBytes(message.binaryData);
 	       }
         }
+        
+        if(attackerLoggedIn && defenderLoggedIn && attackerInfo != "" && defenderInfo != "" &&
+          (attackerConnection == connection || defenderConnection == connection))
+        {
+            if (connections.length == 0 || connections[connections.length-1].length == 2) {
+                // Nobody playing the game or even number of players so far --> create a new game
+                connections.push([connection]);
+                console.log("new game"+connections[connections.length-1].length);
+            }
+            else if (connections[connections.length-1].length == 1) { 
+                // The last game has one player --> add this new player to that game
+                connections[connections.length-1].push(connection);
+                console.log("added to current game"); 
+            }
+            else {
+                console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
+            }
+            for (var i=0; i < connections.length; i++)
+                console.log("\n\n\nconnection @"+i +": size of "+connections[i].length +"\n\n\n");
+
+            gameIndex = findGameByPlayer(connection);
+
+             for(var i = 0; i < connections[gameIndex].length; i++){
+                 console.log(attackerInfo +"___"+defenderInfo);
+                 connections[gameIndex][i].sendUTF(attackerInfo);
+                 connections[gameIndex][i].sendUTF(defenderInfo);
+
+                 connections[gameIndex][i].sendUTF('defenderPlaceTowers');
+                 connections[gameIndex][i].sendUTF('incrementMatch');                         
+             }
+            attackerLoggedIn = false;
+            defenderLoggedIn = false;
+            attackerInfo = "";
+            defenderInfo = "";
+        }        
     });
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
