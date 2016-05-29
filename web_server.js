@@ -47,6 +47,8 @@ var attackerAvailable = true;
 var defenderAvailable = true;
 var attackerInfo = "";
 var defenderInfo = "";
+var attackerConnection;
+var defenderConnection;
 var attackerLoggedIn = false; // these variables control when the timer for placing initial towers start
 var defenderLoggedIn = false;
 var roleChangedToNumber = 0;
@@ -98,7 +100,8 @@ wsServer.on('request', function(request) { // instead of 'request'
 		//console.log("message: "+message.utf8Data);
         if (message.type === 'utf8') {
                
-            if(attackerLoggedIn && defenderLoggedIn && attackerInfo != "" && defenderInfo != "")
+            if(attackerLoggedIn && defenderLoggedIn && attackerInfo != "" && defenderInfo != "" &&
+              (attackerConnection == connection || defenderConnection == connection))
             {
                 if (connections.length == 0 || connections[connections.length-1].length == 2) {
                     // Nobody playing the game or even number of players so far --> create a new game
@@ -138,18 +141,15 @@ wsServer.on('request', function(request) { // instead of 'request'
                 {
                     connection.sendUTF('attacker');
                     attackerLoggedIn = true;
+                    attackerConnection = connection;
                     connection.role = 0;
                 }
                 else if(!defenderLoggedIn)
                 {
                     connection.sendUTF('defender');
                     defenderLoggedIn = true;
+                    defenderConnection = connection;
                     connection.role = 1;
-                }
-                else
-                {
-                    connection.sendUTF('observer');
-                    connection.role = 2;
                 }
 
 
