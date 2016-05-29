@@ -45,6 +45,8 @@ var binaryModifier = 0;
 var zombieGroup;
 var attackerAvailable = true;
 var defenderAvailable = true;
+var attackerInfo = "";
+var defenderInfo = "";
 var attackerLoggedIn = false; // these variables control when the timer for placing initial towers start
 var defenderLoggedIn = false;
 var roleChangedToNumber = 0;
@@ -137,8 +139,13 @@ wsServer.on('request', function(request) { // instead of 'request'
                     gameIndex = findGameByPlayer(connection);
                     
                      for(var i = 0; i < connections[gameIndex].length; i++){
-                        connections[gameIndex][i].sendUTF('defenderPlaceTowers');
-                        connections[gameIndex][i].sendUTF('incrementMatch');
+                         if (connections[gameIndex][i].role == 0)
+                            connections[gameIndex][i].sendUTF(defenderInfo);
+                         else if (connections[gameIndex][i].role == 1)
+                            connections[gameIndex][i].sendUTF(attackerInfo);
+
+                         connections[gameIndex][i].sendUTF('defenderPlaceTowers');
+                         connections[gameIndex][i].sendUTF('incrementMatch');                         
                      }
                     attackerLoggedIn = false;
                     defenderLoggedIn = false;
@@ -241,11 +248,23 @@ wsServer.on('request', function(request) { // instead of 'request'
             else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
 				console.log('Received Message: ' + message.utf8Data);
-                gameIndex = findGameByPlayer(connection);
+                
+                if (connections.length == 0 || connections[connections.length-1].length == 2) {
+                    // Nobody playing the game or even number of players so far --> create a new game
+                    connections.push([connection]);
+                    attackerInfo = message.utf8Data;
+                    console.log("new game"+connections[connections.length-1].length);
+                }
+                else if (connections[connections.length-1].length == 1) { 
+                    // The last game has one player --> add this new player to that game
+                    connections[connections.length-1].push(connection);
+                    defenderInfo = message.utf8Data;
+                    console.log("added to current game"); 
+                }
+                else {
+                    console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
+                }
 
-                for(var i=0; i < connections[gameIndex].length; i++){
-					connections[gameIndex][i].sendUTF(message.utf8Data);
-				}
 			}
 			else
 			{
