@@ -238,6 +238,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                 if (alreadyBeenHere == false) {
                     connectedPlayers.push(connection);
                     
+                    // Adding to a current game if available
                     for (var i=0; i < connections.length; i++) {
                         console.log("\n\n\n");
                         console.log(connections[i][0].role + connection.role);
@@ -254,6 +255,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                         }
                     }
                     
+                    // Creating a new game since there isn't one available
                     if (connections.length == 0) {
                         successfullyAdded = true;
                         connections.push([connection]);
@@ -265,6 +267,17 @@ wsServer.on('request', function(request) { // instead of 'request'
                         
                         console.log("new game"+connections[connections.length-1].length);
                     }
+                    if (successfullyAdded == false) {
+                        successfullyAdded = true;
+                        connections.push([connection]);
+                        
+                        if (connection.role == 0)
+                            attackerInfo = message.utf8Data;
+                        else if (connection.role == 1)
+                            defenderInfo = message.utf8Data;
+                    }
+                    
+                    // flags
                     if (attackerLoggedIn) console.log("attacker loggedin");
                     if (defenderLoggedIn) console.log("defender loggedin");
                     console.log("attackerInfo: "+attackerInfo);
