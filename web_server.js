@@ -218,6 +218,7 @@ wsServer.on('request', function(request) { // instead of 'request'
 
                 for(var i=0; i < connections[gameIndex].length; i++){
                     connections[gameIndex][i].sendUTF('startRound');
+                }
             }
             else if(message.utf8Data.substring(0,1)!= '[' /*&& (message.utf8Data.substring(0,9) == 'addZombie' || message.utf8Data.substring(0,8) == 'addTower')*/)
 			{
