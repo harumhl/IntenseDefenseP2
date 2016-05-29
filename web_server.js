@@ -226,6 +226,22 @@ wsServer.on('request', function(request) { // instead of 'request'
 			{
 				console.log('Received Message: ' + message.utf8Data);
                 
+                if (message.utf8Data.substring(0,12) == 'attackerName') {
+                    connections.push([connection]);
+                    attackerInfo = message.utf8Data;
+                    console.log("new game"+connections[connections.length-1].length);
+                }
+                else if (message.utf8Data.substring(0,12) == 'defenderName') {
+                    
+                    for (var i=0; i < connections.length; i++) {
+                        if (connections[i].length == 1) {
+                            connections[i].push(connection);
+                            defenderInfo = message.utf8Data;
+                            console.log("added to current game"); 
+                        }
+                    }
+                }
+                /*
                 if (connections.length == 0 || connections[connections.length-1].length == 2) {
                     // Nobody playing the game or even number of players so far --> create a new game
                     connections.push([connection]);
@@ -240,7 +256,7 @@ wsServer.on('request', function(request) { // instead of 'request'
                 }
                 else {
                     console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
-                }
+                }*/
 
 			}
 			else
