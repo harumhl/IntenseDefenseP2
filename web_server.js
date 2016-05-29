@@ -99,7 +99,7 @@ wsServer.on('request', function(request) { // instead of 'request'
     else if (connections[connections.length-1].length == 1) { 
         // The last game has one player --> add this new player to that game
         connections[connections.length-1].push(connection);
-        console.log("added to current game");
+        console.log("added to current game"); 
     }
     else {
         console.log("i dont know"+connections.length+"_"+connections[connections.length-1].length);
