@@ -94,10 +94,15 @@ wsServer.on('request', function(request) { // instead of 'request'
     if (connections.length == 0 || connections[connections.length-1].length == 2) {
         // Nobody playing the game or even number of players so far --> create a new game
         connections.push([connection]);
+        console.log("new game");
     }
     else if (connections[connections.length-1] == 1) { 
         // The last game has one player --> add this new player to that game
         connections[connections.length-1].push(connection);
+        console.log("added to current game");
+    }
+    else {
+        console.log("i dont know");
     }
     for (var i=0; i < connections.length; i++)
         console.log("\n\n\nconnection @"+i +": size of "+connections[i].length+"\n\n\n");
